@@ -1,0 +1,50 @@
+body {
+  height: 100vh;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: #ed4848;
+}
+
+a,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+textarea,
+input {
+  padding: 0pt;
+  margin: 0pt;
+  font-family: system-ui;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.main_content {
+  width: calc(100% - 180pt);
+  height: calc(100% - 80pt);
+  margin: 20pt;
+  padding: 20pt;
+  border-radius: 10pt;
+  flex: 1;
+  overflow: hidden;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.input {
+  padding: 10pt;
+  border-width: 2pt;
+  border-color: #ddd;
+  border-radius: 7pt;
+  border-style: solid;
+}
