@@ -44,40 +44,42 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className={loginStyles["center-box"]}>
-      <form
-        className="frosty"
-        id={loginStyles["login-form"]}
-        onSubmit={(event) => {
-          handleLoginSubmission(event);
-        }}
-      >
-        <div id={loginStyles["lid"]}>
-          <img
-            src={companyLogo}
-            alt="GG Logo"
-            draggable="false"
-            id={loginStyles["gg-logo"]}
-          />
-        </div>
-        <LoginText attemptedLogin={attemptedLogin} />
-        <div id={loginStyles["contents"]}>
-          <h2 className={loginStyles["textfield-label"]}>E-Mail Address</h2>
-          <input
-            className={loginStyles["field"]}
-            name="username"
-            placeholder="Username"
-          />
-          <h2 className={loginStyles["textfield-label"]}>Password</h2>
-          <input
-            className={loginStyles["field"]}
-            name="password"
-            placeholder="Password"
-            type="password"
-          />
-          <input id={loginStyles["submit"]} type="submit" value="Sign In" />
-        </div>
-      </form>
+    <div id={loginStyles["container"]}>
+      <div id={loginStyles["center-box"]}>
+        <form
+          className="frosty"
+          id={loginStyles["login-form"]}
+          onSubmit={(event) => {
+            handleLoginSubmission(event);
+          }}
+        >
+          <div id={loginStyles["lid"]}>
+            <img
+              src={companyLogo}
+              alt="GG Logo"
+              draggable="false"
+              id={loginStyles["gg-logo"]}
+            />
+          </div>
+          <LoginText attemptedLogin={attemptedLogin} />
+          <div id={loginStyles["contents"]}>
+            <h2 className={loginStyles["textfield-label"]}>E-Mail Address</h2>
+            <input
+              className={loginStyles["field"]}
+              name="username"
+              placeholder="Username"
+            />
+            <h2 className={loginStyles["textfield-label"]}>Password</h2>
+            <input
+              className={loginStyles["field"]}
+              name="password"
+              placeholder="Password"
+              type="password"
+            />
+            <input id={loginStyles["submit"]} type="submit" value="Sign In" />
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
