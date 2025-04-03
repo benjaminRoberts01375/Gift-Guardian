@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100vh; /* Adjust as needed */
+  height: 100vh;
 }
 
 #center-box {
@@ -51,13 +51,25 @@
   font-family: "Helvetica", "Arial", sans-serif;
 }
 
+#submit-container {
+  display: flex;
+}
+
+#switch {
+  background: #0000;
+  border-width: 0pt;
+  height: 45pt;
+  color: #ed4848;
+  font-size: 15pt;
+  padding: 0pt;
+  margin: 0pt 10pt 0pt auto;
+}
+
 #submit {
   width: 90pt;
   height: 45pt;
   background-color: #ed4848;
   border: 4pt solid #fff;
-  margin-top: 50pt;
-  margin-left: auto;
   color: white;
   font-family: "Arial Rounded MT Bold", "Arial", sans-serif;
   font-size: 15pt;
@@ -65,7 +77,7 @@
 }
 
 #submit:hover {
-  background-color: #66d;
+  background-color: #aa0000;
   transition: 0.3s;
   cursor: pointer;
 }

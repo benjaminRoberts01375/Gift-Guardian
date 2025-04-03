@@ -4,7 +4,7 @@ import companyLogo from "../assets/Wide.png";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
   const navigate = useNavigate();
   const [attemptedLogin, setAttemptedLogin] = useState<
     "fresh" | "failed" | "error"
@@ -43,8 +43,8 @@ const LoginScreen = () => {
     }
   };
 
-  const createAccount = () => {
-    navigate("/signup");
+  const signIn = () => {
+    navigate("/");
   };
 
   return (
@@ -81,10 +81,10 @@ const LoginScreen = () => {
               type="password"
             />
             <div id={loginStyles["submit-container"]}>
-              <button onClick={createAccount} id={loginStyles["switch"]}>
-                Sign Up
+              <button onClick={signIn} id={loginStyles["switch"]}>
+                Already have an account?
               </button>
-              <input id={loginStyles["submit"]} type="submit" value="Sign In" />
+              <input id={loginStyles["submit"]} type="submit" value="Sign Up" />
             </div>
           </div>
         </form>
@@ -106,7 +106,7 @@ function LoginText({ attemptedLogin }: LoginTextProps) {
       </h1>
     );
   }
-  return <h1 id={loginStyles["login-text"]}>Welcome</h1>;
+  return <h1 id={loginStyles["login-text"]}>Sign Up</h1>;
 }
 
-export default LoginScreen;
+export default SignUpScreen;
