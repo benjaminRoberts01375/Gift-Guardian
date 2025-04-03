@@ -1,6 +1,6 @@
 import loginStyles from "./login.module.css"; // Import the CSS module
 import "../style.css";
-import companyLogo from "../../../Logos/Wide.png";
+import companyLogo from "../assets/Wide.png";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 

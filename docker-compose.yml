@@ -1,0 +1,41 @@
+version: '3.8'
+
+networks:
+  gg-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+
+services:
+  frontend:
+    build:
+      context: ./GG-Frontend
+      dockerfile: Dockerfile
+    container_name: gg-frontend
+    restart: unless-stopped
+    networks:
+      gg-network:
+        ipv4_address: 172.18.0.20
+    hostname: frontend
+    volumes:
+      - ./GG-Frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: gg-nginx
+    restart: unless-stopped
+    networks:
+      - gg-network
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
