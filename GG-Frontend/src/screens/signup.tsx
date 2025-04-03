@@ -1,4 +1,5 @@
-import loginStyles from "./login.module.css"; // Import the CSS module
+import loginStyles from "./login.module.css";
+import signupStyles from "./signup.module.css";
 import "../style.css";
 import companyLogo from "../assets/Wide.png";
 import { useState, FormEvent } from "react";
@@ -80,6 +81,29 @@ const SignUpScreen = () => {
               placeholder="Password"
               type="password"
             />
+            <div id={signupStyles["name-container"]}>
+              <div className={signupStyles["name-field"]}>
+                <h2 className={loginStyles["textfield-label"]}>First Name</h2>
+                <input
+                  placeholder="First Name"
+                  name="firstName"
+                  type="text"
+                  className={loginStyles["field"]}
+                />
+              </div>
+              <div
+                className={signupStyles["name-field"]}
+                id={signupStyles["last-name-field"]}
+              >
+                <h2 className={loginStyles["textfield-label"]}>Last Name</h2>
+                <input
+                  placeholder="Last Name"
+                  name="lastName"
+                  type="text"
+                  className={loginStyles["field"]}
+                />
+              </div>
+            </div>
             <div id={loginStyles["submit-container"]}>
               <button onClick={signIn} id={loginStyles["switch"]}>
                 Already have an account?
