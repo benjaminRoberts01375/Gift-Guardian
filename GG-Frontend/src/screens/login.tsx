@@ -81,7 +81,11 @@ const LoginScreen = () => {
               type="password"
             />
             <div id={loginStyles["submit-container"]}>
-              <button onClick={createAccount} id={loginStyles["switch"]}>
+              <button
+                type="button"
+                onClick={createAccount}
+                id={loginStyles["switch"]}
+              >
                 Sign Up
               </button>
               <input id={loginStyles["submit"]} type="submit" value="Sign In" />

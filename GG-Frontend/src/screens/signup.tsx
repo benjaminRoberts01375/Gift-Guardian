@@ -105,7 +105,7 @@ const SignUpScreen = () => {
               </div>
             </div>
             <div id={loginStyles["submit-container"]}>
-              <button onClick={signIn} id={loginStyles["switch"]}>
+              <button type="button" onClick={signIn} id={loginStyles["switch"]}>
                 Already have an account?
               </button>
               <input id={loginStyles["submit"]} type="submit" value="Sign Up" />
