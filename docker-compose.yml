@@ -19,7 +19,7 @@ services:
     hostname: frontend
     volumes:
       - ./GG-Frontend:/app
-      - /app/node_modules
+      - gg-node-modules:/app/node_modules
     environment:
       - NODE_ENV=development
 
@@ -57,3 +57,5 @@ services:
 volumes:
   postgres_data:
     name: gg-postgres-data
+  gg-node-modules:
+    name: gg-frontend-node-modules
