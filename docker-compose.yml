@@ -9,16 +9,16 @@ networks:
 services:
   frontend:
     build:
-      context: ./GG-Frontend
+      context: ./Frontend
       dockerfile: Dockerfile
-    container_name: gg-frontend
+    container_name: frontend
     restart: unless-stopped
     networks:
       gg-network:
         ipv4_address: 172.18.0.20
     hostname: frontend
     volumes:
-      - ./GG-Frontend:/app
+      - ./Frontend:/app
       - gg-node-modules:/app/node_modules
     environment:
       - NODE_ENV=development
@@ -54,4 +54,4 @@ volumes:
   postgres_data:
     name: gg-postgres-data
   gg-node-modules:
-    name: gg-frontend-node-modules
+    name: frontend-node-modules
