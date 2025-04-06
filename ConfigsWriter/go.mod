@@ -1,4 +1,4 @@
-module github.com/benjaminRoberts01375/Gift-Guardian/Setup
+module github.com/benjaminRoberts01375/Gift-Guardian/ConfigsWriter
 
 go 1.24.2
 

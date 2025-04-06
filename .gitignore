@@ -140,4 +140,4 @@ dist
 .DS_Store
 
 # Binaries
-Setup/Setup
+ConfigsWriter/ConfigsWriter
