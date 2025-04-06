@@ -50,6 +50,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  db:
+    build:
+      context: ./DB
+      dockerfile: Dockerfile
+      args:
+        - GITHUB_TOKEN=${GITHUB_TOKEN}
+    container_name: gg-db
+    restart: unless-stopped
+    networks:
+      gg-network:
+        ipv4_address: 172.18.0.3
+    hostname: db
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+
 volumes:
   postgres_data:
     name: gg-postgres-data
