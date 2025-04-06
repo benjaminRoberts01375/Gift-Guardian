@@ -138,3 +138,6 @@ dist
 
 # macOS
 .DS_Store
+
+# Binaries
+Setup/Setup
