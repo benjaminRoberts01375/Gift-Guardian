@@ -42,6 +42,7 @@ services:
     image: postgres:17.4-alpine
     container_name: gg-postgres
     restart: unless-stopped
+    user: postgres:postgres
     networks:
       gg-network:
         ipv4_address: 172.18.0.2
