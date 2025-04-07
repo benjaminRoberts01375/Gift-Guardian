@@ -1,10 +1,15 @@
-import loginStyles from "./login.module.css"; // Import the CSS module
+import loginStyles from "./login.module.css";
+import credentialStyles from "./Credentials.module.css";
 import "../style.css";
-import companyLogo from "../assets/Wide.png";
-import { useState, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-const LoginScreen = () => {
+type SignInProps = {
+  signUp: () => void;
+  forgotPassword: () => void;
+};
+
+const Login: React.FC<SignInProps> = ({ signUp, forgotPassword }) => {
   const navigate = useNavigate();
   const [attemptedLogin, setAttemptedLogin] = useState<
     "fresh" | "failed" | "error"
@@ -28,7 +33,7 @@ const LoginScreen = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include", // Add this line to handle cookies
+        credentials: "include",
       });
 
       if (response.ok) {
@@ -43,57 +48,53 @@ const LoginScreen = () => {
     }
   };
 
-  const createAccount = () => {
-    navigate("/signup");
-  };
-
   return (
-    <div id={loginStyles["container"]}>
-      <div id={loginStyles["center-box"]}>
-        <form
-          className="frosty"
-          id={loginStyles["login-form"]}
-          onSubmit={(event) => {
-            handleLoginSubmission(event);
-          }}
-        >
-          <div id={loginStyles["lid"]}>
-            <img
-              src={companyLogo}
-              alt="GG Logo"
-              draggable="false"
-              id={loginStyles["gg-logo"]}
-            />
-          </div>
-          <LoginText attemptedLogin={attemptedLogin} />
-          <div id={loginStyles["contents"]}>
-            <h2 className={loginStyles["textfield-label"]}>E-Mail Address</h2>
-            <input
-              className={loginStyles["field"]}
-              name="username"
-              placeholder="Username"
-            />
-            <h2 className={loginStyles["textfield-label"]}>Password</h2>
-            <input
-              className={loginStyles["field"]}
-              name="password"
-              placeholder="Password"
-              type="password"
-            />
-            <div id={loginStyles["submit-container"]}>
-              <button
-                type="button"
-                onClick={createAccount}
-                id={loginStyles["switch"]}
-              >
-                Sign Up
-              </button>
-              <input id={loginStyles["submit"]} type="submit" value="Sign In" />
-            </div>
-          </div>
-        </form>
+    <form
+      className="frosty"
+      id={loginStyles["login-form"]}
+      onSubmit={(event) => {
+        handleLoginSubmission(event);
+      }}
+    >
+      <LoginText attemptedLogin={attemptedLogin} />
+      <div id={credentialStyles["contents"]}>
+        <h2 className={credentialStyles["textfield-label"]}>E-Mail Address</h2>
+        <input
+          className={credentialStyles["field"]}
+          name="username"
+          placeholder="Username"
+        />
+        <h2 className={credentialStyles["textfield-label"]}>Password</h2>
+        <input
+          className={credentialStyles["field"]}
+          name="password"
+          placeholder="Password"
+          type="password"
+        />
+        <div id={credentialStyles["submit-container"]}>
+          <button
+            type="button"
+            onClick={forgotPassword}
+            className={credentialStyles["secondary"]}
+          >
+            Forgot Password?
+          </button>
+          <button
+            type="button"
+            onClick={signUp}
+            className={credentialStyles["secondary"]}
+            id={loginStyles["signUp"]}
+          >
+            Sign Up
+          </button>
+          <input
+            id={credentialStyles["primary"]}
+            type="submit"
+            value="Sign In"
+          />
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 
@@ -110,7 +111,7 @@ function LoginText({ attemptedLogin }: LoginTextProps) {
       </h1>
     );
   }
-  return <h1 id={loginStyles["login-text"]}>Welcome</h1>;
+  return <h1 id={credentialStyles["title"]}>Welcome</h1>;
 }
 
-export default LoginScreen;
+export default Login;

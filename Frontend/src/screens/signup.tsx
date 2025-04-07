@@ -1,15 +1,18 @@
-import loginStyles from "./login.module.css";
 import signupStyles from "./signup.module.css";
+import credentialsStyles from "./Credentials.module.css";
 import "../style.css";
-import companyLogo from "../assets/Wide.png";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SignUpScreen = () => {
+type SignupProps = {
+  signIn: () => void;
+};
+
+const SignUp: React.FC<SignupProps> = ({ signIn }) => {
   const navigate = useNavigate();
-  const [attemptedLogin, setAttemptedLogin] = useState<
-    "fresh" | "failed" | "error"
-  >("fresh");
+  const [attemptedLogin, setAttemptedLogin] = useState<"fresh" | "failed">(
+    "fresh",
+  );
 
   // Define the onSubmit handler as a separate function with proper type for event
   const handleLoginSubmission = async (event: FormEvent<HTMLFormElement>) => {
@@ -40,97 +43,90 @@ const SignUpScreen = () => {
       }
     } catch (error) {
       console.error("Error during login:", error);
-      setAttemptedLogin("error");
+      setAttemptedLogin("failed");
     }
   };
 
-  const signIn = () => {
-    navigate("/");
-  };
-
   return (
-    <div id={loginStyles["container"]}>
-      <div id={loginStyles["center-box"]}>
-        <form
-          className="frosty"
-          id={loginStyles["login-form"]}
-          onSubmit={(event) => {
-            handleLoginSubmission(event);
-          }}
-        >
-          <div id={loginStyles["lid"]}>
-            <img
-              src={companyLogo}
-              alt="GG Logo"
-              draggable="false"
-              id={loginStyles["gg-logo"]}
+    <form
+      className="frosty"
+      id={credentialsStyles["login-form"]}
+      onSubmit={(event) => {
+        handleLoginSubmission(event);
+      }}
+    >
+      <TitleText attemptedLogin={attemptedLogin} />
+      <div id={credentialsStyles["contents"]}>
+        <h2 className={credentialsStyles["textfield-label"]}>E-Mail Address</h2>
+        <input
+          className={credentialsStyles["field"]}
+          name="username"
+          placeholder="Username"
+        />
+        <h2 className={credentialsStyles["textfield-label"]}>Password</h2>
+        <input
+          className={credentialsStyles["field"]}
+          name="password"
+          placeholder="Password"
+          type="password"
+        />
+        <div id={signupStyles["name-container"]}>
+          <div className={signupStyles["name-field"]}>
+            <h2 className={credentialsStyles["textfield-label"]}>First Name</h2>
+            <input
+              placeholder="First Name"
+              name="firstName"
+              type="text"
+              className={credentialsStyles["field"]}
             />
           </div>
-          <LoginText attemptedLogin={attemptedLogin} />
-          <div id={loginStyles["contents"]}>
-            <h2 className={loginStyles["textfield-label"]}>E-Mail Address</h2>
+          <div
+            className={signupStyles["name-field"]}
+            id={signupStyles["last-name-field"]}
+          >
+            <h2 className={credentialsStyles["textfield-label"]}>Last Name</h2>
             <input
-              className={loginStyles["field"]}
-              name="username"
-              placeholder="Username"
+              placeholder="Last Name"
+              name="lastName"
+              type="text"
+              className={credentialsStyles["field"]}
             />
-            <h2 className={loginStyles["textfield-label"]}>Password</h2>
-            <input
-              className={loginStyles["field"]}
-              name="password"
-              placeholder="Password"
-              type="password"
-            />
-            <div id={signupStyles["name-container"]}>
-              <div className={signupStyles["name-field"]}>
-                <h2 className={loginStyles["textfield-label"]}>First Name</h2>
-                <input
-                  placeholder="First Name"
-                  name="firstName"
-                  type="text"
-                  className={loginStyles["field"]}
-                />
-              </div>
-              <div
-                className={signupStyles["name-field"]}
-                id={signupStyles["last-name-field"]}
-              >
-                <h2 className={loginStyles["textfield-label"]}>Last Name</h2>
-                <input
-                  placeholder="Last Name"
-                  name="lastName"
-                  type="text"
-                  className={loginStyles["field"]}
-                />
-              </div>
-            </div>
-            <div id={loginStyles["submit-container"]}>
-              <button type="button" onClick={signIn} id={loginStyles["switch"]}>
-                Already have an account?
-              </button>
-              <input id={loginStyles["submit"]} type="submit" value="Sign Up" />
-            </div>
           </div>
-        </form>
+        </div>
+        <div id={credentialsStyles["submit-container"]}>
+          <button
+            type="button"
+            onClick={signIn}
+            className={credentialsStyles["secondary"]}
+            id={signupStyles["account-exists"]}
+          >
+            Already have an account?
+          </button>
+          <input
+            id={credentialsStyles["primary"]}
+            type="submit"
+            value="Sign Up"
+          />
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 
 // Define interface for LoginText props
-interface LoginTextProps {
-  attemptedLogin: "fresh" | "failed" | "error";
+interface TitleTextProps {
+  attemptedLogin: "fresh" | "failed";
 }
 
-function LoginText({ attemptedLogin }: LoginTextProps) {
+function TitleText({ attemptedLogin }: TitleTextProps) {
   if (attemptedLogin === "failed") {
     return (
-      <h1 className="error title" id={loginStyles["login-text"]}>
+      <h1 className="error title" id={credentialsStyles["title"]}>
         Login Failed
       </h1>
     );
   }
-  return <h1 id={loginStyles["login-text"]}>Sign Up</h1>;
+  return <h1 id={credentialsStyles["title"]}>Sign Up</h1>;
 }
 
-export default SignUpScreen;
+export default SignUp;
