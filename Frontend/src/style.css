@@ -26,6 +26,10 @@ a {
   color: black;
 }
 
+button {
+  cursor: pointer;
+}
+
 .main_content {
   width: calc(100% - 180pt);
   height: calc(100% - 80pt);
