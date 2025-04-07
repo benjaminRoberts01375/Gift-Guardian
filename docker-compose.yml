@@ -47,7 +47,7 @@ services:
       gg-network:
         ipv4_address: 172.18.0.2
     env_file:
-      - ./db.env
+      - ./Postgres/db.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./Postgres/init:/docker-entrypoint-initdb.d
