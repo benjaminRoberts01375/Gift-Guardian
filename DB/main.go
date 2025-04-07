@@ -19,6 +19,7 @@ func main() {
 	database = setupDB()
 	defer database.Close()
 	Coms.Println("Going up")
+	http.HandleFunc("POST /userCreate", userCreateNew)
 	http.ListenAndServe(Coms.GetLaunchPort(), nil)
 }
 
