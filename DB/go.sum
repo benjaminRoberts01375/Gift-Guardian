@@ -1,2 +1,4 @@
 github.com/benjaminRoberts01375/Go-Communicate v0.0.0-20250406175748-379c2a8bdbf4 h1:IeN5YjP+26aodsN/Y3e+9MkHxYMt3legWgCPiY8T5C0=
 github.com/benjaminRoberts01375/Go-Communicate v0.0.0-20250406175748-379c2a8bdbf4/go.mod h1:mEtpQ3sniksqo+auuV8RH/8FojtNkcKJFOd5dp0KO0s=
+github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
+github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
