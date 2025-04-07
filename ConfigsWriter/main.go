@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	DBModels "github.com/benjaminRoberts01375/Gift-Guardian/DB/models"
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 	ComsModels "github.com/benjaminRoberts01375/Go-Communicate/models"
 )
@@ -12,10 +13,10 @@ import (
 const LaunchPort = 9001
 
 func main() {
-	setupDBAPI()
+	setupDB()
 }
 
-func setupDBAPI() Coms.Config {
+func setupDB() (Coms.Config, DBModels.Config) {
 	executable, err := os.Executable()
 	if err != nil {
 		panic(err)
@@ -30,13 +31,23 @@ func setupDBAPI() Coms.Config {
 		EncryptionKeys: Coms.CreateEncryptionKeys(),
 		LaunchPort:     LaunchPort,
 	}
-	DBAPIComsConfigBytes, err := json.Marshal(DBAPIComsConfig)
+
+	DBConfigBytes, err := json.Marshal(dbConfig)
 	if err != nil {
 		panic(err)
 	}
-	err = os.WriteFile(filepath.Join(DBAPIEnvPath, "coms.json"), DBAPIComsConfigBytes, 0644)
+	err = os.WriteFile(filepath.Join(DBAPIEnvPath, "db.json"), DBConfigBytes, 0644)
 	if err != nil {
 		panic(err)
 	}
-	return DBAPIComsConfig
+
+	DBComsConfigBytes, err := json.Marshal(DBAPIComsConfig)
+	if err != nil {
+		panic(err)
+	}
+	err = os.WriteFile(filepath.Join(DBAPIEnvPath, "coms.json"), DBComsConfigBytes, 0644)
+	if err != nil {
+		panic(err)
+	}
+	return DBAPIComsConfig, dbConfig
 }
