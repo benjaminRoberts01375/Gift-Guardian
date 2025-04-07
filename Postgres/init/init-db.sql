@@ -1,3 +1,6 @@
+-- Clean up
+DROP DATABASE dev;
+
 -- Create the gift_guardian database
 CREATE DATABASE gift_guardian;
 
