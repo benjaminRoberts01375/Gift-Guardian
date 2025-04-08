@@ -10,6 +10,8 @@ type Config struct {
 	DBUser          string `json:"user"`
 	DBPassword      string `json:"password"`
 	DBContainerName string `json:"container_name"`
+	JWTSecret       string `json:"jwt_secret"`
+	EmailAPIKey     string `json:"email_api_key"`
 }
 
 func (config Config) PSQLInfo() string {

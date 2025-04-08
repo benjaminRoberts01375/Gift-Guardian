@@ -20,6 +20,7 @@ func main() {
 	defer database.Close()
 	Coms.Println("Going up")
 	http.HandleFunc("POST /userCreate", userCreateNew)
+	http.HandleFunc("/user-confirmation/{token}", userConfirmation)
 	http.ListenAndServe(Coms.GetLaunchPort(), nil)
 }
 
