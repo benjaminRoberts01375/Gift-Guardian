@@ -5,13 +5,14 @@ import (
 )
 
 type Config struct {
-	DBPort          int    `json:"db_port"`
-	DBName          string `json:"db_name"`
-	DBUser          string `json:"user"`
-	DBPassword      string `json:"password"`
-	DBContainerName string `json:"container_name"`
-	JWTSecret       string `json:"jwt_secret"`
-	EmailAPIKey     string `json:"email_api_key"`
+	DBPort             int    `json:"db_port"`
+	DBName             string `json:"db_name"`
+	DBUser             string `json:"user"`
+	DBPassword         string `json:"password"`
+	DBContainerName    string `json:"container_name"`
+	JWTSecret          string `json:"jwt_secret"`
+	EmailAPIKey        string `json:"email_api_key"`
+	AllowSendingEmails bool   `json:"allow_sending_emails"`
 }
 
 func (config Config) PSQLInfo() string {

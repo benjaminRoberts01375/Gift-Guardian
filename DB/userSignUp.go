@@ -36,7 +36,9 @@ func userCreateNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
-	go sendConfirmationEmail(userData.Email, userData.FirstName)
+	if config.AllowSendingEmails {
+		go sendConfirmationEmail(userData.Email, userData.FirstName)
+	}
 }
 
 func sendConfirmationEmail(username string, firstName string) {
