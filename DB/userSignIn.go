@@ -48,7 +48,7 @@ func userSignIn(w http.ResponseWriter, r *http.Request) {
 		Value:    jwt,
 		HttpOnly: true,
 		Secure:   true,
-		SameSite: http.SameSiteNoneMode,
+		SameSite: http.SameSiteStrictMode,
 		Expires:  time.Now().Add(UserJWTDuration),
 		Path:     "/",
 	})
