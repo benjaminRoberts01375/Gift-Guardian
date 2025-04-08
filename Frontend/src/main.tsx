@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./screens/login/login.tsx";
 import SignUp from "./screens/login/signup.tsx";
 import ForgotPassword from "./screens/login/forgotPassword.tsx";
+import CheckEmail from "./screens/login/checkEmail.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -22,6 +23,10 @@ createRoot(document.getElementById("root")!).render(
         <Route
           path="/forgot-password"
           element={<CredentialsScreen content={<ForgotPassword />} />}
+        />
+        <Route
+          path="/check-email"
+          element={<CredentialsScreen content={<CheckEmail />} />}
         />
       </Routes>
     </BrowserRouter>
