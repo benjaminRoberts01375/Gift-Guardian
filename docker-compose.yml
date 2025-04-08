@@ -1,10 +1,6 @@
 networks:
   gg-network:
     driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.18.0.0/16
 
 services:
   frontend:
@@ -14,8 +10,7 @@ services:
     container_name: frontend
     restart: unless-stopped
     networks:
-      gg-network:
-        ipv4_address: 172.18.0.20
+      - gg-network
     hostname: frontend
     volumes:
       - ./Frontend:/app
@@ -44,8 +39,7 @@ services:
     restart: unless-stopped
     user: postgres:postgres
     networks:
-      gg-network:
-        ipv4_address: 172.18.0.2
+      - gg-network
     env_file:
       - ./Postgres/db.env
     volumes:
@@ -61,8 +55,7 @@ services:
     container_name: gg-db
     restart: unless-stopped
     networks:
-      gg-network:
-        ipv4_address: 172.18.0.3
+      - gg-network
     hostname: db
     depends_on:
       - postgres
