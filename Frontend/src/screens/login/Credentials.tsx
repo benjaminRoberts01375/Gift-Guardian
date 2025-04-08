@@ -1,6 +1,6 @@
 import credentialStyles from "./Credentials.module.css";
-import "../style.css";
-import companyLogo from "../assets/Wide.png";
+import "../../style.css";
+import companyLogo from "../../assets/Wide.png";
 
 type CredentialsProps = {
   content: React.ReactNode;

@@ -1,6 +1,6 @@
 import loginStyles from "./login.module.css";
 import credentialStyles from "./Credentials.module.css";
-import "../style.css";
+import "../../style.css";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const Login = () => {
     };
 
     try {
-      const response = await fetch("/api/staffLogin", {
+      const response = await fetch("/db/userSignIn", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ interface LoginTextProps {
 function LoginText({ attemptedLogin }: LoginTextProps) {
   if (attemptedLogin === "failed") {
     return (
-      <h1 className="error title" id={loginStyles["login-text"]}>
+      <h1 className="error title" id={credentialStyles["login-text"]}>
         Login Failed
       </h1>
     );
