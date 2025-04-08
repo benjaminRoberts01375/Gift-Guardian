@@ -1,10 +1,10 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import CredentialsScreen from "./screens/Credentials.tsx";
+import CredentialsScreen from "./screens/login/Credentials.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./screens/login";
-import SignUp from "./screens/signup";
-import ForgotPassword from "./screens/forgotPassword.tsx";
+import Login from "./screens/login/login.tsx";
+import SignUp from "./screens/login/signup.tsx";
+import ForgotPassword from "./screens/login/forgotPassword.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
