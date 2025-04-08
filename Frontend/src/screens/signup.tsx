@@ -26,7 +26,7 @@ const SignUp: React.FC<SignupProps> = ({ signIn }) => {
     };
 
     try {
-      const response = await fetch("/api/staffLogin", {
+      const response = await fetch("/db/userCreate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
