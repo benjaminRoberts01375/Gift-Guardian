@@ -23,6 +23,8 @@ const SignUp: React.FC<SignupProps> = ({ signIn }) => {
     const payload = {
       username: formData.get("username") as string,
       password: formData.get("password") as string,
+      first_name: formData.get("firstName") as string,
+      last_name: formData.get("lastName") as string,
     };
 
     try {
