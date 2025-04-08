@@ -1,7 +1,7 @@
 import loginStyles from "./login.module.css";
 import credentialStyles from "./Credentials.module.css";
 import "../../style.css";
-import { useState, FormEvent } from "react";
+import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -42,6 +42,27 @@ const Login = () => {
       setAttemptedLogin("error");
     }
   };
+  // Check if the user is already logged in
+  useEffect(() => {
+    const checkIfLoggedIn = async () => {
+      try {
+        const response = await fetch("/db/userJWTSignIn", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        if (response.ok) {
+          navigate("/dashboard");
+        }
+      } catch (error) {
+        console.error("Error during login:", error);
+      }
+    };
+
+    checkIfLoggedIn();
+  }, [navigate]);
 
   return (
     <form

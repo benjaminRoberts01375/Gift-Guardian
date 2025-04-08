@@ -22,6 +22,7 @@ func main() {
 	Coms.Println("Going up")
 	http.HandleFunc("POST /userCreate", userCreateNew)
 	http.HandleFunc("POST /userSignIn", userSignIn)
+	http.HandleFunc("POST /userJWTSignIn", userJWTSignIn)
 	http.HandleFunc("/user-confirmation/{token}", userConfirmation)
 	http.ListenAndServe(Coms.GetLaunchPort(), nil)
 }
