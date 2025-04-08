@@ -4,15 +4,11 @@ import "../style.css";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-type SignupProps = {
-  signIn: () => void;
-};
-
-const SignUp: React.FC<SignupProps> = ({ signIn }) => {
-  const navigate = useNavigate();
+const SignUp = () => {
   const [attemptedLogin, setAttemptedLogin] = useState<"fresh" | "failed">(
     "fresh",
   );
+  const navigate = useNavigate();
 
   // Define the onSubmit handler as a separate function with proper type for event
   const handleLoginSubmission = async (event: FormEvent<HTMLFormElement>) => {
@@ -34,11 +30,11 @@ const SignUp: React.FC<SignupProps> = ({ signIn }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
-        credentials: "include", // Add this line to handle cookies
+        credentials: "include", // Cookies
       });
 
       if (response.ok) {
-        navigate("/dashboard");
+        navigate("/check-email");
       } else {
         console.error("Login failed:", response.status);
         setAttemptedLogin("failed");
@@ -98,7 +94,9 @@ const SignUp: React.FC<SignupProps> = ({ signIn }) => {
         <div id={credentialsStyles["submit-container"]}>
           <button
             type="button"
-            onClick={signIn}
+            onClick={() => {
+              navigate("/login");
+            }}
             className={credentialsStyles["secondary"]}
             id={signupStyles["account-exists"]}
           >

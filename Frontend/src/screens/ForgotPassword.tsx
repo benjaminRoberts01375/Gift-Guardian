@@ -2,11 +2,9 @@ import forgotPasswordStyles from "./forgotPassword.module.css";
 import credentialsStyles from "./Credentials.module.css";
 import "../style.css";
 import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
-  const [attemptedLogin, setAttemptedLogin] = useState<
+  const [attemptedLogin, setAttemptedReset] = useState<
     "fresh" | "failed" | "error"
   >("fresh");
 
@@ -30,15 +28,13 @@ const ForgotPassword = () => {
         credentials: "include", // Add this line to handle cookies
       });
 
-      if (response.ok) {
-        navigate("/dashboard");
-      } else {
-        console.error("Login failed:", response.status);
-        setAttemptedLogin("failed");
+      if (!response.ok) {
+        console.error("Password failed:", response.status);
+        setAttemptedReset("failed");
       }
     } catch (error) {
       console.error("Error during login:", error);
-      setAttemptedLogin("error");
+      setAttemptedReset("error");
     }
   };
 

@@ -1,15 +1,10 @@
 import loginStyles from "./login.module.css";
 import credentialStyles from "./Credentials.module.css";
 import "../style.css";
-import React, { useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
-type SignInProps = {
-  signUp: () => void;
-  forgotPassword: () => void;
-};
-
-const Login: React.FC<SignInProps> = ({ signUp, forgotPassword }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [attemptedLogin, setAttemptedLogin] = useState<
     "fresh" | "failed" | "error"
@@ -74,14 +69,18 @@ const Login: React.FC<SignInProps> = ({ signUp, forgotPassword }) => {
         <div id={credentialStyles["submit-container"]}>
           <button
             type="button"
-            onClick={forgotPassword}
+            onClick={() => {
+              navigate("/forgot-password");
+            }}
             className={credentialStyles["secondary"]}
           >
             Forgot Password?
           </button>
           <button
             type="button"
-            onClick={signUp}
+            onClick={() => {
+              navigate("/sign-up");
+            }}
             className={credentialStyles["secondary"]}
             id={loginStyles["signUp"]}
           >

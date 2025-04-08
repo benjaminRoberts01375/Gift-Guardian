@@ -1,16 +1,12 @@
 import credentialStyles from "./Credentials.module.css";
 import "../style.css";
 import companyLogo from "../assets/Wide.png";
-import { useState } from "react";
-import Login from "./login";
-import Signup from "./signup";
-import ForgotPassword from "./ForgotPassword";
 
-const CredentialsScreen = () => {
-  const [credentialsType, setCredentialsType] = useState<
-    "login" | "signup" | "forgot"
-  >("login");
+type CredentialsProps = {
+  content: React.ReactNode;
+};
 
+const CredentialsScreen = ({ content }: CredentialsProps) => {
   return (
     <div id={credentialStyles["container"]}>
       <div id={credentialStyles["center-box"]}>
@@ -23,16 +19,7 @@ const CredentialsScreen = () => {
               id={credentialStyles["gg-logo"]}
             />
           </div>
-          {credentialsType === "login" ? (
-            <Login
-              signUp={() => setCredentialsType("signup")}
-              forgotPassword={() => setCredentialsType("forgot")}
-            />
-          ) : null}
-          {credentialsType === "signup" ? (
-            <Signup signIn={() => setCredentialsType("login")} />
-          ) : null}
-          {credentialsType === "forgot" ? <ForgotPassword /> : null}
+          {content}
         </div>
       </div>
     </div>
