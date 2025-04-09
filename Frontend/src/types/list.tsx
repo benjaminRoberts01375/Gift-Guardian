@@ -7,7 +7,12 @@ class List {
   groups: Group[];
   owner: User;
 
-  constructor(id: string, owner: User, title: string, groups: Group[] = []) {
+  constructor(
+    owner: User,
+    id: string = "dummy",
+    title: string = "Untitled List",
+    groups: Group[] = [],
+  ) {
     this.owner = owner;
     this.groups = groups;
     this.id = id;
