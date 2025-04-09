@@ -13,11 +13,20 @@ const Dashboard = () => {
         {lists.find((list) => list.id === "dummy") ? null : <AddListButton />}
       </div>
       <div>
-        {lists.map((list) => (
-          <div>
-            <ListCollapsed listID={list.id} />
-          </div>
-        ))}
+        {lists.map((list) =>
+          list.id !== "dummy" ? null : ( // Only list dummy lists
+            <div key={list.id}>
+              <ListCollapsed listID={list.id} />
+            </div>
+          ),
+        )}
+        {lists.map((list) =>
+          list.id === "dummy" ? null : ( // Filter out any dummy lists
+            <div key={list.id}>
+              <ListCollapsed listID={list.id} />
+            </div>
+          ),
+        )}
       </div>
       <div className={dashboardStyles["dashboard-header"]}>
         <h1>Lists shared with you</h1>
