@@ -9,7 +9,7 @@ interface ListProviderProps {
   children: ReactNode;
 }
 
-export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
+export const ListProvider = ({ children }: ListProviderProps) => {
   const [lists, setLists] = useState<List[]>([]);
 
   // List operations
