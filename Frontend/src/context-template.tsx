@@ -5,32 +5,53 @@ import Gift from "./types/gift.tsx";
 
 // Define types for the context actions
 export type ListContextType = {
-  list: List | null;
-  setList: (list: List) => void;
+  lists: List[];
+  setLists: (lists: List[]) => void;
+  activeListId: string | null;
+  setActiveListId: (id: string | null) => void;
+
+  // List operations
+  addList: (list: List) => void;
+  updateList: (listId: string, updatedList: Partial<List>) => void;
+  removeList: (listId: string) => void;
+  updateListTitle: (listId: string, title: string) => void;
 
   // Group operations
-  addGroup: (group: Group) => void;
-  updateGroup: (groupId: string, updatedGroup: Partial<Group>) => void;
-  removeGroup: (groupId: string) => void;
+  addGroup: (listId: string, group: Group) => void;
+  updateGroup: (
+    listId: string,
+    groupId: string,
+    updatedGroup: Partial<Group>,
+  ) => void;
+  removeGroup: (listId: string, groupId: string) => void;
 
   // Gift operations
-  addGift: (groupId: string, gift: Gift) => void;
+  addGift: (listId: string, groupId: string, gift: Gift) => void;
   updateGift: (
+    listId: string,
     groupId: string,
     giftId: string,
     updatedGift: Partial<Gift>,
   ) => void;
-  removeGift: (groupId: string, giftId: string) => void;
-  moveGift: (fromGroupId: string, toGroupId: string, giftId: string) => void;
-
-  // List operations
-  updateListTitle: (title: string) => void;
+  removeGift: (listId: string, groupId: string, giftId: string) => void;
+  moveGift: (
+    listId: string,
+    fromGroupId: string,
+    toGroupId: string,
+    giftId: string,
+  ) => void;
 };
 
 // Create the context with default values
 export const ListContext = createContext<ListContextType>({
-  list: null,
-  setList: () => {},
+  lists: [],
+  setLists: () => {},
+  activeListId: null,
+  setActiveListId: () => {},
+  addList: () => {},
+  updateList: () => {},
+  removeList: () => {},
+  updateListTitle: () => {},
   addGroup: () => {},
   updateGroup: () => {},
   removeGroup: () => {},
@@ -38,7 +59,6 @@ export const ListContext = createContext<ListContextType>({
   updateGift: () => {},
   removeGift: () => {},
   moveGift: () => {},
-  updateListTitle: () => {},
 });
 
 // Create a custom hook to use the context
