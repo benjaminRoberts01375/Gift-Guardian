@@ -15,7 +15,6 @@ const Dashboard = () => {
       <div>
         {lists.map((list) => (
           <div>
-            <h1>{list.title}</h1>
             <ListCollapsed listID={list.id} />
           </div>
         ))}
