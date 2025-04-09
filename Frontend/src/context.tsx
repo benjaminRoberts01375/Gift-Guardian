@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import List from "./types/list.tsx";
 import Group from "./types/group.tsx";
 import Gift from "./types/gift.tsx";
@@ -21,8 +21,8 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
     const updatedLists = lists.map((list) => {
       if (list.id === listId) {
         return new List(
-          list.id,
           updatedList.owner || list.owner,
+          list.id,
           updatedList.title || list.title,
           updatedList.groups || list.groups,
         );
@@ -41,7 +41,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
   const updateListTitle = (listId: string, title: string) => {
     const updatedLists = lists.map((list) => {
       if (list.id === listId) {
-        return new List(list.id, list.owner, title, list.groups);
+        return new List(list.owner, list.id, title, list.groups);
       }
       return list;
     });
@@ -68,7 +68,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
   // Group operations
   const addGroup = (listId: string, group: Group) => {
     updateListById(listId, (list) => {
-      return new List(list.id, list.owner, list.title, [...list.groups, group]);
+      return new List(list.owner, list.id, list.title, [...list.groups, group]);
     });
   };
 
@@ -89,7 +89,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
         return group;
       });
 
-      return new List(list.id, list.owner, list.title, updatedGroups);
+      return new List(list.owner, list.id, list.title, updatedGroups);
     });
   };
 
@@ -98,7 +98,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
       const filteredGroups = list.groups.filter(
         (group) => group.id !== groupId,
       );
-      return new List(list.id, list.owner, list.title, filteredGroups);
+      return new List(list.owner, list.id, list.title, filteredGroups);
     });
   };
 
@@ -118,7 +118,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
         return group;
       });
 
-      return new List(list.id, list.owner, list.title, updatedGroups);
+      return new List(list.owner, list.id, list.title, updatedGroups);
     });
   };
 
@@ -147,7 +147,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
         return group;
       });
 
-      return new List(list.id, list.owner, list.title, updatedGroups);
+      return new List(list.owner, list.id, list.title, updatedGroups);
     });
   };
 
@@ -163,7 +163,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
         return group;
       });
 
-      return new List(list.id, list.owner, list.title, updatedGroups);
+      return new List(list.owner, list.id, list.title, updatedGroups);
     });
   };
 
@@ -203,7 +203,7 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
         return group;
       });
 
-      return new List(list.id, list.owner, list.title, updatedGroups);
+      return new List(list.owner, list.id, list.title, updatedGroups);
     });
   };
 
