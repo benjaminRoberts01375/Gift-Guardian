@@ -1,0 +1,6 @@
+.dashboard-header {
+  display: flex;
+  padding: 10pt;
+  margin-top: 10pt;
+  background: #ffffff55;
+}

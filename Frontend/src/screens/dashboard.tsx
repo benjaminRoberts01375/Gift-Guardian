@@ -1,7 +1,13 @@
+import dashboardStyles from "./dashboard.module.css";
+import "../style.css";
 const Dashboard = () => {
   return (
     <div>
-      <h1>Dashboard</h1>
+      <div className={dashboardStyles["dashboard-header"]}>
+      </div>
+      <div className={dashboardStyles["dashboard-header"]}>
+        <h1>Lists shared with you</h1>
+      </div>
     </div>
   );
 };
