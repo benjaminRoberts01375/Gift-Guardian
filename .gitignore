@@ -145,3 +145,6 @@ DB/DB
 
 # Additional configs
 ConfigsWriter/dbConfig.go
+
+# Lock files
+Logos/Favicon.afdesign~lock~
