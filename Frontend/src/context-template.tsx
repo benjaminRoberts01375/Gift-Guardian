@@ -7,8 +7,6 @@ import Gift from "./types/gift.tsx";
 export type ListContextType = {
   lists: List[];
   setLists: (lists: List[]) => void;
-  activeListId: string | null;
-  setActiveListId: (id: string | null) => void;
 
   // List operations
   addList: (list: List) => void;
@@ -46,8 +44,6 @@ export type ListContextType = {
 export const ListContext = createContext<ListContextType>({
   lists: [],
   setLists: () => {},
-  activeListId: null,
-  setActiveListId: () => {},
   addList: () => {},
   updateList: () => {},
   removeList: () => {},

@@ -11,7 +11,6 @@ interface ListProviderProps {
 
 export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
   const [lists, setLists] = useState<List[]>([]);
-  const [activeListId, setActiveListId] = useState<string | null>(null);
 
   // List operations
   const addList = (list: List) => {
@@ -37,11 +36,6 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
   const removeList = (listId: string) => {
     const filteredLists = lists.filter((list) => list.id !== listId);
     setLists(filteredLists);
-
-    // If we're removing the active list, reset activeListId
-    if (activeListId === listId) {
-      setActiveListId(filteredLists.length > 0 ? filteredLists[0].id : null);
-    }
   };
 
   const updateListTitle = (listId: string, title: string) => {
@@ -200,8 +194,6 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
   const value: ListContextType = {
     lists,
     setLists,
-    activeListId,
-    setActiveListId,
     addList,
     updateList,
     removeList,
