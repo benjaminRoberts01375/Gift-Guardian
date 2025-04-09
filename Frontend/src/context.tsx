@@ -49,6 +49,10 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
     setLists(updatedLists);
   };
 
+  const getList = (listId: string) => {
+    return lists.find((list) => list.id === listId);
+  };
+
   // Helper function to find and update a specific list
   const updateListById = (listId: string, updateFn: (list: List) => List) => {
     const updatedLists = lists.map((list) => {
@@ -96,6 +100,12 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
       );
       return new List(list.id, list.owner, list.title, filteredGroups);
     });
+  };
+
+  const getGroup = (listId: string, groupId: string) => {
+    const list = getList(listId);
+    if (!list) return undefined;
+    return list.groups.find((group) => group.id === groupId);
   };
 
   // Gift operations
@@ -157,6 +167,12 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
     });
   };
 
+  const getGift = (listId: string, groupId: string, giftId: string) => {
+    const group = getGroup(listId, groupId);
+    if (!group) return undefined;
+    return group.gifts.find((gift) => gift.id === giftId);
+  };
+
   const moveGift = (
     listId: string,
     fromGroupId: string,
@@ -198,13 +214,16 @@ export const ListProvider: React.FC<ListProviderProps> = ({ children }) => {
     updateList,
     removeList,
     updateListTitle,
+    getList,
     addGroup,
     updateGroup,
     removeGroup,
+    getGroup,
     addGift,
     updateGift,
     removeGift,
     moveGift,
+    getGift,
   };
 
   return <ListContext.Provider value={value}>{children}</ListContext.Provider>;

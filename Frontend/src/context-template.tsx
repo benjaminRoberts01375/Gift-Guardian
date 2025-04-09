@@ -13,6 +13,7 @@ export type ListContextType = {
   updateList: (listId: string, updatedList: Partial<List>) => void;
   removeList: (listId: string) => void;
   updateListTitle: (listId: string, title: string) => void;
+  getList: (listId: string) => List | undefined;
 
   // Group operations
   addGroup: (listId: string, group: Group) => void;
@@ -22,6 +23,7 @@ export type ListContextType = {
     updatedGroup: Partial<Group>,
   ) => void;
   removeGroup: (listId: string, groupId: string) => void;
+  getGroup: (listId: string, groupId: string) => Group | undefined;
 
   // Gift operations
   addGift: (listId: string, groupId: string, gift: Gift) => void;
@@ -38,6 +40,11 @@ export type ListContextType = {
     toGroupId: string,
     giftId: string,
   ) => void;
+  getGift: (
+    listId: string,
+    groupId: string,
+    giftId: string,
+  ) => Gift | undefined;
 };
 
 // Create the context with default values
@@ -48,13 +55,16 @@ export const ListContext = createContext<ListContextType>({
   updateList: () => {},
   removeList: () => {},
   updateListTitle: () => {},
+  getList: () => undefined,
   addGroup: () => {},
   updateGroup: () => {},
   removeGroup: () => {},
+  getGroup: () => undefined,
   addGift: () => {},
   updateGift: () => {},
   removeGift: () => {},
   moveGift: () => {},
+  getGift: () => undefined,
 });
 
 // Create a custom hook to use the context
