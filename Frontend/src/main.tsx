@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import CredentialsScreen from "./screens/login/Credentials.tsx";
+import CredentialsScreen from "./screens/login/credentials.tsx";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./screens/login/login.tsx";
 import SignUp from "./screens/login/signup.tsx";

@@ -1,4 +1,4 @@
-import credentialStyles from "./Credentials.module.css";
+import credentialStyles from "./credentials.module.css";
 import "../../style.css";
 import companyLogo from "../../assets/Wide.png";
 
