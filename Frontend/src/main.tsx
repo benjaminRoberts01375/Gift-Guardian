@@ -6,6 +6,8 @@ import Login from "./screens/login/login.tsx";
 import SignUp from "./screens/login/signup.tsx";
 import ForgotPassword from "./screens/login/forgotPassword.tsx";
 import CheckEmail from "./screens/login/checkEmail.tsx";
+import Screen from "./components/screen.tsx";
+import Dashboard from "./screens/dashboard.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -27,6 +29,10 @@ createRoot(document.getElementById("root")!).render(
         <Route
           path="/check-email"
           element={<CredentialsScreen content={<CheckEmail />} />}
+        />
+        <Route
+          path="/dashboard"
+          element={<Screen content={<Dashboard />} title="Dashboard" />}
         />
       </Routes>
     </BrowserRouter>
