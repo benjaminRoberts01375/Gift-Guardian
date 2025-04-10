@@ -14,7 +14,7 @@ const AddListButton = () => {
 
   return (
     <button onClick={createNewList} id={addListButtonStyles["add-list-button"]}>
-      +
+      ＋
     </button>
   );
 };
