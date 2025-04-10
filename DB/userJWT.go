@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -25,6 +26,14 @@ func userGenerateJWT(username string, duration time.Duration) (string, error) {
 	claims.Issuer = "Gift Guardian DB"
 	claims.Subject = "GG Login"
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(config.JWTSecret))
+}
+
+func userJWTIsValidFromCookie(r *http.Request) (*UserJWTClaims, bool) {
+	cookie, err := r.Cookie(UserJWTCookieName)
+	if err != nil {
+		return nil, false
+	}
+	return userJWTIsValid(cookie.Value)
 }
 
 func userJWTIsValid(tokenString string) (*UserJWTClaims, bool) {

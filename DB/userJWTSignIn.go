@@ -7,12 +7,7 @@ import (
 )
 
 func userJWTSignIn(w http.ResponseWriter, r *http.Request) {
-	requestJWT, err := r.Cookie(UserJWTCookieName)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
-		return
-	}
-	_, valid := userJWTIsValid(requestJWT.Value)
+	_, valid := userJWTIsValidFromCookie(r)
 	if !valid {
 		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
 		return
