@@ -11,7 +11,7 @@ const ListCollapsed = ({ listID }: ListCollapsedProps) => {
   const list = getList(listID);
   return (
     <div id={listStyles["List-entry"]}>
-      <h1>{list?.title}</h1>
+      <h1>▸ {list?.title}</h1>
     </div>
   );
 };
