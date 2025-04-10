@@ -44,7 +44,7 @@ func userSignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.SetCookie(w, &http.Cookie{
-		Name:     "LoginToken",
+		Name:     UserJWTCookieName,
 		Value:    jwt,
 		HttpOnly: true,
 		Secure:   true,
