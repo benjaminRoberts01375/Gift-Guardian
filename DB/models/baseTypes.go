@@ -1,12 +1,15 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type List struct {
 	ID        int       `json:"id"`
 	OwnerID   int       `json:"owner_id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
+	Groups    []Group   `json:"groups"`
 }
 
 type Group struct {
@@ -14,6 +17,7 @@ type Group struct {
 	ListID    int       `json:"list_id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
+	Gifts     []Gift    `json:"gifts"`
 }
 
 type Gift struct {
