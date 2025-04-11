@@ -16,7 +16,7 @@ var config models.Config
 func main() {
 	Coms.ReadConfig()
 	Coms.ReadExternalConfig("db.json", &config)
-	preflightChecks()
+	config.PreflightChecks()
 	database = setupDB()
 	defer database.Close()
 	Coms.Println("Going up")
@@ -39,29 +39,4 @@ func setupDB() *sql.DB {
 		panic("Could not ping DB at " + config.PSQLInfo() + ": " + err.Error())
 	}
 	return db
-}
-
-func preflightChecks() {
-	if config.DBPort == 0 {
-		panic("DBPort is not set in config")
-	}
-	if config.DBName == "" {
-		panic("DBName is not set in config")
-	}
-	if config.DBUser == "" {
-		panic("DBUser is not set in config")
-	}
-	if config.DBPassword == "" {
-		panic("DBPassword is not set in config")
-	}
-	if config.DBContainerName == "" {
-		panic("DBContainerName is not set in config")
-	}
-	if config.JWTSecret == "" {
-		panic("JWTSecret is not set in config")
-	}
-	if config.EmailAPIKey == "" {
-		panic("EmailAPIKey is not set in config")
-	}
-	Coms.Println("Preflight checks passed")
 }
