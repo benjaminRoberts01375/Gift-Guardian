@@ -1,11 +1,12 @@
 package models
 
 import (
+	"database/sql"
 	"time"
 )
 
 type List struct {
-	ID        int       `json:"id"`
+	ID        string    `json:"id"`
 	OwnerID   int       `json:"owner_id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
@@ -13,7 +14,7 @@ type List struct {
 }
 
 type Group struct {
-	ID        int       `json:"id"`
+	ID        string    `json:"id"`
 	ListID    int       `json:"list_id"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
@@ -21,7 +22,7 @@ type Group struct {
 }
 
 type Gift struct {
-	ID          int       `json:"id"`
+	ID          string    `json:"id"`
 	GroupID     int       `json:"group_id"`
 	Name        string    `json:"name"`
 	Description string    `json:"description"`
