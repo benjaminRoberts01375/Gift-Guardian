@@ -1,6 +1,6 @@
 import listStyles from "./list.module.css";
 import "../style.css";
-import { useList } from "../context-template.tsx";
+import { useList } from "../context-hook.tsx";
 
 interface ListCollapsedProps {
   listID: string;
