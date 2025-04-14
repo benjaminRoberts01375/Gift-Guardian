@@ -36,5 +36,6 @@ func userUpsertList(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
+	dbTransaction.Commit()
 	Coms.ExternalPostRespond(list, w)
 }
