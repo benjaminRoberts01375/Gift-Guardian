@@ -66,14 +66,14 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
     return newList;
   };
 
-  const groupsGet = (listID: string) => {
-    return lists.find((list) => list.id === listID)?.groups;
+  const groupsGet = (listClientID: string) => {
+    return lists.find((list) => list.clientID === listClientID)?.groups;
   };
 
-  const groupGet = (listID: string, groupID: string) => {
+  const groupGet = (listClientID: string, groupClientID: string) => {
     return lists
-      .find((list) => list.id === listID)
-      ?.groups.find((group) => group.id === groupID);
+      .find((list) => list.clientID === listClientID)
+      ?.groups.find((group) => group.clientID === groupClientID);
   };
 
   // Value object that will be passed to consuming components
