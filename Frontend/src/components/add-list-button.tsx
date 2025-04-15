@@ -1,15 +1,12 @@
 import addListButtonStyles from "./add-list-button.module.css";
 import "../style.css";
-import { useList } from "../context-template.tsx";
-import List from "../types/list.tsx";
-import User from "../types/user.tsx";
+import { useList } from "../context-hook.tsx";
 
 const AddListButton = () => {
-  const { addList } = useList();
+  const { listCreate } = useList();
 
   const createNewList = () => {
-    console.log("Creating new list");
-    addList(new List(new User("ben", "Benjamin", "Roberts"))); // TODO: Replace with actual user
+    listCreate();
   };
 
   return (

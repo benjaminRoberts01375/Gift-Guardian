@@ -8,11 +8,11 @@ import ForgotPassword from "./screens/login/forgotPassword.tsx";
 import CheckEmail from "./screens/login/checkEmail.tsx";
 import Screen from "./components/screen.tsx";
 import Dashboard from "./screens/dashboard.tsx";
-import { ListProvider } from "./context.tsx";
+import { ListsProvider } from "./context.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ListProvider>
+    <ListsProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<CredentialsScreen content={<Login />} />} />
@@ -38,6 +38,6 @@ createRoot(document.getElementById("root")!).render(
           />
         </Routes>
       </BrowserRouter>
-    </ListProvider>
+    </ListsProvider>
   </StrictMode>,
 );

@@ -7,8 +7,8 @@ interface ListCollapsedProps {
 }
 
 const ListCollapsed = ({ listID }: ListCollapsedProps) => {
-  const { getList } = useList();
-  const list = getList(listID);
+  const { listGet } = useList();
+  const list = listGet(listID);
   return (
     <div id={listStyles["List-entry"]}>
       <h1>▸ {list?.title}</h1>
