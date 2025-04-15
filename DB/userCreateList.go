@@ -13,20 +13,23 @@ func userCreateList(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
 		return
 	}
-	list, err := Coms.ExternalPostReceived[models.List](r)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
-		return
-	}
 	// Get user ID from email
-	err = database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&list.OwnerID)
+	var userID string
+	err := database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-	statement := `INSERT INTO lists (owner_id) VALUES ($1) RETURNING id`
+
+	list, err := Coms.ExternalPostReceived[models.List](r)
+	if err != nil {
+		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
+		return
+	}
+
+	statement := `INSERT INTO lists (owner_id, name) VALUES ($1, $2) RETURNING id`
 	listID := ""
-	err = database.QueryRow(statement, list.OwnerID).Scan(&listID)
+	err = database.QueryRow(statement, userID, list.Name).Scan(&listID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
