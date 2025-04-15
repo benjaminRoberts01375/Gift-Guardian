@@ -4,6 +4,7 @@ import List from "./types/list.tsx";
 // Define the shape of our context
 export interface ListsContextType {
   listsGet: () => List[];
+  listGet: (id: string) => List | undefined;
   listRemove: (id: string) => void;
 }
 

@@ -19,6 +19,10 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
     return lists;
   };
 
+  const listGet = (clientID: string) => {
+    return lists.find((list) => list.clientID === clientID);
+  };
+
   const listRemove = (id: string) => {
     setLists((prevLists) => prevLists.filter((list) => list.id !== id));
   };
