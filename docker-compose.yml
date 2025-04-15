@@ -62,26 +62,6 @@ services:
     env_file:
       - ./.env
 
-  dev:
-    build:
-      context: ./.devcontainer
-      dockerfile: Dockerfile
-    container_name: gg-dev
-    volumes:
-      - .:/workspace:cached
-      - ~/.ssh:/home/vscode/.ssh:cached
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: sleep infinity
-    networks:
-      - gg-network
-    environment:
-      - GOPATH=/go
-    depends_on:
-      - postgres
-      - db
-      - frontend
-      - nginx
-
 volumes:
   postgres_data:
     name: gg-postgres-data

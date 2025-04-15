@@ -1,0 +1,22 @@
+networks:
+  gg-dev-network:
+    driver: bridge
+  gift-guardian_gg-network:
+    external: true
+
+services:
+  dev:
+    build:
+      context: ./.devcontainer
+      dockerfile: Dockerfile
+    container_name: gg-dev
+    volumes:
+      - .:/workspace:cached
+      - ~/.ssh:/home/vscode/.ssh:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: sleep infinity
+    networks:
+      - gg-dev-network
+      - gift-guardian_gg-network
+    environment:
+      - GOPATH=/go
