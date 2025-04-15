@@ -64,12 +64,24 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
     return newList;
   };
 
+  const groupsGet = (listID: string) => {
+    return lists.find((list) => list.id === listID)?.groups;
+  };
+
+  const groupGet = (listID: string, groupID: string) => {
+    return lists
+      .find((list) => list.id === listID)
+      ?.groups.find((group) => group.id === groupID);
+  };
+
   // Value object that will be passed to consuming components
   const value: ListsContextType = {
     listCreate,
     listsGet,
     listGet,
     listRemove,
+    groupsGet
+    groupGet,
   };
 
   return (
