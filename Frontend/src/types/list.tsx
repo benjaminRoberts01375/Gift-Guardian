@@ -3,6 +3,7 @@ import User from "./user.tsx";
 
 class List {
   id: string;
+  clientID: string;
   title: string;
   groups: Group[];
   owner: User;
@@ -17,6 +18,7 @@ class List {
     this.groups = groups;
     this.id = id;
     this.title = title;
+    this.clientID = crypto.randomUUID();
   }
 }
 
