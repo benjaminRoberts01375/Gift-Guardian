@@ -24,6 +24,10 @@ ENV GOPATH=/go
 # Install gopls
 RUN /usr/local/go/bin/go install -v golang.org/x/tools/gopls@latest
 
+# Add this after the line that creates Go directories
+RUN mkdir -p /go/pkg/mod/cache/download && \
+    chmod -R 777 /go/pkg
+
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash \
     && echo 'export BUN_INSTALL="$HOME/.bun"' >> /etc/bash.bashrc \
