@@ -12,7 +12,7 @@ class List {
     owner: User,
     id: string = "",
     title: string = "Untitled List",
-    groups: Group[] = [],
+    groups: Group[] = [new Group("Unsorted")],
   ) {
     this.owner = owner;
     this.groups = groups;
