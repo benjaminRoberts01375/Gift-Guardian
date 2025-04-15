@@ -10,7 +10,7 @@ class List {
 
   constructor(
     owner: User,
-    id: string = "dummy",
+    id: string = "",
     title: string = "Untitled List",
     groups: Group[] = [],
   ) {
