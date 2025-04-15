@@ -5,7 +5,7 @@ class Group {
   name: string;
   gifts: Gift[];
 
-  constructor(id: string = "", name: string = "Unsorted", gifts: Gift[] = []) {
+  constructor(name: string = "Unsorted", gifts: Gift[] = [], id: string = "") {
     this.gifts = gifts;
     this.id = id;
     this.name = name;
