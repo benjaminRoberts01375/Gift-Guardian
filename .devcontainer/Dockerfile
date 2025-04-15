@@ -12,8 +12,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Create Go directory with proper permissions
 RUN mkdir -p /go/bin /go/src /go/pkg && chown -R vscode:vscode /go
 
-# Install Go 1.24.2
-RUN curl -sSL https://go.dev/dl/go1.24.2.linux-amd64.tar.gz | tar -C /usr/local -xzf - \
+# Install Go 1.24.2 for ARM64
+RUN curl -sSL https://go.dev/dl/go1.24.2.linux-arm64.tar.gz | tar -C /usr/local -xzf - \
     && export PATH=$PATH:/usr/local/go/bin \
     && go version
 
