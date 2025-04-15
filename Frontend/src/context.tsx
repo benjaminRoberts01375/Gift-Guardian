@@ -48,14 +48,22 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
         }
 
         const result: List = await response.json();
-
+        const targetGroupClientID = newList.groups[0]?.clientID;
         // Update the list with server-generated ID or other fields
         setLists((prevLists) =>
-          prevLists.map((list) =>
-            list.clientID === newList.clientID
-              ? { ...list, id: result.id }
-              : list,
-          ),
+          prevLists.map((list) => {
+            if (list.clientID === newList.clientID) {
+              // Create a new array of groups with the updated group
+              const updatedGroups = list.groups.map((group) =>
+                group.clientID === targetGroupClientID
+                  ? { ...group, id: targetGroupClientID }
+                  : group,
+              );
+              // Return updated list with modified groups
+              return { ...list, groups: updatedGroups, id: result.id };
+            }
+            return list;
+          }),
         );
       } catch (error) {
         console.error("Error saving list:", error);
