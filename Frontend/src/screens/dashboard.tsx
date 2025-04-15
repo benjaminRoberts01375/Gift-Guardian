@@ -1,32 +1,24 @@
 import dashboardStyles from "./dashboard.module.css";
 import "../style.css";
 import AddListButton from "../components/add-list-button.tsx";
-import { useList } from "../context-template.tsx";
-import ListCollapsed from "../components/list-collapsed.tsx";
+import { useList } from "../context-hook.tsx";
+import ListView from "../components/list-view.tsx";
+import List from "../types/list.tsx";
 
 const Dashboard = () => {
-  const { lists } = useList();
+  const { listsGet } = useList();
   return (
     <div>
       <div className={dashboardStyles["dashboard-header"]}>
         <h1>Your lists</h1>
-        {lists.find((list) => list.id === "dummy") ? null : <AddListButton />}
+        <AddListButton />
       </div>
       <div>
-        {lists.map((list) =>
-          list.id !== "dummy" ? null : ( // Only list dummy lists
-            <div key={list.id}>
-              <ListCollapsed listID={list.id} />
-            </div>
-          ),
-        )}
-        {lists.map((list) =>
-          list.id === "dummy" ? null : ( // Filter out any dummy lists
-            <div key={list.id}>
-              <ListCollapsed listID={list.id} />
-            </div>
-          ),
-        )}
+        {listsGet().map((list: List) => (
+          <div key={list.clientID}>
+            <ListView listID={list.clientID} />
+          </div>
+        ))}
       </div>
       <div className={dashboardStyles["dashboard-header"]}>
         <h1>Lists shared with you</h1>
