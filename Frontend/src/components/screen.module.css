@@ -1,3 +1,7 @@
+#screen {
+  align-items: center;
+}
+
 #header {
   height: 50pt;
   padding: 10pt;
@@ -21,4 +25,8 @@
 
 #profile {
   margin: 0pt 0pt 0pt auto;
+}
+
+#content {
+  width: 100%;
 }
