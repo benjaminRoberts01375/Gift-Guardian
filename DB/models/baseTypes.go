@@ -52,6 +52,7 @@ func (list *List) Upsert(dbTransaction *sql.Tx) error {
 	}
 
 	for i := range list.Groups {
+		list.Groups[i].ListID = list.ID
 		err = list.Groups[i].Upsert(dbTransaction)
 		if err != nil {
 			return err
@@ -79,6 +80,7 @@ func (group *Group) Upsert(dbTransaction *sql.Tx) error {
 	}
 
 	for i := range group.Gifts {
+		group.Gifts[i].GroupID = group.ID
 		err = group.Gifts[i].Upsert(dbTransaction)
 		if err != nil {
 			return err
