@@ -80,7 +80,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
     listsGet,
     listGet,
     listRemove,
-    groupsGet
+    groupsGet,
     groupGet,
   };
 
