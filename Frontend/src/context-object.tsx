@@ -6,6 +6,7 @@ export interface ListsContextType {
   listsGet: () => List[];
   listGet: (id: string) => List | undefined;
   listRemove: (id: string) => void;
+  listCreate: () => List;
 }
 
 // Create the context with a default value

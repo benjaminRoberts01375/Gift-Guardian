@@ -1,5 +1,6 @@
 import React, { useState, ReactNode } from "react";
 import List from "./types/list.tsx";
+import User from "./types/user.tsx";
 import { ListsContext, ListsContextType } from "./context-object.tsx";
 
 // Props for the provider component
@@ -27,9 +28,47 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
     setLists((prevLists) => prevLists.filter((list) => list.id !== id));
   };
 
+  const listCreate = () => {
+    const newList = new List(new User("ben", "Benjamin", "Roberts"));
+    setLists((prevLists) => [...prevLists, newList]);
+
+    // Fire and forget async POST request
+    (async () => {
+      try {
+        const response = await fetch("/db/userCreateList", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newList),
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const result = await response.json();
+
+        // Update the list with server-generated ID or other fields
+        setLists((prevLists) =>
+          prevLists.map((list) =>
+            list.clientID === newList.clientID ? { ...list, id: result } : list,
+          ),
+        );
+      } catch (error) {
+        console.error("Error saving list:", error);
+        // Optionally handle error - e.g., notify user or rollback the list addition
+      }
+    })();
+
+    return newList;
+  };
+
   // Value object that will be passed to consuming components
   const value: ListsContextType = {
+    listCreate,
     listsGet,
+    listGet,
     listRemove,
   };
 
