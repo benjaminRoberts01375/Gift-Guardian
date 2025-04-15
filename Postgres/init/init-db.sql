@@ -33,7 +33,7 @@ CREATE TABLE lists (
 -- Create a table for storing groups
 CREATE TABLE groups (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    list_id INTEGER REFERENCES lists(id),
+    list_id UUID REFERENCES lists(id),
     name VARCHAR(100) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -41,7 +41,7 @@ CREATE TABLE groups (
 -- Create a table for storing gifts
 CREATE TABLE gifts (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    group_id INTEGER REFERENCES groups(id),
+    group_id UUID REFERENCES groups(id),
     name VARCHAR(100) NOT NULL,
     description VARCHAR(1000) NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

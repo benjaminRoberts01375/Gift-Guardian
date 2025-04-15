@@ -35,7 +35,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
     // Fire and forget async POST request
     (async () => {
       try {
-        const response = await fetch("/db/userCreateList", {
+        const response = await fetch("/db/userUpsertList", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -47,12 +47,14 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({
           return;
         }
 
-        const result = await response.json();
+        const result: List = await response.json();
 
         // Update the list with server-generated ID or other fields
         setLists((prevLists) =>
           prevLists.map((list) =>
-            list.clientID === newList.clientID ? { ...list, id: result } : list,
+            list.clientID === newList.clientID
+              ? { ...list, id: result.id }
+              : list,
           ),
         );
       } catch (error) {
