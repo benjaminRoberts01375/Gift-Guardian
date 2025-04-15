@@ -1,6 +1,8 @@
 import { useList } from "../context-hook.tsx";
 import ListStyles from "./list-view.module.css";
 import { useState } from "react";
+import GroupView from "./group-view.tsx";
+import Group from "../types/group.tsx";
 
 interface ListProps {
   listID: string;
@@ -23,6 +25,14 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
           {expanded ? "▾" : "▸"} {list?.title}
         </h1>
       </button>
+      {expanded &&
+        list?.groups.map((group: Group) => (
+          <GroupView
+            key={group.clientID}
+            listClientID={listID}
+            groupClientID={group.clientID}
+          />
+        ))}
     </>
   );
 };
