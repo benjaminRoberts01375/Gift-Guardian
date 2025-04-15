@@ -21,6 +21,9 @@ RUN curl -sSL https://go.dev/dl/go1.24.2.linux-arm64.tar.gz | tar -C /usr/local 
 ENV PATH=$PATH:/usr/local/go/bin:/go/bin
 ENV GOPATH=/go
 
+# Install gopls
+RUN /usr/local/go/bin/go install -v golang.org/x/tools/gopls@latest
+
 # Install Bun
 RUN curl -fsSL https://bun.sh/install | bash \
     && echo 'export BUN_INSTALL="$HOME/.bun"' >> /etc/bash.bashrc \
