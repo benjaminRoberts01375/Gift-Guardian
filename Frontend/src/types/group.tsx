@@ -1,7 +1,7 @@
 import Gift from "./gift.tsx";
-
 class Group {
   id: string;
+  clientID: string;
   name: string;
   gifts: Gift[];
 
@@ -9,6 +9,7 @@ class Group {
     this.gifts = gifts;
     this.id = id;
     this.name = name;
+    this.clientID = crypto.randomUUID();
   }
 }
 
