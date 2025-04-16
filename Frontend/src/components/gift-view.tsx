@@ -18,7 +18,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 			<input type="text" placeholder="Where can it be gotten?" />
 			<input type="text" placeholder="Notes" />
 			<button role="submit" onClick={handleSubmit}>
-				Add
+				Save
 			</button>
 		</form>
 	);
