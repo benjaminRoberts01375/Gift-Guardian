@@ -36,5 +36,8 @@
 	},
 
 	// Exclude DB directory from Prettier formatting
-	"prettier.ignorePath": ".prettierignore"
+	"prettier.ignorePath": ".prettierignore",
+	"files.associations": {
+		"bun.lock": "jsonc"
+	}
 }
