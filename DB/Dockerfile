@@ -4,9 +4,6 @@ FROM golang:alpine AS builder
 # Set environment variables
 ENV GOPRIVATE=github.com/benjaminRoberts01375
 
-# Accept GitHub token as build argument
-ARG GITHUB_TOKEN
-
 # Install git
 RUN apk add --no-cache git
 
@@ -16,8 +13,12 @@ WORKDIR /app
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
-# Configure git to use the GitHub token
-RUN git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "https://github.com/"
+# Mount GitHub token at build time
+RUN --mount=type=secret,id=env_file \
+    if [ -f "/run/secrets/env_file" ]; then \
+    TOKEN=$(grep "GITHUB_TOKEN" /run/secrets/env_file | sed 's/GITHUB_TOKEN=//') && \
+    git config --global url."https://${TOKEN}@github.com/".insteadOf "https://github.com/"; \
+    fi
 
 # Download dependencies
 RUN go mod download && go mod tidy
@@ -29,7 +30,11 @@ COPY . .
 RUN go build -o main .
 
 # Clean up git config after build
-RUN git config --global --unset url."https://${GITHUB_TOKEN}@github.com/".insteadOf
+RUN --mount=type=secret,id=env_file \
+    if [ -f "/run/secrets/env_file" ]; then \
+    TOKEN=$(grep "GITHUB_TOKEN" /run/secrets/env_file | sed 's/GITHUB_TOKEN=//') && \
+    git config --global --unset url."https://${TOKEN}@github.com/".insteadOf; \
+    fi || true
 
 # Final stage - not too picky about the exact version of alpine
 FROM alpine:3
@@ -45,11 +50,9 @@ WORKDIR /home/appuser
 COPY --from=builder --chown=appuser:appgroup /app/main /home/appuser/main
 
 # Create configs directory and set permissions
-# USER root
 USER appuser
 RUN mkdir -p /home/appuser/configs && \
     chown -R appuser:appgroup /home/appuser/configs
-#USER appuser
 
 # Copy environment variables
 COPY --chown=appuser:appgroup .env /home/appuser/configs/

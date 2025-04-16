@@ -50,8 +50,8 @@ services:
     build:
       context: ./DB
       dockerfile: Dockerfile
-      args:
-        - GITHUB_TOKEN=${GITHUB_TOKEN}
+      secrets:
+        - source: env_file
     container_name: gg-db
     restart: unless-stopped
     networks:
@@ -59,11 +59,13 @@ services:
     hostname: db
     depends_on:
       - postgres
-    env_file:
-      - ./.env
 
 volumes:
   postgres_data:
     name: gg-postgres-data
   gg-node-modules:
     name: frontend-node-modules
+
+secrets:
+  env_file:
+    file: ./.env
