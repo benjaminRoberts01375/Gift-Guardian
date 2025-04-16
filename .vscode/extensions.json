@@ -5,6 +5,7 @@
 		"golang.go",
 		"ms-azuretools.vscode-docker",
 		"streetsidesoftware.code-spell-checker",
-		"gruntfuggly.todo-tree"
+		"gruntfuggly.todo-tree",
+		"be5invis.toml"
 	]
 }
