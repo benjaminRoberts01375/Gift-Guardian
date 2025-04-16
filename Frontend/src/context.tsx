@@ -46,17 +46,26 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, initialL
 
 				const result: List = await response.json();
 				const targetGroupClientID = newList.groups[0]?.clientID;
+				const targetGiftClientID = newList.groups[0]?.gifts[0]?.clientID;
 				// Update the list with server-generated ID or other fields
 				setLists(prevLists =>
+					// Search for default list to update
 					prevLists.map(list => {
 						if (list.clientID === newList.clientID) {
-							// Create a new array of groups with the updated group
-							const updatedGroups = list.groups.map(group =>
-								group.clientID === targetGroupClientID
-									? { ...group, id: targetGroupClientID }
-									: group,
-							);
-							// Return updated list with modified groups
+							// Search for default group to update
+							const updatedGroups = list.groups.map(group => {
+								// Search for default gift to update
+								group.gifts = group.gifts.map(gift => {
+									if (gift.clientID === targetGiftClientID) {
+										return { ...gift, id: targetGiftClientID };
+									}
+									return gift;
+								});
+								if (group.clientID === targetGroupClientID) {
+									return { ...group, id: targetGroupClientID };
+								}
+								return group;
+							});
 							return { ...list, groups: updatedGroups, id: result.id };
 						}
 						return list;
