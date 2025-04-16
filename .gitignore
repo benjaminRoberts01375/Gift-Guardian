@@ -142,6 +142,7 @@ dist
 # Binaries
 ConfigsWriter/ConfigsWriter
 DB/DB
+DB/tmp/main
 
 # Additional configs
 ConfigsWriter/dbConfig.go

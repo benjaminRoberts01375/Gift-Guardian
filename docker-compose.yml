@@ -49,7 +49,7 @@ services:
   db:
     build:
       context: ./DB
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       secrets:
         - source: env_file
     container_name: gg-db
@@ -59,6 +59,8 @@ services:
     hostname: db
     depends_on:
       - postgres
+    volumes:
+      - ./DB:/app
 
 volumes:
   postgres_data:
