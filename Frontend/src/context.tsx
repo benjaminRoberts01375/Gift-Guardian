@@ -81,6 +81,19 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, initialL
 			?.groups.find(group => group.clientID === groupClientID);
 	};
 
+	const giftsGet = (listClientID: string, groupClientID: string) => {
+		return lists
+			.find(list => list.clientID === listClientID)
+			?.groups.find(group => group.clientID === groupClientID)?.gifts;
+	};
+
+	const giftGet = (listClientID: string, groupClientID: string, giftClientID: string) => {
+		return lists
+			.find(list => list.clientID === listClientID)
+			?.groups.find(group => group.clientID === groupClientID)
+			?.gifts.find(gift => gift.clientID === giftClientID);
+	};
+
 	// Value object that will be passed to consuming components
 	const value: ListsContextType = {
 		listCreate,
@@ -89,6 +102,8 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children, initialL
 		listRemove,
 		groupsGet,
 		groupGet,
+		giftsGet,
+		giftGet,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
