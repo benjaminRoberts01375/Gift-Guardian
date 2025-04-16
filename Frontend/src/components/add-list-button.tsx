@@ -3,17 +3,17 @@ import "../style.css";
 import { useList } from "../context-hook.tsx";
 
 const AddListButton = () => {
-  const { listCreate } = useList();
+	const { listCreate } = useList();
 
-  const createNewList = () => {
-    listCreate();
-  };
+	const createNewList = () => {
+		listCreate();
+	};
 
-  return (
-    <button onClick={createNewList} id={addListButtonStyles["add-list-button"]}>
-      ＋
-    </button>
-  );
+	return (
+		<button onClick={createNewList} id={addListButtonStyles["add-list-button"]}>
+			＋
+		</button>
+	);
 };
 
 export default AddListButton;

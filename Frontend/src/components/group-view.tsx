@@ -4,30 +4,22 @@ import GiftView from "./gift-view.tsx";
 import Gift from "../types/gift.tsx";
 
 interface GroupViewProps {
-  listClientID: string;
-  groupClientID: string;
+	listClientID: string;
+	groupClientID: string;
 }
 
-const GroupView = ({
-  listClientID,
-  groupClientID: groupClientID,
-}: GroupViewProps) => {
-  const { groupGet } = useList();
-  const group = groupGet(listClientID, groupClientID);
+const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProps) => {
+	const { groupGet } = useList();
+	const group = groupGet(listClientID, groupClientID);
 
-  return (
-    <div>
-      <h2>{group?.name}</h2>
-      {group?.gifts.map((gift: Gift) => (
-        <GiftView
-          key={gift.id}
-          listID={listClientID}
-          groupID={groupClientID}
-          giftID={gift.id}
-        />
-      ))}
-    </div>
-  );
+	return (
+		<div>
+			<h2>{group?.name}</h2>
+			{group?.gifts.map((gift: Gift) => (
+				<GiftView key={gift.id} listID={listClientID} groupID={groupClientID} giftID={gift.id} />
+			))}
+		</div>
+	);
 };
 
 export default GroupView;

@@ -1,16 +1,16 @@
 #name-container {
-  display: flex;
+	display: flex;
 }
 
 .name-field {
-  width: 48%;
-  display: block;
+	width: 48%;
+	display: block;
 }
 
 #last-name-field {
-  margin: 0pt 0pt 0pt auto;
+	margin: 0pt 0pt 0pt auto;
 }
 
 #account-exists {
-  margin: 0pt 10pt 0pt auto;
+	margin: 0pt 10pt 0pt auto;
 }

@@ -1,0 +1,10 @@
+# Ignore Go files in DB directory
+/DB/**/*
+
+# Other common ignores
+node_modules
+*.log
+dist
+build
+.git
+bun.lock

@@ -39,8 +39,8 @@ func (list *List) Upsert(dbTransaction *sql.Tx) error {
 	var err error
 	if list.ID == "" { // Add new list
 		err = dbTransaction.QueryRow(`
-			INSERT INTO lists (owner_id, name) 
-			VALUES ($1, $2) 
+			INSERT INTO lists (owner_id, name)
+			VALUES ($1, $2)
 			RETURNING id
 		`, list.OwnerID, list.Name).Scan(&list.ID)
 	} else { // Update existing list
@@ -66,8 +66,8 @@ func (group *Group) Upsert(dbTransaction *sql.Tx) error {
 	var err error
 	if group.ID == "" { // Add new group
 		err = dbTransaction.QueryRow(`
-			INSERT INTO groups (list_id, name) 
-			VALUES ($1, $2) 
+			INSERT INTO groups (list_id, name)
+			VALUES ($1, $2)
 			RETURNING id
 			`, group.ListID, group.Name).Scan(&group.ID)
 	} else { // Update existing group
@@ -94,8 +94,8 @@ func (gift *Gift) Upsert(dbTransaction *sql.Tx) error {
 	var err error
 	if gift.ID == "" { // Add new gift
 		err = dbTransaction.QueryRow(`
-			INSERT INTO gifts (group_id, name, description, gotten) 
-			VALUES ($1, $2, $3, $4) 
+			INSERT INTO gifts (group_id, name, description, gotten)
+			VALUES ($1, $2, $3, $4)
 			RETURNING id
 		`, gift.GroupID, gift.Name, gift.Description, gift.Gotten).Scan(&gift.ID)
 	} else { // Update existing gift
