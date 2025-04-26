@@ -52,3 +52,11 @@ button {
 	border-radius: 7pt;
 	border-style: solid;
 }
+
+.layer {
+	background: #ffffff66;
+}
+
+.layer-down {
+	background: #00000033;
+}

@@ -10,7 +10,7 @@ type ScreenProps = {
 const Screen = ({ content, title }: ScreenProps) => {
 	return (
 		<div id={screenStyles["screen"]}>
-			<div id={screenStyles["header"]}>
+			<div id={screenStyles["header"]} className="layer">
 				<img src={companyLogo} alt="GG Logo" draggable="false" id={screenStyles["gg-logo"]} />
 				<h1 id={screenStyles["title"]}>{title}</h1>
 				<p id={screenStyles["profile"]}>Placeholder</p>

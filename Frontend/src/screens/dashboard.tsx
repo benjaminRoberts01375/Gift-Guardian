@@ -9,7 +9,7 @@ const Dashboard = () => {
 	const { listsGet } = useList();
 	return (
 		<div>
-			<div className={dashboardStyles["dashboard-header"]}>
+			<div className={`${dashboardStyles["dashboard-header"]} layer`}>
 				<h1>Your lists</h1>
 				<AddListButton />
 			</div>
@@ -20,7 +20,7 @@ const Dashboard = () => {
 					</div>
 				))}
 			</div>
-			<div className={dashboardStyles["dashboard-header"]}>
+			<div className={`${dashboardStyles["dashboard-header"]} layer`}>
 				<h1>Lists shared with you</h1>
 			</div>
 			<div>{/* TODO: Add list entries for shared lists */}</div>
