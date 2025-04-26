@@ -15,6 +15,7 @@ type Config struct {
 	JWTSecret          string `json:"jwt_secret"`
 	EmailAPIKey        string `json:"email_api_key"`
 	AllowSendingEmails bool   `json:"allow_sending_emails"`
+	DevMode            bool   `json:"dev_mode"`
 }
 
 // Returns the URL to connect to the DB

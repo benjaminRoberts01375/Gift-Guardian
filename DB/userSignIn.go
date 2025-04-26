@@ -43,15 +43,27 @@ func userSignIn(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-	http.SetCookie(w, &http.Cookie{
-		Name:     UserJWTCookieName,
-		Value:    jwt,
-		HttpOnly: false,
-		Secure:   true,
-		SameSite: http.SameSiteStrictMode,
-		Expires:  time.Now().Add(UserJWTDuration),
-		Path:     "/",
-	})
+	if config.DevMode {
+		http.SetCookie(w, &http.Cookie{
+			Name:     UserJWTCookieName,
+			Value:    jwt,
+			HttpOnly: false,
+			Secure:   false,
+			SameSite: http.SameSiteStrictMode,
+			Expires:  time.Now().Add(time.Hour * 24 * 30), // One month
+			Path:     "/",
+		})
+	} else {
+		http.SetCookie(w, &http.Cookie{
+			Name:     UserJWTCookieName,
+			Value:    jwt,
+			HttpOnly: false,
+			Secure:   true,
+			SameSite: http.SameSiteStrictMode,
+			Expires:  time.Now().Add(UserJWTDuration),
+			Path:     "/",
+		})
+	}
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
 	Coms.Println("Successfully signed in")
 }
