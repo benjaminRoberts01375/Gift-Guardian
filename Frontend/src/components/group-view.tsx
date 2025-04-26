@@ -13,12 +13,12 @@ const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProp
 	const group = groupGet(listClientID, groupClientID);
 
 	return (
-		<div>
+		<>
 			<h2>{group?.name}</h2>
 			{group?.gifts.map((gift: Gift) => (
 				<GiftView key={gift.id} listID={listClientID} groupID={groupClientID} giftID={gift.id} />
 			))}
-		</div>
+		</>
 	);
 };
 
