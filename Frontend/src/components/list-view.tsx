@@ -1,3 +1,4 @@
+import "../style.css";
 import { useList } from "../context-hook.tsx";
 import ListStyles from "./list-view.module.css";
 import { useState } from "react";
@@ -17,18 +18,22 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 	const list = listGet(listID);
 
 	return (
-		<>
+		<div id={ListStyles["List"]} className="layer">
 			<button id={ListStyles["List-Header"]} onClick={() => setExpanded(!expanded)}>
 				<h1>
 					{expanded ? "▾" : "▸"} {list?.title}
 				</h1>
 			</button>
-			{expanded &&
-				list?.groups.map((group: Group) => (
-					<GroupView key={group.clientID} listClientID={listID} groupClientID={group.clientID} />
-				))}
+
+			{expanded && (
+				<div className="layer">
+					{list?.groups.map((group: Group) => (
+						<GroupView key={group.clientID} listClientID={listID} groupClientID={group.clientID} />
+					))}
+				</div>
+			)}
 			<GroupAddView />
-		</>
+		</div>
 	);
 };
 
