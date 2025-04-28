@@ -11,4 +11,11 @@
 #inputs:hover {
 	background: #ff000075;
 }
+
+.field {
+	width: calc(100% - 15pt);
+	border-width: 0pt;
+	margin: 5pt 0pt 0pt 5pt;
+	padding: 5pt 0pt 5pt 5pt;
+}
 }
