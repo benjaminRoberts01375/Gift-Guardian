@@ -1,0 +1,8 @@
+#inputs {
+	display: flex;
+	flex-direction: column;
+	width: 200pt;
+	height: 100pt;
+	margin-bottom: 10pt;
+	border-radius: 5pt;
+}
