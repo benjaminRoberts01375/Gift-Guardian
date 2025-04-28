@@ -26,7 +26,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 			</button>
 
 			{expanded && (
-				<div className="layer">
+				<div className={`${ListStyles["Group"]} layer`}>
 					{list?.groups.map((group: Group) => (
 						<GroupView key={group.clientID} listClientID={listID} groupClientID={group.clientID} />
 					))}
