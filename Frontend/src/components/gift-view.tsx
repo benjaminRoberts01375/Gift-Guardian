@@ -1,4 +1,5 @@
 import "../style.css";
+import GiftStyles from "./gift-view.module.css";
 
 interface ListGiftProps {
 	listID: string;
@@ -13,11 +14,11 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 	};
 
 	return (
-		<form>
-			<input type="text" placeholder="Add a gift idea" />
-			<input type="text" placeholder="Where can it be gotten?" />
-			<input type="text" placeholder="Notes" />
-			<button role="submit" onClick={handleSubmit}>
+		<form id={GiftStyles["inputs"]} className="layer-down">
+			<input type="text" placeholder="Item Name" className={GiftStyles["field"]} />
+			<input type="text" placeholder="URL or Location" className={GiftStyles["field"]} />
+			<input type="text" placeholder="Notes" className={GiftStyles["field"]} />
+			<button role="submit" onClick={handleSubmit} id={GiftStyles["save"]}>
 				Save
 			</button>
 		</form>
