@@ -30,9 +30,9 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 					{list?.groups.map((group: Group) => (
 						<GroupView key={group.clientID} listClientID={listID} groupClientID={group.clientID} />
 					))}
+					<GroupAddView />
 				</div>
 			)}
-			<GroupAddView />
 		</div>
 	);
 };
