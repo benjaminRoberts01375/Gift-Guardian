@@ -1,5 +1,5 @@
 import forgotPasswordStyles from "./forgotPassword.module.css";
-import credentialsStyles from "./Credentials.module.css";
+import credentialsStyles from "./credentials.module.css";
 import "../../style.css";
 import { useState, FormEvent } from "react";
 

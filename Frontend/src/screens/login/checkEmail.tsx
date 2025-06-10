@@ -1,4 +1,4 @@
-import credentialsStyles from "./Credentials.module.css";
+import credentialsStyles from "./credentials.module.css";
 import "../../style.css";
 
 const CheckEmail = () => {

@@ -1,5 +1,5 @@
 import signupStyles from "./signup.module.css";
-import credentialsStyles from "./Credentials.module.css";
+import credentialsStyles from "./credentials.module.css";
 import "../../style.css";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";

@@ -1,5 +1,5 @@
 import loginStyles from "./login.module.css";
-import credentialStyles from "./Credentials.module.css";
+import credentialStyles from "./credentials.module.css";
 import "../../style.css";
 import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
