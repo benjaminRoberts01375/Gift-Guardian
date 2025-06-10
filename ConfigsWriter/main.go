@@ -23,6 +23,7 @@ func setupDB() (Coms.Config, DBModels.Config) {
 	}
 	repoPath := filepath.Dir(filepath.Dir(executable))
 	DBAPIEnvPath := filepath.Join(repoPath, "DB", ".env")
+	os.MkdirAll(DBAPIEnvPath, 0755)
 	DBAPIComsConfig := Coms.Config{
 		System: ComsModels.SystemInfo{
 			Role:  "DB",
