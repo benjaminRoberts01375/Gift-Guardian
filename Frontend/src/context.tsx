@@ -33,10 +33,19 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 				// Give a UUID to each list, gift, and group
 				data.forEach(list => {
 					list.clientID = crypto.randomUUID();
+					if (list.title === "" || list.title === undefined) {
+						list.title = "Untitled List";
+					}
 					list.groups.forEach(group => {
 						group.clientID = crypto.randomUUID();
+						if (group.name === "" || group.name === undefined) {
+							group.name = "Unsorted";
+						}
 						group.gifts.forEach(gift => {
 							gift.clientID = crypto.randomUUID();
+							if (gift.name === "" || gift.name === undefined) {
+								gift.name = "Untitled Gift";
+							}
 						});
 					});
 				});
