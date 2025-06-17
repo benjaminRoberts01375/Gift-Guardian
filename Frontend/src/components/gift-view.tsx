@@ -23,7 +23,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 		}
 		gift.name = formData.get("name") as string;
 		gift.url = formData.get("url") as string;
-		// gift.description = formData.get("description") as string;
+		gift.description = formData.get("description") as string;
 		console.log("Updating gift", gift);
 		giftUpdate(gift);
 	};
