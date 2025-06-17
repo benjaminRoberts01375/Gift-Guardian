@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import List from "./types/list.tsx";
+import Group from "./types/group.tsx";
 
 // Define the shape of our context
 export interface ListsContextType {
@@ -7,6 +8,7 @@ export interface ListsContextType {
 	requestUserData: () => void;
 	listsGet: () => List[];
 	listGet: (clientID: string) => List | undefined;
+	groupGet: (listClientID: string, groupClientID: string) => Group | undefined;
 }
 
 // Create the context with a default value

@@ -1,5 +1,6 @@
 import React, { useState, ReactNode } from "react";
 import List from "./types/list.tsx";
+import Group from "./types/group.tsx";
 import { ListsContext, ListsContextType } from "./context-object.tsx";
 
 // Props for the provider component
@@ -55,11 +56,20 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return lists.find(list => list.clientID === clientID);
 	}
 
+	function groupGet(listClientID: string, groupClientID: string): Group | undefined {
+		const list = listGet(listClientID);
+		if (list === undefined) {
+			return undefined;
+		}
+		return list.groups.find(group => group.clientID === groupClientID);
+	}
+
 	const value: ListsContextType = {
 		lists,
 		requestUserData,
 		listsGet,
 		listGet,
+		groupGet,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
