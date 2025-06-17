@@ -24,7 +24,6 @@ func main() {
 	http.HandleFunc("POST /userSignIn", userSignIn)
 	http.HandleFunc("POST /userJWTSignIn", userJWTSignIn)
 	http.HandleFunc("/user-confirmation/{token}", userConfirmation)
-	http.HandleFunc("POST /userUpsertList", userUpsertList)
 	http.HandleFunc("POST /userCreateList", userCreateList)
 	http.HandleFunc("POST /userGetLists", userGetLists)
 	if config.DevMode {
