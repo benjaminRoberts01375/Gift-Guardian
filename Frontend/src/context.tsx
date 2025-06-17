@@ -51,10 +51,15 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return lists;
 	}
 
+	function listGet(clientID: string): List | undefined {
+		return lists.find(list => list.clientID === clientID);
+	}
+
 	const value: ListsContextType = {
 		lists,
 		requestUserData,
 		listsGet,
+		listGet,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;

@@ -6,6 +6,7 @@ export interface ListsContextType {
 	lists: List[];
 	requestUserData: () => void;
 	listsGet: () => List[];
+	listGet: (clientID: string) => List | undefined;
 }
 
 // Create the context with a default value
