@@ -3,8 +3,10 @@ import credentialStyles from "./credentials.module.css";
 import "../../style.css";
 import { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
+import { useList } from "../../context-hook.tsx";
 
 const Login = () => {
+	const { requestUserData } = useList();
 	const navigate = useNavigate();
 	const [attemptedLogin, setAttemptedLogin] = useState<"fresh" | "failed" | "error">("fresh");
 
@@ -30,6 +32,7 @@ const Login = () => {
 			});
 
 			if (response.ok) {
+				requestUserData(); // Setup the context
 				navigate("/dashboard");
 			} else {
 				console.error("Login failed:", response.status);
@@ -52,6 +55,7 @@ const Login = () => {
 					credentials: "include",
 				});
 				if (response.ok) {
+					requestUserData(); // Setup the context
 					navigate("/dashboard");
 				}
 			} catch (error) {
@@ -60,7 +64,7 @@ const Login = () => {
 		};
 
 		checkIfLoggedIn();
-	}, [navigate]);
+	}, [navigate, requestUserData]);
 
 	return (
 		<form
