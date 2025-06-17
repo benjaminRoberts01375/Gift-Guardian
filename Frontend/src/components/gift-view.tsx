@@ -50,7 +50,13 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 				className={GiftStyles["field"]}
 				name="url"
 			/>
-			<input type="text" placeholder="Notes" className={GiftStyles["field"]} name="description" />
+			<input
+				defaultValue={gift?.description ?? ""}
+				type="text"
+				placeholder="Notes"
+				className={GiftStyles["field"]}
+				name="description"
+			/>
 			<button role="submit" type="submit" id={GiftStyles["save"]}>
 				Save
 			</button>
