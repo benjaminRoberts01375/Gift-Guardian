@@ -107,44 +107,39 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 		// Process Group
 		if groupID.Valid {
 			if _, exists := groupsMap[groupID.String]; !exists {
-				group := models.Group{
+				group := &models.Group{ // Store pointer to Group
 					ID:        groupID.String,
 					ListID:    groupListID.String,
 					Name:      groupName.String,
 					CreatedAt: groupCreatedAt.Time,
 					Gifts:     []models.Gift{}, // Initialize slice
 				}
-				groupsMap[groupID.String] = &group
-
-				// Link group to its list
-				if list, ok := listsMap[groupListID.String]; ok {
-					list.Groups = append(list.Groups, group)
-				}
+				groupsMap[groupID.String] = group
 			}
 		}
 
 		// Process Gift
 		if giftID.Valid {
-			if group, ok := groupsMap[giftGroupID.String]; ok {
-				// Only append if it's a new gift for this group (avoid duplicates from joins)
-				found := false
-				for _, existingGift := range group.Gifts {
-					if existingGift.ID == giftID.String {
-						found = true
-						break
-					}
-				}
-				if !found {
-					group.Gifts = append(group.Gifts, models.Gift{
-						ID:          giftID.String,
-						GroupID:     giftGroupID.String,
-						Name:        giftName.String,
-						Description: giftDescription.String,
-						CreatedAt:   giftCreatedAt.Time,
-						Gotten:      giftGotten.Bool,
-					})
-				}
+			gift := models.Gift{
+				ID:          giftID.String,
+				GroupID:     giftGroupID.String,
+				Name:        giftName.String,
+				Description: giftDescription.String,
+				CreatedAt:   giftCreatedAt.Time,
+				Gotten:      giftGotten.Bool,
 			}
+
+			// Link gift to its group
+			if group, ok := groupsMap[giftGroupID.String]; ok {
+				group.Gifts = append(group.Gifts, gift)
+			}
+		}
+	}
+
+	// After all rows are processed, link groups to their lists
+	for _, group := range groupsMap {
+		if list, ok := listsMap[group.ListID]; ok {
+			list.Groups = append(list.Groups, *group) // Append the dereferenced group
 		}
 	}
 
