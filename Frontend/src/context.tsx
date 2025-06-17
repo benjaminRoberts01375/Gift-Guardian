@@ -1,6 +1,5 @@
 import React, { useState, ReactNode } from "react";
 import List from "./types/list.tsx";
-import User from "./types/user.tsx";
 import { ListsContext, ListsContextType } from "./context-object.tsx";
 
 // Props for the provider component
@@ -10,109 +9,52 @@ interface ListsProviderProps {
 }
 
 // Provider component that will wrap the components that need access to the context
-export const ListsProvider: React.FC<ListsProviderProps> = ({ children, initialLists = [] }) => {
-	const [lists, setLists] = useState<List[]>(initialLists);
+export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
+	const [lists, setLists] = useState<List[]>([]);
 
-	const listsGet = () => {
-		return lists;
-	};
-
-	const listGet = (clientID: string) => {
-		return lists.find(list => list.clientID === clientID);
-	};
-
-	const listRemove = (id: string) => {
-		setLists(prevLists => prevLists.filter(list => list.id !== id));
-	};
-
-	const listCreate = () => {
-		const newList = new List(new User("ben", "Benjamin", "Roberts"));
-		setLists(prevLists => [...prevLists, newList]);
-
-		// Fire and forget async POST request
+	function requestUserData(): void {
+		console.log("Requesting user data");
 		(async () => {
 			try {
-				const response = await fetch("/db/userUpsertList", {
+				const response = await fetch("/db/userGetLists", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
 					},
-					body: JSON.stringify(newList),
+					credentials: "include",
 				});
 
 				if (!response.ok) {
-					return;
+					throw new Error("Failed to fetch user data");
 				}
-
-				const result: List = await response.json();
-				const targetGroupClientID = newList.groups[0]?.clientID;
-				const targetGiftClientID = newList.groups[0]?.gifts[0]?.clientID;
-				// Update the list with server-generated ID or other fields
-				setLists(prevLists =>
-					// Search for default list to update
-					prevLists.map(list => {
-						if (list.clientID === newList.clientID) {
-							// Search for default group to update
-							const updatedGroups = list.groups.map(group => {
-								// Search for default gift to update
-								group.gifts = group.gifts.map(gift => {
-									if (gift.clientID === targetGiftClientID) {
-										return { ...gift, id: targetGiftClientID };
-									}
-									return gift;
-								});
-								if (group.clientID === targetGroupClientID) {
-									return { ...group, id: targetGroupClientID };
-								}
-								return group;
-							});
-							return { ...list, groups: updatedGroups, id: result.id };
-						}
-						return list;
-					}),
-				);
+				// Parse the response as JSON and set the lists state
+				const data: List[] = await response.json(); // Correctly parse JSON
+				// Give a UUID to each list, gift, and group
+				data.forEach(list => {
+					list.clientID = crypto.randomUUID();
+					list.groups.forEach(group => {
+						group.clientID = crypto.randomUUID();
+						group.gifts.forEach(gift => {
+							gift.clientID = crypto.randomUUID();
+						});
+					});
+				});
+				setLists(data);
+				console.log("Successfully fetched user data:", data);
 			} catch (error) {
-				console.error("Error saving list:", error);
-				// Optionally handle error - e.g., notify user or rollback the list addition
+				console.error("Error fetching user data:", error);
 			}
 		})();
+	}
 
-		return newList;
-	};
+	function listsGet(): List[] {
+		return lists;
+	}
 
-	const groupsGet = (listClientID: string) => {
-		return lists.find(list => list.clientID === listClientID)?.groups;
-	};
-
-	const groupGet = (listClientID: string, groupClientID: string) => {
-		return lists
-			.find(list => list.clientID === listClientID)
-			?.groups.find(group => group.clientID === groupClientID);
-	};
-
-	const giftsGet = (listClientID: string, groupClientID: string) => {
-		return lists
-			.find(list => list.clientID === listClientID)
-			?.groups.find(group => group.clientID === groupClientID)?.gifts;
-	};
-
-	const giftGet = (listClientID: string, groupClientID: string, giftClientID: string) => {
-		return lists
-			.find(list => list.clientID === listClientID)
-			?.groups.find(group => group.clientID === groupClientID)
-			?.gifts.find(gift => gift.clientID === giftClientID);
-	};
-
-	// Value object that will be passed to consuming components
 	const value: ListsContextType = {
-		listCreate,
+		lists,
+		requestUserData,
 		listsGet,
-		listGet,
-		listRemove,
-		groupsGet,
-		groupGet,
-		giftsGet,
-		giftGet,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
