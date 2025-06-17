@@ -11,6 +11,7 @@ export interface ListsContextType {
 	listGet: (clientID: string) => List | undefined;
 	groupGet: (listClientID: string, groupClientID: string) => Group | undefined;
 	giftGet: (listClientID: string, groupClientID: string, giftClientID: string) => Gift | undefined;
+	giftUpdate: (gift: Gift) => void;
 }
 
 // Create the context with a default value

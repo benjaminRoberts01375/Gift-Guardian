@@ -86,6 +86,28 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return group.gifts.find(gift => gift.clientID === giftClientID);
 	}
 
+	function giftUpdate(gift: Gift): void {
+		console.log("Updating gift", gift);
+		(async () => {
+			try {
+				const response = await fetch("/db/userUpdateGift", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(gift),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to update gift: " + response.status);
+				}
+			} catch (error) {
+				console.error("Error updating gift:", error);
+			}
+		})();
+	}
+
 	const value: ListsContextType = {
 		lists,
 		requestUserData,
@@ -93,6 +115,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		listGet,
 		groupGet,
 		giftGet,
+		giftUpdate,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
