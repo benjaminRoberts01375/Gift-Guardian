@@ -26,6 +26,7 @@ func main() {
 	http.HandleFunc("/user-confirmation/{token}", userConfirmation)
 	http.HandleFunc("POST /userUpsertList", userUpsertList)
 	http.HandleFunc("POST /userCreateList", userCreateList)
+	http.HandleFunc("POST /userGetLists", userGetLists)
 	if config.DevMode {
 		Coms.Println("Dev mode enabled")
 	}
