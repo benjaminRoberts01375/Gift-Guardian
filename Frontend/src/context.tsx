@@ -2,6 +2,7 @@ import React, { useState, ReactNode } from "react";
 import List from "./types/list.tsx";
 import Group from "./types/group.tsx";
 import Gift from "./types/gift.tsx";
+import User from "./types/user.tsx";
 import { ListsContext, ListsContextType } from "./context-object.tsx";
 
 // Props for the provider component
@@ -13,12 +14,13 @@ interface ListsProviderProps {
 // Provider component that will wrap the components that need access to the context
 export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 	const [lists, setLists] = useState<List[]>([]);
+	const [user, setUser] = useState<User | undefined>(undefined);
 
 	function requestUserData(): void {
 		console.log("Requesting user data");
 		(async () => {
 			try {
-				const response = await fetch("/db/userGetLists", {
+				const response = await fetch("/db/userGetData", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -30,12 +32,17 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 					throw new Error("Failed to fetch user data");
 				}
 				// Parse the response as JSON and set the lists state
-				const data: List[] = await response.json(); // Correctly parse JSON
+				const rawData = await response.json(); // Correctly parse JSON
+				setUser(rawData.user);
+				if (rawData.lists === undefined || rawData.lists === null) {
+					return;
+				}
+				const data: List[] = rawData.lists;
 				// Give a UUID to each list, gift, and group
 				data.forEach(list => {
 					list.clientID = crypto.randomUUID();
-					if (list.title === "" || list.title === undefined) {
-						list.title = "Untitled List";
+					if (list.name === "" || list.name === undefined) {
+						list.name = "Untitled List";
 					}
 					list.groups.forEach(group => {
 						group.clientID = crypto.randomUUID();
@@ -110,6 +117,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 
 	const value: ListsContextType = {
 		lists,
+		user,
 		requestUserData,
 		listsGet,
 		listGet,

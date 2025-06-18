@@ -25,7 +25,7 @@ func main() {
 	http.HandleFunc("POST /userJWTSignIn", userJWTSignIn)
 	http.HandleFunc("/user-confirmation/{token}", userConfirmation)
 	http.HandleFunc("POST /userCreateList", userCreateList)
-	http.HandleFunc("POST /userGetLists", userGetLists)
+	http.HandleFunc("POST /userGetData", userGetData)
 	http.HandleFunc("POST /userUpdateGift", userUpdateGift)
 	if config.DevMode {
 		Coms.Println("Dev mode enabled")

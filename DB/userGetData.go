@@ -8,7 +8,14 @@ import (
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 )
 
-func userGetLists(w http.ResponseWriter, r *http.Request) {
+// UserDataResponse combines user information and their lists
+type UserDataResponse struct {
+	User  models.PublicUser `json:"user"`
+	Lists []models.List     `json:"lists"`
+}
+
+func userGetData(w http.ResponseWriter, r *http.Request) {
+	Coms.Println("Getting user data")
 	claims, isValid := userJWTIsValidFromCookie(r)
 	if !isValid {
 		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
@@ -21,20 +28,32 @@ func userGetLists(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dbTransaction.Rollback()
 
-	// Get user ID from email
+	// Get user ID and public user data from email
 	var userID string
-	err = database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
+	var publicUser models.PublicUser
+	err = database.QueryRow("SELECT id, email, first_name, last_name FROM users WHERE email=$1", claims.Username).Scan(&userID, &publicUser.Email, &publicUser.FirstName, &publicUser.LastName)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			Coms.ExternalPostRespondCode(http.StatusNotFound, w) // User not found
+			return
+		}
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
+
 	lists, err := getLists(dbTransaction, userID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
 	dbTransaction.Commit()
-	Coms.ExternalPostRespond(lists, w)
+
+	response := UserDataResponse{
+		User:  publicUser,
+		Lists: lists,
+	}
+	Coms.Println(response)
+	Coms.ExternalPostRespond(response, w)
 }
 
 func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
