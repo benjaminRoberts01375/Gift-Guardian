@@ -73,6 +73,57 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return lists.find(list => list.clientID === clientID);
 	}
 
+	function listAdd(name: string = "Untitled List"): List {
+		if (user === undefined) {
+			throw new Error("User must be logged in to create a list");
+		}
+		const newList = new List(user, name);
+		setLists(prevLists => [...prevLists, newList]);
+
+		(async () => {
+			try {
+				const response = await fetch("/db/userCreateList", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(newList),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to create list: " + response.status);
+				}
+				// Parse the response as JSON and set the lists state
+				const dbList: List = await response.json();
+				dbList.clientID = newList.clientID;
+				dbList.groups[0].clientID = newList.groups[0].clientID;
+				dbList.groups[0].gifts[0].clientID = newList.groups[0].gifts[0].clientID;
+
+				listUpdateInternal(dbList);
+				console.log("Successfully created list:", dbList);
+			} catch (error) {
+				console.error("Error creating list:", error);
+			}
+		})();
+		return newList;
+	}
+
+	function listUpdateInternal(updateList: List): void {
+		// Update the list in the state without making a network request
+		setLists(prevLists => {
+			const newLists = prevLists.map(list => {
+				if (list.clientID === updateList.clientID) {
+					console.log("Found list to update:", updateList);
+					return updateList;
+				}
+				console.log("Did not find list to update:", list);
+				return list;
+			});
+			return newLists;
+		});
+	}
+
 	function groupGet(listClientID: string, groupClientID: string): Group | undefined {
 		const list = listGet(listClientID);
 		if (list === undefined) {
@@ -121,6 +172,8 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		requestUserData,
 		listsGet,
 		listGet,
+		listAdd,
+		listUpdateInternal,
 		groupGet,
 		giftGet,
 		giftUpdate,

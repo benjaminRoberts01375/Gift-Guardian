@@ -20,19 +20,42 @@ func userCreateList(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-
-	list, err := Coms.ExternalPostReceived[models.List](r)
+	requestList, err := Coms.ExternalPostReceived[models.List](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
 
-	statement := `INSERT INTO lists (owner_id, name) VALUES ($1, $2) RETURNING id`
-	listID := ""
-	err = database.QueryRow(statement, userID, list.Name).Scan(&listID)
+	statement := `
+WITH new_list AS (
+    INSERT INTO lists (owner_id, name)
+    VALUES ($1, $2)
+    RETURNING id
+),
+new_group AS (
+    INSERT INTO groups (list_id, name)
+    VALUES ((SELECT id FROM new_list), $3)
+    RETURNING id
+),
+new_gift AS (
+    INSERT INTO gifts (group_id, name, description)
+    VALUES ((SELECT id FROM new_group), $4, $5)
+    RETURNING id
+)
+SELECT
+    (SELECT id FROM new_list) as list_id,
+    (SELECT id FROM new_group) as group_id,
+    (SELECT id FROM new_gift) as gift_id;
+	`
+	err = database.QueryRow(statement, userID, requestList.Name,
+		requestList.Groups[0].Name, requestList.Groups[0].Gifts[0].Name,
+		requestList.Groups[0].Gifts[0].Description).Scan(
+		&requestList.ID, &requestList.Groups[0].ID,
+		&requestList.Groups[0].Gifts[0].ID,
+	)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-	Coms.ExternalPostRespond(listID, w)
+	Coms.ExternalPostRespond(requestList, w)
 }

@@ -1,17 +1,16 @@
 import dashboardStyles from "./dashboard.module.css";
 import "../style.css";
-import AddListButton from "../components/add-list-button.tsx";
 import { useList } from "../context-hook.tsx";
 import ListView from "../components/list-view.tsx";
 import List from "../types/list.tsx";
 
 const Dashboard = () => {
-	const { listsGet } = useList();
+	const { listsGet, listAdd } = useList();
 	return (
 		<div>
-			<div className={`${dashboardStyles["dashboard-header"]} layer`}>
+			<div className={`${dashboardStyles["dashboard-header"]} layer`} onClick={() => listAdd()}>
 				<h1>Your lists</h1>
-				<AddListButton />
+				<button className="flavor-button">Add List</button>
 			</div>
 			<div>
 				{listsGet().map((list: List) => (

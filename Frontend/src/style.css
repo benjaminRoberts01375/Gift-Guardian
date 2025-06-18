@@ -53,10 +53,31 @@ button {
 	border-style: solid;
 }
 
-.layer {
+.layer,
+.flavor-button {
 	background: #ffffff66;
 }
 
 .layer-down {
 	background: #ff000040;
+}
+
+.flavor-button {
+	color: black;
+	height: 25pt;
+	border: none;
+	border: solid 2pt #0000;
+	border-radius: 20pt;
+	font-size: 20px;
+	font-weight: 700;
+	padding: 0 10pt;
+	margin: 0 0 0 auto;
+	box-shadow: 0pt 0pt 10pt #0005;
+	transition-duration: 0.25s;
+}
+
+.flavor-button:hover {
+	box-shadow: 0pt 0pt 0pt #005;
+	border: solid 2pt #0005;
+	transition-duration: 0.25s;
 }
