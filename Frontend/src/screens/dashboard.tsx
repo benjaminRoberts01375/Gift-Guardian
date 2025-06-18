@@ -8,9 +8,11 @@ const Dashboard = () => {
 	const { listsGet, listAdd } = useList();
 	return (
 		<div>
-			<div className={`${dashboardStyles["dashboard-header"]} layer`} onClick={() => listAdd()}>
+			<div className={`${dashboardStyles["dashboard-header"]} layer`}>
 				<h1>Your lists</h1>
-				<button className="flavor-button">Add List</button>
+				<button className="flavor-button" onClick={() => listAdd()}>
+					Add List
+				</button>
 			</div>
 			<div>
 				{listsGet().map((list: List) => (
