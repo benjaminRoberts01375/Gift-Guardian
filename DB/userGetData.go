@@ -15,7 +15,6 @@ type UserDataResponse struct {
 }
 
 func userGetData(w http.ResponseWriter, r *http.Request) {
-	Coms.Println("Getting user data")
 	claims, isValid := userJWTIsValidFromCookie(r)
 	if !isValid {
 		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
@@ -52,7 +51,6 @@ func userGetData(w http.ResponseWriter, r *http.Request) {
 		User:  publicUser,
 		Lists: lists,
 	}
-	Coms.Println(response)
 	Coms.ExternalPostRespond(response, w)
 }
 

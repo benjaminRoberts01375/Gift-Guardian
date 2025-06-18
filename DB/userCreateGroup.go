@@ -26,9 +26,6 @@ func userCreateGroup(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-	Coms.Println("Group: ", requestGroup)
-	Coms.Println("List ID: ", requestGroup.ListID)
-	Coms.Println("ID: ", requestGroup.ID)
 
 	statement := `
 WITH new_group AS (
@@ -61,17 +58,3 @@ SELECT
 	}
 	Coms.ExternalPostRespond(requestGroup, w)
 }
-
-// WITH new_group AS (
-//     INSERT INTO groups (list_id, name)
-//     VALUES ('458af1c2-aafb-4992-9ef8-066226f4e82b', 'test group')
-//     RETURNING id
-// ),
-// new_gift AS (
-//     INSERT INTO gifts (group_id, name, description)
-//     VALUES ((SELECT id FROM new_group), 'test gift', 'nerd')
-//     RETURNING id
-// )
-// SELECT
-//     (SELECT id FROM new_group) as group_id,
-//     (SELECT id FROM new_gift) as gift_id;
