@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"net/http"
 
 	"github.com/benjaminRoberts01375/Gift-Guardian/DB/models"
@@ -54,6 +55,10 @@ SELECT
 		&requestList.Groups[0].Gifts[0].ID,
 	)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			Coms.ExternalPostRespondCode(http.StatusNotFound, w)
+			return
+		}
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
