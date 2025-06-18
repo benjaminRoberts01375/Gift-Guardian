@@ -81,3 +81,9 @@ button {
 	border: solid 2pt #0005;
 	transition-duration: 0.25s;
 }
+
+.flavor-button:active {
+	background: #ff000040;
+	box-shadow: 0pt 0pt 0pt #005;
+	border: solid 2pt #0005;
+}
