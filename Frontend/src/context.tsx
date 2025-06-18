@@ -226,6 +226,82 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		})();
 	}
 
+	function giftAdd(listClientID: string, groupClientID: string, name: string = ""): Gift {
+		if (user === undefined) {
+			throw new Error("User must be logged in to create a Gift");
+		}
+		const baseList = lists.find(list => list.clientID === listClientID);
+		if (listClientID === "" || baseList === undefined) {
+			throw new Error("List must exist to create a Gift");
+		}
+
+		const baseGroup = baseList.groups.find(group => group.clientID === groupClientID);
+		if (baseGroup === undefined || groupClientID === "") {
+			throw new Error("Group must exist to create a Gift");
+		}
+
+		const newGift = new Gift(name);
+		newGift.group_id = baseGroup.id;
+		baseGroup.gifts.push(newGift);
+
+		console.log("Sending gift to DB:", newGift);
+		groupUpdateInternal(baseGroup, listClientID);
+		(async () => {
+			try {
+				const response = await fetch("/db/userCreateGift", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(newGift),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to create gift: " + response.status);
+				}
+				// Parse the response as JSON and set the lists state
+				const dbGift: Gift = await response.json();
+				dbGift.clientID = newGift.clientID;
+
+				giftUpdateInternal(dbGift, listClientID, groupClientID);
+				console.log("Successfully created gift:", dbGift);
+			} catch (error) {
+				console.error("Error creating gift:", error);
+			}
+		})();
+		return newGift;
+	}
+
+	function giftUpdateInternal(
+		updateGift: Gift,
+		baseListClientID: string,
+		baseGroupClientID: string,
+	): void {
+		// Update the list in the state without making a network request
+		setLists(prevLists => {
+			const newLists = prevLists.map(list => {
+				if (list.clientID === baseListClientID) {
+					const updatedGroups = list.groups.map(group => {
+						if (group.clientID === baseGroupClientID) {
+							const updatedGifts = group.gifts.map(gift => {
+								if (gift.clientID === updateGift.clientID) {
+									return updateGift;
+								}
+								return gift;
+							});
+							group.gifts = updatedGifts;
+						}
+						return group;
+					});
+					list.groups = updatedGroups;
+				}
+				return list;
+			});
+			return newLists;
+		});
+	}
+
 	const value: ListsContextType = {
 		lists,
 		user,
@@ -239,6 +315,8 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		groupUpdateInternal,
 		giftGet,
 		giftUpdate,
+		giftAdd,
+		giftUpdateInternal,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;

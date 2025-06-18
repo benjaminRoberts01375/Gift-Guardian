@@ -18,6 +18,12 @@ export interface ListsContextType {
 	groupUpdateInternal: (updateGroup: Group, baseListClientID: string) => void;
 	giftGet: (listClientID: string, groupClientID: string, giftClientID: string) => Gift | undefined;
 	giftUpdate: (gift: Gift) => void;
+	giftAdd: (listClientID: string, groupClientID: string, name?: string) => Gift;
+	giftUpdateInternal: (
+		updateGift: Gift,
+		baseListClientID: string,
+		baseGroupClientID: string,
+	) => void;
 }
 
 // Create the context with a default value

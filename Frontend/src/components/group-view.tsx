@@ -2,6 +2,7 @@ import "../style.css";
 import { useList } from "../context-hook.tsx";
 import GiftView from "./gift-view.tsx";
 import Gift from "../types/gift.tsx";
+import GroupStyles from "./group-view.module.css";
 
 interface GroupViewProps {
 	listClientID: string;
@@ -9,12 +10,17 @@ interface GroupViewProps {
 }
 
 const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProps) => {
-	const { groupGet } = useList();
+	const { groupGet, giftAdd } = useList();
 	const group = groupGet(listClientID, groupClientID);
 
 	return (
 		<>
-			<h2>{group?.name}</h2>
+			<div id={GroupStyles["Group-Header"]}>
+				<h2>{group?.name}</h2>
+				<button className="flavor-button" onClick={() => giftAdd(listClientID, groupClientID)}>
+					Add Gift
+				</button>
+			</div>
 			{group?.gifts.map((gift: Gift) => (
 				<GiftView
 					key={gift.id}
