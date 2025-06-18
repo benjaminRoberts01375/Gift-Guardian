@@ -5,14 +5,27 @@
 }
 
 #List-Header {
-	width: 100%;
+	width: calc(100% - 20pt);
+	font-size: inherit;
+	align-items: center;
+	justify-content: left;
+	text-align: left;
+	border: none;
+	padding: 0pt 10pt 0pt 10pt;
+	background-color: #0000;
+	display: flex;
+}
+
+#List-Button {
+	width: calc(100% - 200pt);
 	font-size: inherit;
 	align-items: start;
 	justify-content: left;
 	text-align: left;
 	border: none;
-	padding: 0pt 0pt 0pt 10pt;
-	background-color: #0000;
+	padding: 0pt 10pt 0pt 10pt;
+	background-color: #f0f0;
+	display: flex;
 }
 
 .Group {

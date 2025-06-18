@@ -132,6 +132,66 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return list.groups.find(group => group.clientID === groupClientID);
 	}
 
+	function groupAdd(listClientID: string, name: string = "Untitled Group"): Group {
+		if (user === undefined) {
+			throw new Error("User must be logged in to create a Group");
+		}
+		const baseList = lists.find(list => list.clientID === listClientID);
+		if (listClientID === "" || baseList === undefined) {
+			throw new Error("List must exist to create a Group");
+		}
+		const newGroup = new Group(name);
+		newGroup.list_id = baseList.id;
+		baseList.groups.push(newGroup);
+		console.log("Sending group to DB:", newGroup);
+		listUpdateInternal(baseList);
+		(async () => {
+			try {
+				const response = await fetch("/db/userCreateGroup", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(newGroup),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to create group: " + response.status);
+				}
+				// Parse the response as JSON and set the lists state
+				const dbGroup: Group = await response.json();
+				dbGroup.clientID = newGroup.clientID;
+				dbGroup.gifts[0].clientID = newGroup.gifts[0].clientID;
+
+				groupUpdateInternal(dbGroup, listClientID);
+				console.log("Successfully created group:", dbGroup);
+			} catch (error) {
+				console.error("Error creating group:", error);
+			}
+		})();
+		return newGroup;
+	}
+
+	function groupUpdateInternal(updateGroup: Group, baseListClientID: string): void {
+		// Update the list in the state without making a network request
+		setLists(prevLists => {
+			const newLists = prevLists.map(list => {
+				if (list.clientID === baseListClientID) {
+					const updatedGroups = list.groups.map(group => {
+						if (group.clientID === updateGroup.clientID) {
+							return updateGroup;
+						}
+						return group;
+					});
+					list.groups = updatedGroups;
+				}
+				return list;
+			});
+			return newLists;
+		});
+	}
+
 	function giftGet(
 		listClientID: string,
 		groupClientID: string,
@@ -175,6 +235,8 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		listAdd,
 		listUpdateInternal,
 		groupGet,
+		groupAdd,
+		groupUpdateInternal,
 		giftGet,
 		giftUpdate,
 	};

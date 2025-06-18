@@ -14,16 +14,23 @@ interface ListProps {
 const ListView = ({ listID, defaultExpanded }: ListProps) => {
 	const [expanded, setExpanded] = useState<boolean>(defaultExpanded ?? false);
 
-	const { listGet } = useList();
+	const { listGet, groupAdd } = useList();
 	const list = listGet(listID);
 
 	return (
 		<div id={ListStyles["List"]} className="layer">
-			<button id={ListStyles["List-Header"]} onClick={() => setExpanded(!expanded)}>
-				<h1>
-					{expanded ? "▾" : "▸"} {list?.name}
-				</h1>
-			</button>
+			<div id={ListStyles["List-Header"]}>
+				<button onClick={() => setExpanded(!expanded)} id={ListStyles["List-Button"]}>
+					<h1>
+						{expanded ? "▾" : "▸"} {list?.name}
+					</h1>
+				</button>
+				{expanded ? (
+					<button className="flavor-button" onClick={() => groupAdd(listID)}>
+						Add Group
+					</button>
+				) : null}
+			</div>
 
 			{expanded && (
 				<div className={`${ListStyles["Group"]} layer`}>

@@ -71,7 +71,7 @@ button {
 	font-size: 20px;
 	font-weight: 700;
 	padding: 0 10pt;
-	margin: 0 0 0 auto;
+	margin: 5pt 0 5pt auto;
 	box-shadow: 0pt 0pt 10pt #0005;
 	transition-duration: 0.25s;
 }
