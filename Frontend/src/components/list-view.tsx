@@ -21,7 +21,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 		<div id={ListStyles["List"]} className="layer">
 			<button id={ListStyles["List-Header"]} onClick={() => setExpanded(!expanded)}>
 				<h1>
-					{expanded ? "▾" : "▸"} {list?.title}
+					{expanded ? "▾" : "▸"} {list?.name}
 				</h1>
 			</button>
 

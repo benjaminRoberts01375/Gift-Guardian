@@ -4,7 +4,7 @@ import User from "./user.tsx";
 class List {
 	id: string;
 	clientID: string;
-	title: string;
+	name: string;
 	groups: Group[];
 	owner: User;
 
@@ -17,7 +17,7 @@ class List {
 		this.owner = owner;
 		this.groups = groups;
 		this.id = id;
-		this.title = title;
+		this.name = title;
 		this.clientID = crypto.randomUUID();
 	}
 }
