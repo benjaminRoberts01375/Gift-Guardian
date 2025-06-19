@@ -6,6 +6,7 @@
 	margin-bottom: 10pt;
 	border-radius: 5pt;
 	transition: 0.25s;
+	margin: 3pt;
 }
 
 #inputs:hover {

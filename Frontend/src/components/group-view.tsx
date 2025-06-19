@@ -21,14 +21,16 @@ const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProp
 					Add Gift
 				</button>
 			</div>
-			{group?.gifts.map((gift: Gift) => (
-				<GiftView
-					key={gift.id}
-					listID={listClientID}
-					groupID={groupClientID}
-					giftID={gift.clientID}
-				/>
-			))}
+			<div id={GroupStyles["Gifts"]}>
+				{group?.gifts.map((gift: Gift) => (
+					<GiftView
+						key={gift.id}
+						listID={listClientID}
+						groupID={groupClientID}
+						giftID={gift.clientID}
+					/>
+				))}
+			</div>
 		</>
 	);
 };
