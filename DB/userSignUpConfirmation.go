@@ -8,7 +8,6 @@ import (
 
 // Example URL: https://giftguardian.benlab.us/db/userConfirmation/abcdefg123456
 func userConfirmation(w http.ResponseWriter, r *http.Request) {
-	Coms.Println(r.Method) // TODO: Remove this print
 	activationToken := r.PathValue("token")
 	claims, valid := userJWTIsValid(activationToken)
 	if !valid {

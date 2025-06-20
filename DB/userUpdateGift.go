@@ -36,7 +36,7 @@ func userUpdateGift(w http.ResponseWriter, r *http.Request) {
 	UPDATE gifts
 	SET name = $1, description = $2, gotten = $3
 	WHERE group_id = $4 AND id = $5
-	`
+	` // TODO: Add support for where to get gifts from
 	_, err = dbTransaction.Exec(statement, gift.Name, gift.Description, gift.Gotten, gift.GroupID, gift.ID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
