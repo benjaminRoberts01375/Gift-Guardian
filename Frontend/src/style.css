@@ -77,7 +77,8 @@ h2 {
 	border-style: solid;
 }
 
-.flavor-button {
+.flavor-button,
+.flavor-icon {
 	color: black;
 	background: #fff;
 	height: 25pt;
@@ -92,16 +93,28 @@ h2 {
 	transition-duration: 0.25s;
 }
 
-.flavor-button:hover {
+.flavor-button:hover,
+.flavor-icon:hover {
 	box-shadow: 0pt 0pt 0pt #005;
 	border: solid 2pt #0005;
 	transition-duration: 0.25s;
 }
 
-.flavor-button:active {
+.flavor-button:active,
+.flavor-icon:active {
 	background: #ff000040;
 	box-shadow: 0pt 0pt 0pt #005;
 	border: solid 2pt #0005;
+}
+
+.flavor-icon {
+	color: black;
+	background: #fff;
+	min-height: 25pt;
+	height: auto;
+	margin: 0pt 0pt 0pt 3pt;
+	display: flex;
+	align-items: center;
 }
 
 @media (max-width: 575px) {

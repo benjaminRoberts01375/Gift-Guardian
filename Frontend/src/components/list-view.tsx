@@ -4,6 +4,8 @@ import ListStyles from "./list-view.module.css";
 import { useState } from "react";
 import GroupView from "./group-view.tsx";
 import Group from "../types/group.tsx";
+import { BiRename } from "react-icons/bi";
+import { FaTrashAlt } from "react-icons/fa";
 
 interface ListProps {
 	listID: string;
@@ -25,10 +27,17 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 					</h1>
 				</button>
 				{expanded ? (
-					// Ensure this button has the class to be styled
-					<button className="flavor-button" onClick={() => groupAdd(listID)}>
-						Add Group
-					</button>
+					<>
+						<button className="flavor-button" onClick={() => groupAdd(listID)}>
+							Add Group
+						</button>
+						<button className="flavor-icon" onClick={() => console.log("Edit Group")}>
+							<BiRename />
+						</button>
+						<button className="flavor-icon" onClick={() => console.log("Edit Group")}>
+							<FaTrashAlt />
+						</button>
+					</>
 				) : null}
 			</div>
 
