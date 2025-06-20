@@ -1,5 +1,14 @@
 .dashboard-header {
 	display: flex;
-	padding: 10pt;
+	padding: 3pt;
+	margin: 4pt;
+	border-radius: 5pt;
 	margin-top: 10pt;
+	align-items: center;
+}
+
+@media (max-width: 575px) {
+	.dashboard-header {
+		display: block;
+	}
 }

@@ -2,32 +2,33 @@
 	width: calc(100% - 20pt);
 	margin: 10pt;
 	border-radius: 5pt;
+	overflow: hidden;
 }
 
 #List-Header {
-	width: calc(100% - 20pt);
-	font-size: inherit;
 	align-items: center;
 	justify-content: left;
 	text-align: left;
 	border: none;
-	padding: 0pt 10pt 0pt 10pt;
+	padding: 5pt 5pt 5pt 2pt;
 	background-color: #0000;
 	display: flex;
+	flex-wrap: wrap;
 }
 
 #List-Button {
-	width: calc(100% - 200pt);
+	flex: 1;
 	font-size: inherit;
 	align-items: start;
 	justify-content: left;
 	text-align: left;
 	border: none;
-	padding: 0pt 10pt 0pt 10pt;
 	background-color: #f0f0;
 	display: flex;
 }
 
-.Group {
-	padding: 0pt 0pt 0pt 26pt;
+@media (max-width: 575px) {
+	#List-Header {
+		display: block;
+	}
 }

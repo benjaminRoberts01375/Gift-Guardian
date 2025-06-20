@@ -8,7 +8,7 @@ const Dashboard = () => {
 	const { listsGet, listAdd } = useList();
 	return (
 		<div>
-			<div className={`${dashboardStyles["dashboard-header"]} layer`}>
+			<div className={`${dashboardStyles["dashboard-header"]} secondary`}>
 				<h1>Your lists</h1>
 				<button className="flavor-button" onClick={() => listAdd()}>
 					Add List
@@ -21,7 +21,7 @@ const Dashboard = () => {
 					</div>
 				))}
 			</div>
-			<div className={`${dashboardStyles["dashboard-header"]} layer`}>
+			<div className={`${dashboardStyles["dashboard-header"]} secondary`}>
 				<h1>Lists shared with you</h1>
 			</div>
 			<div>{/* TODO: Add list entries for shared lists */}</div>

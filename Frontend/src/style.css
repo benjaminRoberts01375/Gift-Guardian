@@ -1,9 +1,25 @@
 body {
 	height: 100vh;
 	width: 100vw;
-	margin: 0;
-	padding: 0;
-	background: #ed4848;
+	margin: 0pt;
+	padding: 0pt;
+	background: #df6666;
+}
+
+.primary,
+flavor-button:active {
+	background: #ebbf;
+	color: black;
+}
+
+.secondary {
+	background: #ec9a9a;
+	color: black;
+}
+
+.tertiary {
+	background: #fff8;
+	color: black;
 }
 
 a,
@@ -30,6 +46,14 @@ button {
 	cursor: pointer;
 }
 
+h1 {
+	font-size: 24pt;
+}
+
+h2 {
+	font-size: 18pt;
+}
+
 .main_content {
 	width: calc(100% - 180pt);
 	height: calc(100% - 80pt);
@@ -53,17 +77,9 @@ button {
 	border-style: solid;
 }
 
-.layer,
-.flavor-button {
-	background: #ffffff66;
-}
-
-.layer-down {
-	background: #ff000040;
-}
-
 .flavor-button {
 	color: black;
+	background: #fff;
 	height: 25pt;
 	border: none;
 	border: solid 2pt #0000;
@@ -71,7 +87,7 @@ button {
 	font-size: 20px;
 	font-weight: 700;
 	padding: 0 10pt;
-	margin: 5pt 0 5pt auto;
+	margin: 0pt 0pt 0pt auto;
 	box-shadow: 0pt 0pt 10pt #0005;
 	transition-duration: 0.25s;
 }
@@ -86,4 +102,19 @@ button {
 	background: #ff000040;
 	box-shadow: 0pt 0pt 0pt #005;
 	border: solid 2pt #0005;
+}
+
+@media (max-width: 575px) {
+	.flavor-button {
+		transition-duration: 0.25s;
+		width: 100%;
+		font-size: 12pt;
+		height: 20pt;
+	}
+	h1 {
+		font-size: 18pt;
+	}
+	h2 {
+		font-size: 16pt;
+	}
 }

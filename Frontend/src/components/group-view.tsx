@@ -15,13 +15,13 @@ const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProp
 
 	return (
 		<>
-			<div id={GroupStyles["Group-Header"]}>
+			<div id={GroupStyles["Group-Header"]} className="tertiary">
 				<h2>{group?.name}</h2>
 				<button className="flavor-button" onClick={() => giftAdd(listClientID, groupClientID)}>
 					Add Gift
 				</button>
 			</div>
-			<div id={GroupStyles["Gifts"]}>
+			<div id={GroupStyles["Gifts"]} className="primary">
 				{group?.gifts.map((gift: Gift) => (
 					<GiftView
 						key={gift.id}

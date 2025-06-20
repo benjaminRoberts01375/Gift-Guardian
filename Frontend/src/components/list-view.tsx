@@ -17,7 +17,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 	const list = listGet(listID);
 
 	return (
-		<div id={ListStyles["List"]} className="layer">
+		<div id={ListStyles["List"]} className="secondary">
 			<div id={ListStyles["List-Header"]}>
 				<button onClick={() => setExpanded(!expanded)} id={ListStyles["List-Button"]}>
 					<h1>
@@ -25,19 +25,17 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 					</h1>
 				</button>
 				{expanded ? (
+					// Ensure this button has the class to be styled
 					<button className="flavor-button" onClick={() => groupAdd(listID)}>
 						Add Group
 					</button>
 				) : null}
 			</div>
 
-			{expanded && (
-				<div className={`${ListStyles["Group"]} layer`}>
-					{list?.groups.map((group: Group) => (
-						<GroupView key={group.clientID} listClientID={listID} groupClientID={group.clientID} />
-					))}
-				</div>
-			)}
+			{expanded &&
+				list?.groups.map((group: Group) => (
+					<GroupView key={group.clientID} listClientID={listID} groupClientID={group.clientID} />
+				))}
 		</div>
 	);
 };

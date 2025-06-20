@@ -3,7 +3,7 @@
 }
 
 #header {
-	height: 50pt;
+	/* height: 50pt; */
 	padding: 10pt;
 	display: flex;
 	align-items: center;
@@ -12,7 +12,8 @@
 
 #gg-logo {
 	height: auto;
-	width: 200pt;
+	max-width: 200pt;
+	min-width: 100pt;
 }
 
 #title {
@@ -27,6 +28,6 @@
 }
 
 #content {
-	max-width: 1280px;
+	max-width: 1600px;
 	margin: 0 auto;
 }

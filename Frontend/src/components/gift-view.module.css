@@ -1,29 +1,46 @@
 #inputs {
 	display: flex;
 	flex-direction: column;
-	width: 200pt;
-	height: 100pt;
+	max-width: 200pt;
+	min-width: 150pt;
 	margin-bottom: 10pt;
 	border-radius: 5pt;
 	transition: 0.25s;
 	margin: 3pt;
+	flex: 1;
+}
+
+#input-top {
+	border-radius: 3pt 3pt 0pt 0pt;
+}
+
+#input-bottom {
+	border-radius: 0pt 0pt 3pt 3pt;
+	margin-bottom: 3pt;
 }
 
 #inputs:hover {
-	background: #ff000075;
+	background: #db5b5caa;
 }
 
 .field {
 	width: calc(100% - 15pt);
 	border-width: 0pt;
-	margin: 5pt 0pt 0pt 5pt;
+	margin: 3pt 0pt 0pt 5pt;
 	padding: 5pt 0pt 5pt 5pt;
 }
 
 #save {
-	width: 35pt;
-	border-radius: 0pt;
+	height: 25pt;
 	margin: 5pt 5pt 10pt auto;
 	border-width: 0pt;
 	background: white;
+	font-size: 12pt;
+}
+
+@media (max-width: 450px) {
+	#inputs {
+		max-width: 100%;
+		min-width: 100pt;
+	}
 }

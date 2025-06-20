@@ -2,10 +2,14 @@
 	display: flex;
 	justify-content: left;
 	align-items: center;
-	padding: 0pt 10pt 0pt 10pt;
-	background-color: #f0f0;
+	padding: 5pt 5pt 5pt 5pt;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #Gifts {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 0pt;
+	padding: 3pt;
 }
