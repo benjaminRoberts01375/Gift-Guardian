@@ -215,6 +215,34 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		});
 	}
 
+	function groupDelete(group: Group): void {
+		const parentList = lists.find(list => list.id === group.list_id);
+		if (parentList === undefined) {
+			throw new Error("Failed to find parent list");
+		}
+		(async () => {
+			try {
+				const response = await fetch("/db/userDeleteGroup", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(group.id),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to delete group: " + response.status);
+				}
+			} catch (error) {
+				console.error("Error deleting group:", error);
+			}
+		})();
+		const updatedGroups = parentList.groups.filter(grp => grp.clientID !== group.clientID);
+		parentList.groups = updatedGroups;
+		listUpdateInternal(parentList);
+	}
+
 	function giftGet(
 		listClientID: string,
 		groupClientID: string,
@@ -337,6 +365,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		groupUpdate,
 		groupAdd,
 		groupUpdateInternal,
+		groupDelete,
 		giftGet,
 		giftUpdate,
 		giftAdd,

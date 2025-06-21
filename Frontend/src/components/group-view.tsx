@@ -6,6 +6,8 @@ import GroupStyles from "./group-view.module.css";
 import { FaXmark, FaCheck } from "react-icons/fa6";
 import { FormEvent, useState } from "react";
 import PrimaryActions from "./primary-actions.tsx";
+import { useRef } from "react";
+import ConfirmDelete from "./confirm-delete.tsx";
 
 interface GroupViewProps {
 	listClientID: string;
@@ -13,9 +15,10 @@ interface GroupViewProps {
 }
 
 const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProps) => {
-	const { groupGet, groupUpdate, giftAdd } = useList();
+	const { groupGet, groupUpdate, groupDelete, giftAdd } = useList();
 	const group = groupGet(listClientID, groupClientID);
 	const [editingGroup, setEditingGroup] = useState<boolean>(false);
+	const dialogRef = useRef<HTMLDialogElement | null>(null);
 
 	function handleCancel(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -34,6 +37,19 @@ const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProp
 
 	return (
 		<>
+			<dialog ref={dialogRef}>
+				<ConfirmDelete
+					onConfirm={() => {
+						if (group === undefined) {
+							return;
+						}
+						groupDelete(group);
+					}}
+					onCancel={() => dialogRef.current?.close()}
+					name={group?.name ?? "Untitled Group"}
+					type="Group"
+				/>
+			</dialog>
 			<div id={GroupStyles["Group-Header"]} className="tertiary">
 				{!editingGroup && (
 					<>
@@ -41,7 +57,12 @@ const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProp
 						<PrimaryActions
 							name="Gift"
 							addFunction={() => giftAdd(listClientID, groupClientID)}
-							deleteFunction={() => console.log("Delete Group Stub")}
+							deleteFunction={() => {
+								if (group === undefined) {
+									return;
+								}
+								dialogRef.current?.showModal();
+							}}
 							renameFunction={() => setEditingGroup(true)}
 						/>
 					</>

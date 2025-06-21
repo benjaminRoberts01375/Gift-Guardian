@@ -17,6 +17,7 @@ export interface ListsContextType {
 	groupUpdate: (group: Group) => void;
 	groupAdd: (listClientID: string, name?: string) => Group;
 	groupUpdateInternal: (updateGroup: Group, baseListClientID: string) => void;
+	groupDelete: (group: Group) => void;
 	giftGet: (listClientID: string, groupClientID: string, giftClientID: string) => Gift | undefined;
 	giftUpdate: (gift: Gift) => void;
 	giftAdd: (listClientID: string, groupClientID: string, name?: string) => Gift;
