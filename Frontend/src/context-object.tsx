@@ -11,6 +11,7 @@ export interface ListsContextType {
 	requestUserData: () => void;
 	listsGet: () => List[];
 	listGet: (clientID: string) => List | undefined;
+	listUpdate: (list: List) => void;
 	listAdd: (name?: string) => List;
 	listUpdateInternal: (updateList: List) => void;
 	listDelete: (list: List) => void;

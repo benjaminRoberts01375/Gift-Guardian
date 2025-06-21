@@ -73,6 +73,28 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return lists.find(list => list.clientID === clientID);
 	}
 
+	function listUpdate(list: List): void {
+		listUpdateInternal(list);
+		(async () => {
+			try {
+				const response = await fetch("/db/userUpdateList", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(list),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to update list: " + response.status);
+				}
+			} catch (error) {
+				console.error("Error updating list:", error);
+			}
+		})();
+	}
+
 	function listAdd(name: string = "Untitled List"): List {
 		if (user === undefined) {
 			throw new Error("User must be logged in to create a list");
@@ -382,6 +404,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		requestUserData,
 		listsGet,
 		listGet,
+		listUpdate,
 		listAdd,
 		listUpdateInternal,
 		listDelete,
