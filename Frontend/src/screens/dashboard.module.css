@@ -7,8 +7,20 @@
 	align-items: center;
 }
 
-@media (max-width: 575px) {
+.dashboard-header h1 {
+	min-width: 150pt;
+	max-width: 500pt;
+	flex: 3;
+}
+
+@media (max-width: 300px) {
 	.dashboard-header {
 		display: block;
+	}
+}
+
+@media (min-width: 300px) {
+	.dashboard-header h1 {
+		margin: 0pt auto 0pt 0pt;
 	}
 }

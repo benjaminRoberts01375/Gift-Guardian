@@ -88,8 +88,9 @@ h2 {
 	border-radius: 20pt;
 	font-size: 20px;
 	font-weight: 700;
-	padding: 0 10pt;
-	margin: 0pt 0pt 0pt 7pt;
+	padding: 0 5pt;
+	text-wrap: none;
+	line-clamp: 1;
 	box-shadow: 0pt 0pt 10pt #0005;
 	transition-duration: 0.25s;
 	justify-content: center;
