@@ -2,6 +2,7 @@ import "../style.css";
 import GiftStyles from "./gift-view.module.css";
 import { useList } from "../context-hook.tsx";
 import { FormEvent, useState } from "react";
+import { FaXmark, FaCheck } from "react-icons/fa6";
 
 interface ListGiftProps {
 	listID: string;
@@ -24,10 +25,6 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 			(currentURL !== gift?.url && !(currentURL === "" && gift?.url === undefined)) ||
 			(currentDescription !== gift?.description &&
 				!(currentDescription === "" && gift?.description === currentDescription));
-		console.log(gift?.name, currentName);
-		console.log(gift?.url, currentURL);
-		console.log(gift?.description, currentDescription);
-		console.log("Gift differs:", giftChange);
 		setShowSave(giftChange);
 	}
 
@@ -42,24 +39,30 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 		gift.name = formData.get("name") as string;
 		gift.url = formData.get("url") as string;
 		gift.description = formData.get("description") as string;
-		console.log("Updating gift", gift);
 		giftUpdate(gift);
+	};
+
+	const handleReset = (event: FormEvent<HTMLFormElement>) => {
+		event.preventDefault();
+		setGiftName(gift?.name ?? "Untitled Gift");
+		setGiftURL(gift?.url ?? "");
+		setGiftDescription(gift?.description ?? "");
+		setShowSave(false);
 	};
 
 	return (
 		<form
 			id={GiftStyles["inputs"]}
 			className="secondary"
-			onSubmit={event => {
-				handleSubmit(event);
-			}}
+			onSubmit={event => handleSubmit(event)}
+			onReset={event => handleReset(event)}
 		>
 			<input
-				defaultValue={gift?.name ?? "Untitled Gift"}
 				type="text"
 				placeholder="Item name"
 				className={GiftStyles["field"]}
 				id={GiftStyles["input-top"]}
+				value={giftName}
 				name="name"
 				onChange={event => {
 					setGiftName(event.target.value);
@@ -67,10 +70,10 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 				}}
 			/>
 			<input
-				defaultValue={gift?.url ?? ""}
 				type="text"
 				placeholder="Where to get"
 				className={GiftStyles["field"]}
+				value={giftURL}
 				name="url"
 				onChange={event => {
 					setGiftURL(event.target.value);
@@ -78,11 +81,11 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 				}}
 			/>
 			<input
-				defaultValue={gift?.description ?? ""}
 				type="text"
 				placeholder="Notes"
 				className={GiftStyles["field"]}
 				id={GiftStyles["input-bottom"]}
+				value={giftDescription}
 				name="description"
 				onChange={event => {
 					setGiftDescription(event.target.value);
@@ -90,9 +93,14 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 				}}
 			/>
 			{showSave && (
-				<button role="submit" type="submit" id={GiftStyles["save"]} className="flavor-button">
-					Save
-				</button>
+				<>
+					<button role="submit" type="submit" id={GiftStyles["save"]} className="flavor-button">
+						Save
+					</button>
+					<button className="flavor-button" type="reset">
+						<FaXmark />
+					</button>
+				</>
 			)}
 		</form>
 	);
