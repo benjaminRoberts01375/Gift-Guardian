@@ -27,7 +27,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 				</button>
 				{expanded ? (
 					<PrimaryActions
-						name="List"
+						name="Group"
 						addFunction={() => groupAdd(listID)}
 						deleteFunction={() => console.log("Delete List")}
 						renameFunction={() => console.log("Rename List")}
