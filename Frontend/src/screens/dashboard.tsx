@@ -3,9 +3,20 @@ import "../style.css";
 import { useList } from "../context-hook.tsx";
 import ListView from "../components/list-view.tsx";
 import List from "../types/list.tsx";
+import { useEffect } from "react";
 
 const Dashboard = () => {
-	const { listsGet, listAdd } = useList();
+	const { cookieGet, listsGet, listAdd, requestUserData } = useList();
+
+	useEffect(() => {
+		if (
+			listsGet().length === 0 &&
+			(cookieGet("gg-jwt") !== undefined || cookieGet("gg-jwt") !== "")
+		) {
+			requestUserData();
+		}
+	}, [listsGet, requestUserData, cookieGet]);
+
 	return (
 		<>
 			<div className={`${dashboardStyles["dashboard-header"]} secondary`}>
