@@ -7,7 +7,7 @@ import List from "../types/list.tsx";
 const Dashboard = () => {
 	const { listsGet, listAdd } = useList();
 	return (
-		<div>
+		<>
 			<div className={`${dashboardStyles["dashboard-header"]} secondary`}>
 				<h1>Your lists</h1>
 				<button className="flavor-button" onClick={() => listAdd()}>
@@ -25,7 +25,7 @@ const Dashboard = () => {
 				<h1>Lists shared with you</h1>
 			</div>
 			<div>{/* TODO: Add list entries for shared lists */}</div>
-		</div>
+		</>
 	);
 };
 
