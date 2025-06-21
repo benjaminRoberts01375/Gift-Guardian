@@ -11,7 +11,8 @@ export interface ListsContextType {
 	lists: List[];
 	user: User | undefined;
 	cookieGet: (key: CookieKeys) => string | undefined;
-	requestUserData: () => void;
+	userRequestData: () => void;
+	userLogout: () => void;
 	listsGet: () => List[];
 	listGet: (clientID: string) => List | undefined;
 	listUpdate: (list: List) => void;

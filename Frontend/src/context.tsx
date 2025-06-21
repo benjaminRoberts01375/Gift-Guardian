@@ -4,6 +4,7 @@ import Group from "./types/group.tsx";
 import Gift from "./types/gift.tsx";
 import User from "./types/user.tsx";
 import { ListsContext, ListsContextType, CookieKeys } from "./context-object.tsx";
+import { useNavigate } from "react-router-dom";
 
 // Props for the provider component
 interface ListsProviderProps {
@@ -15,6 +16,7 @@ interface ListsProviderProps {
 export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 	const [lists, setLists] = useState<List[]>([]);
 	const [user, setUser] = useState<User | undefined>(undefined);
+	const navigate = useNavigate();
 
 	function cookieGet(key: CookieKeys): string | undefined {
 		const cookieString = document.cookie.split("; ").find(cookie => cookie.startsWith(`${key}=`));
@@ -72,6 +74,11 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 				console.error("Error fetching user data:", error);
 			}
 		})();
+	}
+
+	function userLogout(): void {
+		document.cookie = "gg-jwt=; Max-Age=0; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+		navigate("/login");
 	}
 
 	function listsGet(): List[] {
@@ -442,6 +449,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		user,
 		cookieGet,
 		userRequestData,
+		userLogout,
 		listsGet,
 		listGet,
 		listUpdate,

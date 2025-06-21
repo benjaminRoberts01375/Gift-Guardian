@@ -3,7 +3,6 @@
 }
 
 #header {
-	/* height: 50pt; */
 	padding: 10pt;
 	display: flex;
 	align-items: center;
@@ -24,7 +23,18 @@
 }
 
 #profile {
+	font-weight: bold;
 	margin: 0pt 0pt 0pt auto;
+	padding: 5pt;
+	border: none;
+	border-radius: 10pt;
+	background: none;
+	box-shadow: 0pt 0pt 0pt #0000;
+	transition-duration: 0.5s;
+}
+#profile:hover {
+	box-shadow: 0pt 0pt 10pt #0005;
+	transition-duration: 0.25s;
 }
 
 #content {

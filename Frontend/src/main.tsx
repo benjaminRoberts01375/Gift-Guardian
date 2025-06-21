@@ -12,8 +12,8 @@ import { ListsProvider } from "./context.tsx";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<ListsProvider>
-			<BrowserRouter>
+		<BrowserRouter>
+			<ListsProvider>
 				<Routes>
 					<Route path="/" element={<CredentialsScreen content={<Login />} />} />
 					<Route path="/login" element={<CredentialsScreen content={<Login />} />} />
@@ -25,7 +25,7 @@ createRoot(document.getElementById("root")!).render(
 					<Route path="/check-email" element={<CredentialsScreen content={<CheckEmail />} />} />
 					<Route path="/dashboard" element={<Screen content={<Dashboard />} title="Dashboard" />} />
 				</Routes>
-			</BrowserRouter>
-		</ListsProvider>
+			</ListsProvider>
+		</BrowserRouter>
 	</StrictMode>,
 );

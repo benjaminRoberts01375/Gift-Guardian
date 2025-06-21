@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"; // Import useState and useEf
 import screenStyles from "./screen.module.css";
 import "../style.css";
 import companyLogo from "../assets/Wide.png";
+import { useList } from "../context-hook.tsx";
 
 type ScreenProps = {
 	content: React.ReactNode;
@@ -10,7 +11,7 @@ type ScreenProps = {
 
 const Screen = ({ content, title }: ScreenProps) => {
 	const [isTitleVisible, setIsTitleVisible] = useState(window.innerWidth > 700);
-
+	const { userLogout } = useList();
 	useEffect(() => {
 		const handleResize = () => {
 			setIsTitleVisible(window.innerWidth > 700);
@@ -27,7 +28,9 @@ const Screen = ({ content, title }: ScreenProps) => {
 			<div id={screenStyles["header"]} className="primary">
 				<img src={companyLogo} alt="GG Logo" draggable="false" id={screenStyles["gg-logo"]} />
 				{isTitleVisible ? <h1 id={screenStyles["title"]}>{title}</h1> : null}
-				<p id={screenStyles["profile"]}>Placeholder</p>
+				<button id={screenStyles["profile"]} onClick={() => userLogout()}>
+					Logout
+				</button>
 			</div>
 			<div id={screenStyles["content"]}>{content}</div>
 		</div>
