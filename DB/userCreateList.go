@@ -36,25 +36,30 @@ WITH new_list AS (
 new_group AS (
     INSERT INTO groups (list_id, name)
     VALUES ((SELECT id FROM new_list), $3)
-    RETURNING id
+    RETURNING id, list_id
 ),
 new_gift AS (
     INSERT INTO gifts (group_id, name, description)
     VALUES ((SELECT id FROM new_group), $4, $5)
-    RETURNING id
+    RETURNING id, group_id
 )
 SELECT
-    (SELECT id FROM new_list) as list_id,
-    (SELECT id FROM new_group) as group_id,
-    (SELECT id FROM new_gift) as gift_id;
+    (SELECT id FROM new_list),
+    (SELECT id FROM new_group),
+		(SELECT list_id FROM new_group),
+    (SELECT id FROM new_gift),
+		(SELECT group_id FROM new_gift);
 	`
 	err = database.QueryRow(statement, userID, requestList.Name,
 		requestList.Groups[0].Name, requestList.Groups[0].Gifts[0].Name,
-		requestList.Groups[0].Gifts[0].Description).Scan(
-		&requestList.ID, &requestList.Groups[0].ID,
-		&requestList.Groups[0].Gifts[0].ID,
+		requestList.Groups[0].Gifts[0].Description,
+	).Scan(
+		&requestList.ID,
+		&requestList.Groups[0].ID, &requestList.Groups[0].ListID,
+		&requestList.Groups[0].Gifts[0].ID, &requestList.Groups[0].Gifts[0].GroupID,
 	)
 	if err != nil {
+		Coms.PrintErr(err)
 		if err == sql.ErrNoRows {
 			Coms.ExternalPostRespondCode(http.StatusNotFound, w)
 			return
@@ -62,5 +67,6 @@ SELECT
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
+	Coms.Println("Created list:", requestList)
 	Coms.ExternalPostRespond(requestList, w)
 }
