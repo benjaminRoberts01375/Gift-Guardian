@@ -3,7 +3,7 @@ import List from "./types/list.tsx";
 import Group from "./types/group.tsx";
 import Gift from "./types/gift.tsx";
 import User from "./types/user.tsx";
-import { ListsContext, ListsContextType } from "./context-object.tsx";
+import { ListsContext, ListsContextType, CookieKeys } from "./context-object.tsx";
 
 // Props for the provider component
 interface ListsProviderProps {
@@ -15,6 +15,15 @@ interface ListsProviderProps {
 export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 	const [lists, setLists] = useState<List[]>([]);
 	const [user, setUser] = useState<User | undefined>(undefined);
+
+	function cookieGet(key: CookieKeys): string | undefined {
+		const cookieString = document.cookie.split("; ").find(cookie => cookie.startsWith(`${key}=`));
+
+		if (cookieString) {
+			return decodeURIComponent(cookieString.split("=")[1]);
+		}
+		return undefined;
+	}
 
 	function requestUserData(): void {
 		console.log("Requesting user data");
@@ -431,6 +440,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 	const value: ListsContextType = {
 		lists,
 		user,
+		cookieGet,
 		requestUserData,
 		listsGet,
 		listGet,

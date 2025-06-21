@@ -4,10 +4,13 @@ import Group from "./types/group.tsx";
 import Gift from "./types/gift.tsx";
 import User from "./types/user.tsx";
 
+export type CookieKeys = "gg-jwt";
+
 // Define the shape of our context
 export interface ListsContextType {
 	lists: List[];
 	user: User | undefined;
+	cookieGet: (key: CookieKeys) => string | undefined;
 	requestUserData: () => void;
 	listsGet: () => List[];
 	listGet: (clientID: string) => List | undefined;
