@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useList } from "../../context-hook.tsx";
 
 const Login = () => {
-	const { requestUserData } = useList();
+	const { userRequestData } = useList();
 	const navigate = useNavigate();
 	const [attemptedLogin, setAttemptedLogin] = useState<"fresh" | "failed" | "error">("fresh");
 
@@ -32,7 +32,7 @@ const Login = () => {
 			});
 
 			if (response.ok) {
-				requestUserData(); // Setup the context
+				userRequestData(); // Setup the context
 				navigate("/dashboard");
 			} else {
 				console.error("Login failed:", response.status);
@@ -55,7 +55,7 @@ const Login = () => {
 					credentials: "include",
 				});
 				if (response.ok) {
-					requestUserData(); // Setup the context
+					userRequestData(); // Setup the context
 					navigate("/dashboard");
 				}
 			} catch (error) {
@@ -64,7 +64,7 @@ const Login = () => {
 		};
 
 		checkIfLoggedIn();
-	}, [navigate, requestUserData]);
+	}, [navigate, userRequestData]);
 
 	return (
 		<form

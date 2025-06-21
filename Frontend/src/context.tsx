@@ -25,7 +25,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return undefined;
 	}
 
-	function requestUserData(): void {
+	function userRequestData(): void {
 		console.log("Requesting user data");
 		(async () => {
 			try {
@@ -441,7 +441,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		lists,
 		user,
 		cookieGet,
-		requestUserData,
+		userRequestData,
 		listsGet,
 		listGet,
 		listUpdate,
