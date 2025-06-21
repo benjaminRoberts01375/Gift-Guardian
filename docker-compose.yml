@@ -40,6 +40,8 @@ services:
     user: postgres:postgres
     networks:
       - gg-network
+    ports:
+      - "5432:5432"
     env_file:
       - ./Postgres/db.env
     volumes:
