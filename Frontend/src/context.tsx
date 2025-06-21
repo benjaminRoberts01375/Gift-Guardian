@@ -132,6 +132,29 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		return list.groups.find(group => group.clientID === groupClientID);
 	}
 
+	function groupUpdate(group: Group): void {
+		console.log("Updating group", group);
+		(async () => {
+			try {
+				const response = await fetch("/db/userUpdateGroup", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(group),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to update group: " + response.status);
+				}
+				groupUpdateInternal(group, group.list_id);
+			} catch (error) {
+				console.error("Error updating group:", error);
+			}
+		})();
+	}
+
 	function groupAdd(listClientID: string, name: string = "Untitled Group"): Group {
 		if (user === undefined) {
 			throw new Error("User must be logged in to create a Group");
@@ -311,6 +334,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		listAdd,
 		listUpdateInternal,
 		groupGet,
+		groupUpdate,
 		groupAdd,
 		groupUpdateInternal,
 		giftGet,

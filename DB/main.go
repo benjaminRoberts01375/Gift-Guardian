@@ -29,6 +29,7 @@ func main() {
 	http.HandleFunc("POST /userCreateGroup", userCreateGroup)
 	http.HandleFunc("POST /userUpdateGift", userUpdateGift)
 	http.HandleFunc("POST /userCreateGift", userCreateGift)
+	http.HandleFunc("POST /userUpdateGroup", userUpdateGroup)
 	if config.DevMode {
 		Coms.Println("Dev mode enabled")
 	}

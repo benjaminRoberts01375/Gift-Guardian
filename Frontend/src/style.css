@@ -77,6 +77,7 @@ h2 {
 	border-style: solid;
 }
 
+.flavor-button-distant,
 .flavor-button,
 .flavor-icon {
 	color: black;
@@ -88,11 +89,15 @@ h2 {
 	font-size: 20px;
 	font-weight: 700;
 	padding: 0 10pt;
-	margin: 0pt 0pt 0pt auto;
+	margin: 0pt 0pt 0pt 7pt;
 	box-shadow: 0pt 0pt 10pt #0005;
 	transition-duration: 0.25s;
+	justify-content: center;
+	display: flex;
+	align-items: center;
 }
 
+.flavor-button-distant:hover,
 .flavor-button:hover,
 .flavor-icon:hover {
 	box-shadow: 0pt 0pt 0pt #005;
@@ -100,6 +105,7 @@ h2 {
 	transition-duration: 0.25s;
 }
 
+.flavor-button-distant:active,
 .flavor-button:active,
 .flavor-icon:active {
 	background: #ff000040;
@@ -110,19 +116,27 @@ h2 {
 .flavor-icon {
 	color: black;
 	background: #fff;
-	min-height: 25pt;
-	height: auto;
+	height: 25pt;
 	margin: 0pt 0pt 0pt 3pt;
 	display: flex;
 	align-items: center;
 }
 
-@media (max-width: 575px) {
+.flavor-button-distant {
+	margin: 0pt 0pt 0pt auto;
+}
+
+@media (max-width: 700px) {
+	.flavor-button-distant,
 	.flavor-button {
 		transition-duration: 0.25s;
 		width: 100%;
 		font-size: 12pt;
 		height: 20pt;
+		flex: 1;
+	}
+	.flavor-icon {
+		flex: 0;
 	}
 	h1 {
 		font-size: 18pt;

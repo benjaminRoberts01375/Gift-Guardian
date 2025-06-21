@@ -3,8 +3,9 @@ import { useList } from "../context-hook.tsx";
 import GiftView from "./gift-view.tsx";
 import Gift from "../types/gift.tsx";
 import GroupStyles from "./group-view.module.css";
-import { BiRename } from "react-icons/bi";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaXmark, FaCheck } from "react-icons/fa6";
+import { FormEvent, useState } from "react";
+import PrimaryActions from "./primary-actions.tsx";
 
 interface GroupViewProps {
 	listClientID: string;
@@ -12,22 +13,60 @@ interface GroupViewProps {
 }
 
 const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProps) => {
-	const { groupGet, giftAdd } = useList();
+	const { groupGet, groupUpdate, giftAdd } = useList();
 	const group = groupGet(listClientID, groupClientID);
+	const [editingGroup, setEditingGroup] = useState<boolean>(false);
+
+	function handleCancel(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		setEditingGroup(false);
+	}
+	function handleSubmit(event: FormEvent<HTMLFormElement>) {
+		event.preventDefault();
+		if (group === undefined) {
+			return;
+		}
+		const formData = new FormData(event.currentTarget);
+		group.name = formData.get("name") as string;
+		groupUpdate(group);
+		setEditingGroup(false);
+	}
 
 	return (
 		<>
 			<div id={GroupStyles["Group-Header"]} className="tertiary">
-				<h2>{group?.name}</h2>
-				<button className="flavor-button" onClick={() => giftAdd(listClientID, groupClientID)}>
-					Add Gift
-				</button>
-				<button className="flavor-icon" onClick={() => console.log("Edit Group")}>
-					<BiRename />
-				</button>
-				<button className="flavor-icon" onClick={() => console.log("Edit Group")}>
-					<FaTrashAlt />
-				</button>
+				{!editingGroup && (
+					<>
+						<h2 id={GroupStyles["group-name"]}>{group?.name}</h2>
+						<PrimaryActions
+							name="Gift"
+							addFunction={() => giftAdd(listClientID, groupClientID)}
+							deleteFunction={() => console.log("Delete Group Stub")}
+							renameFunction={() => setEditingGroup(true)}
+						/>
+					</>
+				)}
+				{editingGroup && (
+					<form
+						onReset={event => handleCancel(event)}
+						onSubmit={event => handleSubmit(event)}
+						id={GroupStyles["inputs"]}
+					>
+						<input
+							type="text"
+							placeholder="Group name"
+							className={GroupStyles["input"]}
+							name="name"
+							defaultValue={group?.name}
+						/>
+						<button className="flavor-button" type="submit">
+							<FaCheck />
+						</button>
+						<button className="flavor-button" type="reset">
+							<FaXmark />
+						</button>
+					</form>
+				)}
 			</div>
 			<div id={GroupStyles["Gifts"]} className="primary">
 				{group?.gifts.map((gift: Gift) => (

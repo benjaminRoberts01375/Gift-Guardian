@@ -13,3 +13,19 @@
 	gap: 0pt;
 	padding: 3pt;
 }
+
+.input {
+	max-width: 200pt;
+	border-width: 0pt;
+	border-radius: 5pt;
+	margin: 3pt 3pt 0pt 5pt;
+	padding: 5pt 0pt 5pt 5pt;
+}
+
+#inputs {
+	display: flex;
+}
+
+#group-name {
+	margin: 0pt auto 0pt 0pt;
+}
