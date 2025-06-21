@@ -124,6 +124,29 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		});
 	}
 
+	function listDelete(list: List): void {
+		(async () => {
+			try {
+				const response = await fetch("/db/userDeleteList", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(list.id),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to delete list: " + response.status);
+				}
+			} catch (error) {
+				console.error("Error deleting list:", error);
+			}
+		})();
+		const updatedLists = lists.filter(existingList => existingList.clientID !== list.clientID);
+		setLists(updatedLists);
+	}
+
 	function groupGet(listClientID: string, groupClientID: string): Group | undefined {
 		const list = listGet(listClientID);
 		if (list === undefined) {
@@ -361,6 +384,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		listGet,
 		listAdd,
 		listUpdateInternal,
+		listDelete,
 		groupGet,
 		groupUpdate,
 		groupAdd,

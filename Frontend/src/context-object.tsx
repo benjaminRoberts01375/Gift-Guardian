@@ -13,6 +13,7 @@ export interface ListsContextType {
 	listGet: (clientID: string) => List | undefined;
 	listAdd: (name?: string) => List;
 	listUpdateInternal: (updateList: List) => void;
+	listDelete: (list: List) => void;
 	groupGet: (listClientID: string, groupClientID: string) => Group | undefined;
 	groupUpdate: (group: Group) => void;
 	groupAdd: (listClientID: string, name?: string) => Group;
