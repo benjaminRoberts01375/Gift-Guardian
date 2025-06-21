@@ -30,9 +30,22 @@
 	padding: 5pt 0pt 5pt 5pt;
 }
 
+#actions {
+	display: flex;
+	flex-direction: row;
+	padding: 2pt 0pt 5pt 2pt;
+}
+
+#delete-action {
+	width: auto;
+	flex: 1;
+	margin-right: 5pt;
+}
+
 #save-container {
 	display: flex;
 	flex-direction: row;
+	margin-right: 5pt;
 }
 
 @media (max-width: 450px) {

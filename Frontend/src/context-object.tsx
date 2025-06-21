@@ -28,6 +28,7 @@ export interface ListsContextType {
 		baseListClientID: string,
 		baseGroupClientID: string,
 	) => void;
+	giftDelete: (listClientID: string, groupClientID: string, gift: Gift) => void;
 }
 
 // Create the context with a default value

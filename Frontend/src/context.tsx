@@ -398,6 +398,36 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		});
 	}
 
+	function giftDelete(listClientID: string, groupClientID: string, gift: Gift): void {
+		(async () => {
+			try {
+				const response = await fetch("/db/userDeleteGift", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					credentials: "include",
+					body: JSON.stringify(gift.id),
+				});
+
+				if (!response.ok) {
+					throw new Error("Failed to delete gift: " + response.status);
+				}
+			} catch (error) {
+				console.error("Error deleting gift:", error);
+			}
+		})();
+		const parentGroup = groupGet(listClientID, groupClientID);
+		if (parentGroup === undefined) {
+			throw new Error("Failed to find parent group");
+		}
+		const updatedGifts = parentGroup.gifts.filter(
+			parentGift => parentGift.clientID !== gift.clientID,
+		);
+		parentGroup.gifts = updatedGifts;
+		groupUpdateInternal(parentGroup, listClientID);
+	}
+
 	const value: ListsContextType = {
 		lists,
 		user,
@@ -417,6 +447,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 		giftUpdate,
 		giftAdd,
 		giftUpdateInternal,
+		giftDelete,
 	};
 
 	return <ListsContext.Provider value={value}>{children}</ListsContext.Provider>;
