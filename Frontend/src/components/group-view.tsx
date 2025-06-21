@@ -71,12 +71,12 @@ const GroupView = ({ listClientID, groupClientID: groupClientID }: GroupViewProp
 					<form
 						onReset={event => handleCancel(event)}
 						onSubmit={event => handleSubmit(event)}
-						id={GroupStyles["inputs"]}
+						className="edit-name-container"
 					>
 						<input
 							type="text"
 							placeholder="Group name"
-							className={GroupStyles["input"]}
+							className="edit-name"
 							name="name"
 							defaultValue={group?.name}
 						/>

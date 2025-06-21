@@ -155,6 +155,21 @@ dialog #buttons {
 	margin: 0pt 0pt 0pt auto;
 }
 
+.edit-name {
+	max-width: 200pt;
+	border-width: 0pt;
+	border-radius: 5pt;
+	margin: 3pt 3pt 0pt 5pt;
+	padding: 5pt 0pt 5pt 5pt;
+}
+
+.edit-name-container {
+	display: flex;
+}
+.edit-name-container > button {
+	margin-left: 5pt;
+}
+
 @media (max-width: 700px) {
 	.flavor-button-distant,
 	.flavor-button {
