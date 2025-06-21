@@ -93,14 +93,14 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 				}}
 			/>
 			{showSave && (
-				<>
-					<button role="submit" type="submit" id={GiftStyles["save"]} className="flavor-button">
-						Save
+				<div id={GiftStyles["save-container"]}>
+					<button role="submit" type="submit" className="flavor-icon">
+						<FaCheck />
 					</button>
-					<button className="flavor-button" type="reset">
+					<button className="flavor-icon" type="reset">
 						<FaXmark />
 					</button>
-				</>
+				</div>
 			)}
 		</form>
 	);
