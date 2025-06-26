@@ -1,15 +1,15 @@
-import signupStyles from "./signup.module.css";
-import credentialsStyles from "./credentials.module.css";
 import "../../style.css";
-import { useState, FormEvent } from "react";
+import SignupStyles from "./signup.module.css";
+import CredentialsStyles from "./credentials.module.css";
+import CredentialsScreen from "../../screens/login/credentials.tsx";
+import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
-	const [attemptedLogin, setAttemptedLogin] = useState<"fresh" | "failed">("fresh");
 	const navigate = useNavigate();
+	const [failedSignUp, setFailedSignUp] = useState<boolean>(false);
 
-	// Define the onSubmit handler as a separate function with proper type for event
-	const handleLoginSubmission = async (event: FormEvent<HTMLFormElement>) => {
+	const handleSignUpSubmission = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
 
@@ -17,9 +17,23 @@ const SignUp = () => {
 		const payload = {
 			username: formData.get("username") as string,
 			password: formData.get("password") as string,
-			first_name: formData.get("firstName") as string,
-			last_name: formData.get("lastName") as string,
+			first_name: formData.get("first-name") as string,
+			last_name: formData.get("last-name") as string,
 		};
+		console.log(payload);
+		console.log(formData.getAll("first-name"));
+		if (
+			payload.first_name.length < 2 || // First name too short
+			payload.last_name.length < 2 || // Last name too short
+			!payload.username.includes("@") || // Email missing @ symbol
+			!payload.username.includes(".") || // Email missing . symbol
+			payload.username.length < 5 || // Email too short
+			payload.password.length < 8 // Password too short
+		) {
+			console.error("Missing required fields");
+			setFailedSignUp(true);
+			return;
+		}
 
 		try {
 			const response = await fetch("/db/userCreate", {
@@ -32,88 +46,83 @@ const SignUp = () => {
 			});
 
 			if (response.ok) {
-				navigate("/check-email");
+				navigate("/check-email", { state: { userEmail: payload.username } });
 			} else {
-				console.error("Login failed:", response.status);
-				setAttemptedLogin("failed");
+				console.error("Signup failed:", response.status);
+				throw new Error("Signup failed");
 			}
 		} catch (error) {
 			console.error("Error during login:", error);
-			setAttemptedLogin("failed");
+			setFailedSignUp(true);
 		}
 	};
 
 	return (
-		<form
-			className="frosty"
-			id={credentialsStyles["login-form"]}
-			onSubmit={event => {
-				handleLoginSubmission(event);
-			}}
-		>
-			<TitleText attemptedLogin={attemptedLogin} />
-			<div id={credentialsStyles["contents"]}>
-				<h2 className={credentialsStyles["textfield-label"]}>E-Mail Address</h2>
-				<input className={credentialsStyles["field"]} name="username" placeholder="Username" />
-				<h2 className={credentialsStyles["textfield-label"]}>Password</h2>
-				<input
-					className={credentialsStyles["field"]}
-					name="password"
-					placeholder="Password"
-					type="password"
-				/>
-				<div id={signupStyles["name-container"]}>
-					<div className={signupStyles["name-field"]}>
-						<h2 className={credentialsStyles["textfield-label"]}>First Name</h2>
+		<CredentialsScreen title={failedSignUp ? "Sign Up Failed" : "Welcome"}>
+			<form onSubmit={handleSignUpSubmission}>
+				<div id={CredentialsStyles["inputs"]}>
+					<label htmlFor="username" className={CredentialsStyles["label"]}>
+						Username
+					</label>
+					<input
+						type="text"
+						className={CredentialsStyles["field"]}
+						name="username"
+						placeholder="E-Mail Address"
+					/>
+					<label htmlFor="password" className={CredentialsStyles["label"]}>
+						Password
+					</label>
+					<input
+						type="password"
+						className={CredentialsStyles["field"]}
+						name="password"
+						placeholder="Password"
+					/>
+					<label htmlFor="first-name" className={CredentialsStyles["label"]}>
+						Your Name
+					</label>
+					<div id={SignupStyles["name-container"]}>
 						<input
+							className={CredentialsStyles["field"]}
+							name="first-name"
 							placeholder="First Name"
-							name="firstName"
-							type="text"
-							className={credentialsStyles["field"]}
 						/>
-					</div>
-					<div className={signupStyles["name-field"]} id={signupStyles["last-name-field"]}>
-						<h2 className={credentialsStyles["textfield-label"]}>Last Name</h2>
 						<input
+							className={CredentialsStyles["field"]}
+							name="last-name"
 							placeholder="Last Name"
-							name="lastName"
-							type="text"
-							className={credentialsStyles["field"]}
 						/>
 					</div>
 				</div>
-				<div id={credentialsStyles["submit-container"]}>
-					<button
-						type="button"
-						onClick={() => {
-							navigate("/login");
-						}}
-						className={credentialsStyles["secondary"]}
-						id={signupStyles["account-exists"]}
-					>
-						Already have an account?
+				<div id={CredentialsStyles["actions"]}>
+					<button className={CredentialsStyles["primary"]} type="submit">
+						Sign Up
 					</button>
-					<input id={credentialsStyles["primary"]} type="submit" value="Sign Up" />
+					<div id={CredentialsStyles["secondary-actions"]}>
+						<button
+							className={CredentialsStyles["secondary"]}
+							onClick={event => {
+								event.preventDefault();
+								navigate("/forgot-password");
+							}}
+						>
+							Forgot Password
+						</button>
+						<button
+							className={CredentialsStyles["secondary"]}
+							onClick={event => {
+								event.preventDefault();
+								navigate("/login");
+							}}
+						>
+							Login
+						</button>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
+		</CredentialsScreen>
 	);
 };
-
-// Define interface for LoginText props
-interface TitleTextProps {
-	attemptedLogin: "fresh" | "failed";
-}
-
-function TitleText({ attemptedLogin }: TitleTextProps) {
-	if (attemptedLogin === "failed") {
-		return (
-			<h1 className="error title" id={credentialsStyles["title"]}>
-				Login Failed
-			</h1>
-		);
-	}
-	return <h1 id={credentialsStyles["title"]}>Sign Up</h1>;
-}
 
 export default SignUp;

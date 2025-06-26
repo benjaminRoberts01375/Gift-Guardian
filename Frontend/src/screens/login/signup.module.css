@@ -1,16 +1,3 @@
 #name-container {
 	display: flex;
 }
-
-.name-field {
-	width: 48%;
-	display: block;
-}
-
-#last-name-field {
-	margin: 0pt 0pt 0pt auto;
-}
-
-#account-exists {
-	margin: 0pt 10pt 0pt auto;
-}

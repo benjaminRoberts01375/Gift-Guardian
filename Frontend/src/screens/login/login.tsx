@@ -1,16 +1,15 @@
-import loginStyles from "./login.module.css";
-import credentialStyles from "./credentials.module.css";
 import "../../style.css";
-import { useState, useEffect, FormEvent } from "react";
+import CredentialsStyles from "./credentials.module.css";
+import CredentialsScreen from "../../screens/login/credentials.tsx";
+import { FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useList } from "../../context-hook.tsx";
 
 const Login = () => {
 	const { userRequestData } = useList();
+	const [failedLogin, setSetFailedLogin] = useState<boolean>(false);
 	const navigate = useNavigate();
-	const [attemptedLogin, setAttemptedLogin] = useState<"fresh" | "failed" | "error">("fresh");
 
-	// Define the onSubmit handler as a separate function with proper type for event
 	const handleLoginSubmission = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		const formData = new FormData(event.currentTarget);
@@ -36,14 +35,14 @@ const Login = () => {
 				navigate("/dashboard");
 			} else {
 				console.error("Login failed:", response.status);
-				setAttemptedLogin("failed");
+				throw new Error("Login failed");
 			}
 		} catch (error) {
 			console.error("Error during login:", error);
-			setAttemptedLogin("error");
+			setSetFailedLogin(true);
 		}
 	};
-	// Check if the user is already logged in
+
 	useEffect(() => {
 		const checkIfLoggedIn = async () => {
 			try {
@@ -67,65 +66,56 @@ const Login = () => {
 	}, [navigate, userRequestData]);
 
 	return (
-		<form
-			className="frosty"
-			id={loginStyles["login-form"]}
-			onSubmit={event => {
-				handleLoginSubmission(event);
-			}}
-		>
-			<LoginText attemptedLogin={attemptedLogin} />
-			<div id={credentialStyles["contents"]}>
-				<h2 className={credentialStyles["textfield-label"]}>E-Mail Address</h2>
-				<input className={credentialStyles["field"]} name="username" placeholder="Username" />
-				<h2 className={credentialStyles["textfield-label"]}>Password</h2>
-				<input
-					className={credentialStyles["field"]}
-					name="password"
-					placeholder="Password"
-					type="password"
-				/>
-				<div id={credentialStyles["submit-container"]}>
-					<button
-						type="button"
-						onClick={() => {
-							navigate("/forgot-password");
-						}}
-						className={credentialStyles["secondary"]}
-					>
-						Forgot Password?
-					</button>
-					<button
-						type="button"
-						onClick={() => {
-							navigate("/sign-up");
-						}}
-						className={credentialStyles["secondary"]}
-						id={loginStyles["signUp"]}
-					>
-						Sign Up
-					</button>
-					<input id={credentialStyles["primary"]} type="submit" value="Sign In" />
+		<CredentialsScreen title={failedLogin ? "Login Failed" : "Welcome"}>
+			<form onSubmit={handleLoginSubmission}>
+				<div id={CredentialsStyles["inputs"]}>
+					<label htmlFor="username" className={CredentialsStyles["label"]}>
+						Username
+					</label>
+					<input
+						type="text"
+						className={CredentialsStyles["field"]}
+						name="username"
+						placeholder="E-Mail Address"
+					/>
+					<label htmlFor="password" className={CredentialsStyles["label"]}>
+						Password
+					</label>
+					<input
+						type="password"
+						className={CredentialsStyles["field"]}
+						name="password"
+						placeholder="Password"
+					/>
 				</div>
-			</div>
-		</form>
+				<div id={CredentialsStyles["actions"]}>
+					<button className={CredentialsStyles["primary"]} type="submit">
+						Sign In
+					</button>
+					<div id={CredentialsStyles["secondary-actions"]}>
+						<button
+							className={CredentialsStyles["secondary"]}
+							onClick={event => {
+								event.preventDefault();
+								navigate("/forgot-password");
+							}}
+						>
+							Forgot Password
+						</button>
+						<button
+							className={CredentialsStyles["secondary"]}
+							onClick={event => {
+								event.preventDefault();
+								navigate("/signup");
+							}}
+						>
+							Sign Up
+						</button>
+					</div>
+				</div>
+			</form>
+		</CredentialsScreen>
 	);
 };
-
-// Define interface for LoginText props
-interface LoginTextProps {
-	attemptedLogin: "fresh" | "failed" | "error";
-}
-
-function LoginText({ attemptedLogin }: LoginTextProps) {
-	if (attemptedLogin === "failed") {
-		return (
-			<h1 className="error title" id={credentialStyles["login-text"]}>
-				Login Failed
-			</h1>
-		);
-	}
-	return <h1 id={credentialStyles["title"]}>Welcome</h1>;
-}
 
 export default Login;
