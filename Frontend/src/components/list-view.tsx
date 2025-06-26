@@ -8,6 +8,8 @@ import PrimaryActions from "./primary-actions.tsx";
 import { useRef } from "react";
 import ConfirmDelete from "./confirm-delete.tsx";
 import { FaXmark, FaCheck } from "react-icons/fa6";
+import ListShare from "./list-share.tsx";
+import { FaLink } from "react-icons/fa";
 
 interface ListProps {
 	listID: string;
@@ -17,6 +19,7 @@ interface ListProps {
 const ListView = ({ listID, defaultExpanded }: ListProps) => {
 	const [expanded, setExpanded] = useState<boolean>(defaultExpanded ?? false);
 	const dialogRefDelete = useRef<HTMLDialogElement | null>(null);
+	const dialogRefShare = useRef<HTMLDialogElement | null>(null);
 	const { listGet, listUpdate, listDelete, groupAdd } = useList();
 	const list = listGet(listID);
 	const [editingList, setEditingList] = useState<boolean>(false);
@@ -52,6 +55,10 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 				/>
 			</dialog>
 
+			<dialog ref={dialogRefShare}>
+				<ListShare listID={listID} />
+			</dialog>
+
 			<div id={ListStyles["List"]} className="secondary">
 				<div id={ListStyles["List-Header"]}>
 					{!expanded && !editingList && (
@@ -64,17 +71,30 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 							<button onClick={() => setExpanded(!expanded)} id={ListStyles["List-Button"]}>
 								<h1>▾ {list?.name}</h1>
 							</button>
-							<PrimaryActions
-								name="Group"
-								addFunction={() => groupAdd(listID)}
-								deleteFunction={() => {
-									if (list === undefined) {
-										return;
-									}
-									dialogRefDelete.current?.showModal();
-								}}
-								renameFunction={() => setEditingList(true)}
-							/>
+							<div id={ListStyles["List-Actions"]}>
+								<PrimaryActions
+									name="Group"
+									addFunction={() => groupAdd(listID)}
+									deleteFunction={() => {
+										if (list === undefined) {
+											return;
+										}
+										dialogRefDelete.current?.showModal();
+									}}
+									renameFunction={() => setEditingList(true)}
+								/>
+								<button
+									className="flavor-icon"
+									onClick={() => {
+										if (list === undefined) {
+											return;
+										}
+										dialogRefShare.current?.showModal();
+									}}
+								>
+									<FaLink />
+								</button>
+							</div>
 						</>
 					)}
 					{editingList && (
@@ -97,6 +117,19 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 								<FaXmark />
 							</button>
 						</form>
+					)}
+					{!expanded && (
+						<button
+							className="flavor-icon"
+							onClick={() => {
+								if (list === undefined) {
+									return;
+								}
+								dialogRefShare.current?.showModal();
+							}}
+						>
+							<FaLink />
+						</button>
 					)}
 				</div>
 

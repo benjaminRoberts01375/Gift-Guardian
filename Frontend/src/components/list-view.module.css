@@ -27,8 +27,13 @@
 	display: flex;
 }
 
-@media (max-width: 575px) {
-	#List-Header {
-		display: block;
+#List-Actions {
+	display: flex;
+	flex-direction: row;
+}
+
+@media (max-width: 700px) {
+	#List-Actions {
+		width: 100%;
 	}
 }
