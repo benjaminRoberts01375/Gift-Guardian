@@ -149,3 +149,6 @@ ConfigsWriter/dbConfig.go
 
 # Lock files
 *.afdesign~lock~
+
+# Blender files
+*.blend[0-9]*
