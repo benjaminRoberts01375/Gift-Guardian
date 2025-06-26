@@ -148,4 +148,4 @@ DB/tmp/main
 ConfigsWriter/dbConfig.go
 
 # Lock files
-Logos/Favicon.afdesign~lock~
+*.afdesign~lock~
