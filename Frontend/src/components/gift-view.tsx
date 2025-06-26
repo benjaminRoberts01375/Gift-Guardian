@@ -44,6 +44,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 		gift.url = formData.get("url") as string;
 		gift.description = formData.get("description") as string;
 		giftUpdate(gift);
+		giftDiffers(giftName, giftURL, giftDescription);
 	};
 
 	const handleReset = (event: FormEvent<HTMLFormElement>) => {
