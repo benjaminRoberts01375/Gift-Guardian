@@ -16,7 +16,7 @@ interface ListProps {
 
 const ListView = ({ listID, defaultExpanded }: ListProps) => {
 	const [expanded, setExpanded] = useState<boolean>(defaultExpanded ?? false);
-	const dialogRef = useRef<HTMLDialogElement | null>(null);
+	const dialogRefDelete = useRef<HTMLDialogElement | null>(null);
 	const { listGet, listUpdate, listDelete, groupAdd } = useList();
 	const list = listGet(listID);
 	const [editingList, setEditingList] = useState<boolean>(false);
@@ -38,7 +38,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 
 	return (
 		<>
-			<dialog ref={dialogRef}>
+			<dialog ref={dialogRefDelete}>
 				<ConfirmDelete
 					onConfirm={() => {
 						if (list === undefined) {
@@ -46,7 +46,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 						}
 						listDelete(list);
 					}}
-					onCancel={() => dialogRef.current?.close()}
+					onCancel={() => dialogRefDelete.current?.close()}
 					name={list?.name ?? "Untitled List"}
 					type="List"
 				/>
@@ -71,7 +71,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 									if (list === undefined) {
 										return;
 									}
-									dialogRef.current?.showModal();
+									dialogRefDelete.current?.showModal();
 								}}
 								renameFunction={() => setEditingList(true)}
 							/>
