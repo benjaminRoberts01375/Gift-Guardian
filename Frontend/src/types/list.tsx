@@ -7,6 +7,7 @@ class List {
 	name: string;
 	groups: Group[];
 	owner: User;
+	isPrivate: boolean;
 
 	constructor(
 		owner: User,
@@ -19,6 +20,7 @@ class List {
 		this.id = id;
 		this.name = title;
 		this.clientID = crypto.randomUUID();
+		this.isPrivate = false;
 	}
 }
 

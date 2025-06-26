@@ -56,7 +56,7 @@ const ListView = ({ listID, defaultExpanded }: ListProps) => {
 			</dialog>
 
 			<dialog ref={dialogRefShare}>
-				<ListShare listID={listID} />
+				<ListShare listID={listID} onClose={() => dialogRefShare.current?.close()} />
 			</dialog>
 
 			<div id={ListStyles["List"]} className="secondary">
