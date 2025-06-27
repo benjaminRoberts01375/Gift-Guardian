@@ -78,6 +78,7 @@ export const ListsProvider: React.FC<ListsProviderProps> = ({ children }) => {
 
 	function userLogout(): void {
 		document.cookie = "gg-jwt=; Max-Age=0; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+		setUser(undefined);
 		navigate("/login");
 	}
 

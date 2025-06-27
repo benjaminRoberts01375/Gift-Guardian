@@ -6,16 +6,13 @@ import List from "../types/list.tsx";
 import { useEffect } from "react";
 
 const Dashboard = () => {
-	const { cookieGet, listsGet, listAdd, userRequestData } = useList();
+	const { user, listsGet, listAdd, userRequestData } = useList();
 
 	useEffect(() => {
-		if (
-			listsGet().length === 0 &&
-			(cookieGet("gg-jwt") !== undefined || cookieGet("gg-jwt") !== "")
-		) {
+		if (user === undefined) {
 			userRequestData();
 		}
-	}, [listsGet, userRequestData, cookieGet]);
+	}, [user, userRequestData]);
 
 	return (
 		<>
