@@ -33,11 +33,9 @@ const HamburgerMenu: React.FC = () => {
 						<a href="/change-email">Change Email</a>
 					</li>
 					<li>
-						<li>
-							<a href="/change-password">
-								<p>Change Password</p>
-							</a>
-						</li>
+						<a href="/change-password">
+							<p>Change Password</p>
+						</a>
 					</li>
 					<li>
 						<button onClick={userLogout} id={styles["logout"]}>
