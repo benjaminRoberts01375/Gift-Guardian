@@ -9,6 +9,7 @@ type List struct {
 	ID        string    `json:"id"`
 	OwnerID   string    `json:"owner_id"`
 	Name      string    `json:"name"`
+	Private   bool      `json:"private"`
 	CreatedAt time.Time `json:"created_at"`
 	Groups    []Group   `json:"groups"`
 }

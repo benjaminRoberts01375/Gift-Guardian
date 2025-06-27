@@ -34,10 +34,11 @@ func userUpdateList(w http.ResponseWriter, r *http.Request) {
 	}
 	statement := `
 	UPDATE lists
-	SET name = $1
-	WHERE id = $2
+	SET name = $1, private = $2
+	WHERE id = $3
 	`
-	_, err = dbTransaction.Exec(statement, list.Name, list.ID)
+	Coms.Println(list)
+	_, err = dbTransaction.Exec(statement, list.Name, list.Private, list.ID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return

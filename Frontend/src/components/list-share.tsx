@@ -19,7 +19,7 @@ const ListShare = ({ listID, onClose }: ListShareProps) => {
 		if (list === undefined) {
 			return;
 		}
-		list.isPrivate = event.target.checked;
+		list.Private = event.target.checked;
 		listUpdate(list);
 	}
 

@@ -57,9 +57,9 @@ func userGetData(w http.ResponseWriter, r *http.Request) {
 func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 	statement := `
 		SELECT
-			l.id, l.owner_id, l.name, l.created_at,
+			l.id, l.owner_id, l.name, l.private, l.created_at,
 			g.id, g.list_id, g.name, g.created_at,
-			gf.id, gf.group_id, gf.name, gf.description, gf.created_at, gf.location
+			gf.id, gf.group_id, gf.name, gf.description, gf.location, gf.created_at
 		FROM
 			lists l
 		LEFT JOIN
@@ -86,6 +86,7 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 			listID          sql.NullString
 			listOwnerID     sql.NullString
 			listName        sql.NullString
+			listPrivate     sql.NullBool
 			listCreatedAt   sql.NullTime
 			groupID         sql.NullString
 			groupListID     sql.NullString
@@ -100,9 +101,9 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 		)
 
 		err = rows.Scan(
-			&listID, &listOwnerID, &listName, &listCreatedAt,
+			&listID, &listOwnerID, &listName, &listPrivate, &listCreatedAt,
 			&groupID, &groupListID, &groupName, &groupCreatedAt,
-			&giftID, &giftGroupID, &giftName, &giftDescription, &giftCreatedAt, &giftLocation,
+			&giftID, &giftGroupID, &giftName, &giftDescription, &giftLocation, &giftCreatedAt,
 		)
 		if err != nil {
 			return nil, err
@@ -115,6 +116,7 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 					ID:        listID.String,
 					OwnerID:   listOwnerID.String,
 					Name:      listName.String,
+					Private:   listPrivate.Bool,
 					CreatedAt: listCreatedAt.Time,
 					Groups:    []models.Group{}, // Initialize slice
 				}
