@@ -39,8 +39,8 @@ new_group AS (
     RETURNING id, list_id
 ),
 new_gift AS (
-    INSERT INTO gifts (group_id, name, description)
-    VALUES ((SELECT id FROM new_group), $4, $5)
+    INSERT INTO gifts (group_id, name, description, location)
+    VALUES ((SELECT id FROM new_group), $4, $5, $6)
     RETURNING id, group_id
 )
 SELECT
@@ -50,9 +50,10 @@ SELECT
     (SELECT id FROM new_gift),
 		(SELECT group_id FROM new_gift);
 	`
-	err = database.QueryRow(statement, userID, requestList.Name,
+	err = database.QueryRow(statement,
+		userID, requestList.Name,
 		requestList.Groups[0].Name, requestList.Groups[0].Gifts[0].Name,
-		requestList.Groups[0].Gifts[0].Description,
+		requestList.Groups[0].Gifts[0].Description, requestList.Groups[0].Gifts[0].Location,
 	).Scan(
 		&requestList.ID,
 		&requestList.Groups[0].ID, &requestList.Groups[0].ListID,

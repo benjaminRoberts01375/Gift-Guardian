@@ -59,7 +59,7 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 		SELECT
 			l.id, l.owner_id, l.name, l.created_at,
 			g.id, g.list_id, g.name, g.created_at,
-			gf.id, gf.group_id, gf.name, gf.description, gf.created_at
+			gf.id, gf.group_id, gf.name, gf.description, gf.created_at, gf.location
 		FROM
 			lists l
 		LEFT JOIN
@@ -96,12 +96,13 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 			giftName        sql.NullString
 			giftDescription sql.NullString
 			giftCreatedAt   sql.NullTime
+			giftLocation    sql.NullString
 		)
 
 		err = rows.Scan(
 			&listID, &listOwnerID, &listName, &listCreatedAt,
 			&groupID, &groupListID, &groupName, &groupCreatedAt,
-			&giftID, &giftGroupID, &giftName, &giftDescription, &giftCreatedAt,
+			&giftID, &giftGroupID, &giftName, &giftDescription, &giftCreatedAt, &giftLocation,
 		)
 		if err != nil {
 			return nil, err
@@ -142,6 +143,7 @@ func getLists(dbTransaction *sql.Tx, userID string) ([]models.List, error) {
 				Name:        giftName.String,
 				Description: giftDescription.String,
 				CreatedAt:   giftCreatedAt.Time,
+				Location:    giftLocation.String,
 			}
 
 			// Link gift to its group

@@ -16,7 +16,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 	const { giftGet, giftUpdate, giftDelete } = useList();
 	const gift = giftGet(listID, groupID, giftID);
 	const [giftName, setGiftName] = useState<string>(gift?.name ?? "Untitled Gift");
-	const [giftURL, setGiftURL] = useState<string>(gift?.url ?? "");
+	const [giftURL, setGiftURL] = useState<string>(gift?.location ?? "");
 	const [giftDescription, setGiftDescription] = useState<string>(gift?.description ?? "");
 	const [showSave, setShowSave] = useState<boolean>(false);
 
@@ -24,7 +24,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 	function giftDiffers(currentName: string, currentURL: string, currentDescription: string) {
 		const giftChange =
 			(currentName !== gift?.name && !(currentName === "" && gift?.name === undefined)) ||
-			(currentURL !== gift?.url && !(currentURL === "" && gift?.url === undefined)) ||
+			(currentURL !== gift?.location && !(currentURL === "" && gift?.location === undefined)) ||
 			(currentDescription !== gift?.description &&
 				!(currentDescription === "" && gift?.description === currentDescription));
 		setShowSave(giftChange);
@@ -41,7 +41,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 			return;
 		}
 		gift.name = formData.get("name") as string;
-		gift.url = formData.get("url") as string;
+		gift.location = formData.get("url") as string;
 		gift.description = formData.get("description") as string;
 		giftUpdate(gift);
 		giftDiffers(giftName, giftURL, giftDescription);
@@ -50,7 +50,7 @@ const GiftView = ({ listID, groupID, giftID }: ListGiftProps) => {
 	const handleReset = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		setGiftName(gift?.name ?? "Untitled Gift");
-		setGiftURL(gift?.url ?? "");
+		setGiftURL(gift?.location ?? "");
 		setGiftDescription(gift?.description ?? "");
 		setShowSave(false);
 	};

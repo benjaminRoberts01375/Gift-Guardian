@@ -44,6 +44,7 @@ type Gift struct {
 	Description string    `json:"description"`
 	CreatedAt   time.Time `json:"created_at"`
 	Gotten      bool      `json:"gotten"`
+	Location    string    `json:"location"`
 }
 
 func (gift *Gift) String() string {
