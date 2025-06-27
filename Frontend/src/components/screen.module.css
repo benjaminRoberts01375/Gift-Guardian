@@ -22,21 +22,6 @@
 	margin: 0;
 }
 
-#profile {
-	font-weight: bold;
-	margin: 0pt 0pt 0pt auto;
-	padding: 5pt;
-	border: none;
-	border-radius: 10pt;
-	background: none;
-	box-shadow: 0pt 0pt 0pt #0000;
-	transition-duration: 0.5s;
-}
-#profile:hover {
-	box-shadow: 0pt 0pt 10pt #0005;
-	transition-duration: 0.25s;
-}
-
 #content {
 	max-width: 1600px;
 	margin: 0 auto;

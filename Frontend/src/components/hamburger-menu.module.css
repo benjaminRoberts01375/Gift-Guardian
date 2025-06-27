@@ -1,0 +1,83 @@
+.hamburgerContainer {
+	position: relative;
+	margin: 0pt 0pt 0pt auto;
+	border-radius: 5pt;
+	transition-duration: 0.1s;
+}
+
+.hamburgerContainer:hover {
+	background: #0001;
+	transition-duration: 0.25s;
+}
+
+.hamburgerContainer.open {
+	background-color: #fff;
+	border-radius: 4pt 4pt 0pt 0pt;
+}
+
+.menuDropdown {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	min-width: 180px;
+	background-color: #fff;
+	box-shadow: -5pt 5pt 10pt rgba(0, 0, 0, 0.2);
+	border-radius: 4pt 0pt 4pt 4pt;
+	overflow: hidden;
+	z-index: 1000;
+	/* Start hidden */
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition-duration: 0.25s;
+}
+
+.menuDropdown.open {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.menuDropdown ul {
+	padding: 0;
+	margin: 0;
+}
+
+.menuDropdown li {
+	border-bottom: 1px solid #eee;
+}
+
+.menuDropdown li:last-child {
+	border-bottom: none;
+}
+
+.menuDropdown a,
+.menuDropdown button {
+	color: #333;
+	display: block;
+	padding: 8pt;
+	margin: 0pt;
+	border: none;
+	background: none;
+	width: 100%;
+	text-align: left;
+	font-size: 11pt;
+}
+
+.menuDropdown a:hover,
+.menuDropdown button:hover,
+#logout:hover {
+	background-color: #ebbf;
+	color: black;
+}
+
+#logout {
+	color: red;
+}
+
+@media (max-width: 700px) {
+	.menuDropdown a,
+	.menuDropdown button {
+		font-size: 14pt;
+	}
+}
