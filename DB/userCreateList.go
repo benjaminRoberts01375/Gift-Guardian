@@ -9,19 +9,7 @@ import (
 )
 
 func userCreateList(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
-		return
-	}
-	// Get user ID from email
-	var userID string
-	err := database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
-		return
-	}
-	requestList, err := Coms.ExternalPostReceived[models.List](r)
+	_, userID, requestList, err := checkUserRequest[models.List](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
@@ -60,7 +48,6 @@ SELECT
 		&requestList.Groups[0].Gifts[0].ID, &requestList.Groups[0].Gifts[0].GroupID,
 	)
 	if err != nil {
-		Coms.PrintErr(err)
 		if err == sql.ErrNoRows {
 			Coms.ExternalPostRespondCode(http.StatusNotFound, w)
 			return
@@ -68,6 +55,5 @@ SELECT
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-	Coms.Println("Created list:", requestList)
 	Coms.ExternalPostRespond(requestList, w)
 }

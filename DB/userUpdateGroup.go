@@ -8,17 +8,12 @@ import (
 )
 
 func userUpdateGroup(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
-		return
-	}
-	group, err := Coms.ExternalPostReceived[models.Group](r)
-	Coms.Println(group)
+	_, _, group, err := checkUserRequest[models.Group](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
+
 	dbTransaction, err := database.Begin()
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
@@ -26,12 +21,6 @@ func userUpdateGroup(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dbTransaction.Rollback()
 
-	var userID string
-	err = database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
-		return
-	}
 	statement := `
 	UPDATE groups
 	SET list_id = $1, name = $2

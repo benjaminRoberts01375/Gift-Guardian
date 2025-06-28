@@ -14,7 +14,6 @@ type UserSignIn struct {
 }
 
 func userSignIn(w http.ResponseWriter, r *http.Request) {
-	Coms.Println("Attempting to sign in")
 	userRequest, err := Coms.ExternalPostReceived[UserSignIn](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
@@ -65,5 +64,4 @@ func userSignIn(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
-	Coms.Println("Successfully signed in")
 }

@@ -7,19 +7,7 @@ import (
 )
 
 func userDeleteGroup(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
-		return
-	}
-	// Get user ID from email
-	var userID string
-	err := database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
-		return
-	}
-	groupID, err := Coms.ExternalPostReceived[string](r)
+	_, _, groupID, err := checkUserRequest[string](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return

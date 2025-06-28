@@ -44,7 +44,6 @@ func userCreateNew(w http.ResponseWriter, r *http.Request) {
 func sendConfirmationEmail(username string, firstName string) {
 	confirmationJWT, err := userGenerateJWT(username, UserJWTConfirmation)
 	if err != nil {
-		Coms.Println(err)
 		return
 	}
 	message := `Hello ` + firstName + `, and welcome to Gift Guardian! Please click the link below to confirm your account:
@@ -56,8 +55,5 @@ https://giftguardian.benlab.us/user-confirmation/` + confirmationJWT
 		Subject: "Gift Guardian Account Confirmation",
 		Text:    message,
 	}
-	_, err = client.Emails.Send(emailParams)
-	if err != nil {
-		Coms.Println(err)
-	}
+	client.Emails.Send(emailParams)
 }

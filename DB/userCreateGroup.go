@@ -9,19 +9,7 @@ import (
 )
 
 func userCreateGroup(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
-		return
-	}
-	// Get user ID from email
-	var userID string
-	err := database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
-		return
-	}
-	requestGroup, err := Coms.ExternalPostReceived[models.Group](r)
+	_, _, requestGroup, err := checkUserRequest[models.Group](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
@@ -48,7 +36,6 @@ SELECT
 		&requestGroup.ID, &requestGroup.Gifts[0].ID,
 	)
 	if err != nil {
-		Coms.PrintErr(err)
 		if err == sql.ErrNoRows {
 			Coms.ExternalPostRespondCode(http.StatusNotFound, w)
 			return

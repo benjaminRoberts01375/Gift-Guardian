@@ -9,19 +9,7 @@ import (
 )
 
 func userCreateGift(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
-		return
-	}
-	// Get user ID from email
-	var userID string
-	err := database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
-		return
-	}
-	requestGift, err := Coms.ExternalPostReceived[models.Gift](r)
+	_, _, requestGift, err := checkUserRequest[models.Gift](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
@@ -40,7 +28,6 @@ SELECT
 		&requestGift.ID,
 	)
 	if err != nil {
-		Coms.PrintErr(err)
 		if err == sql.ErrNoRows {
 			Coms.ExternalPostRespondCode(http.StatusNotFound, w)
 			return

@@ -8,17 +8,12 @@ import (
 )
 
 func userUpdateGift(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
-		return
-	}
-	gift, err := Coms.ExternalPostReceived[models.Gift](r)
-	Coms.Println(gift)
+	_, _, gift, err := checkUserRequest[models.Gift](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
+
 	dbTransaction, err := database.Begin()
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
@@ -26,12 +21,6 @@ func userUpdateGift(w http.ResponseWriter, r *http.Request) {
 	}
 	defer dbTransaction.Rollback()
 
-	var userID string
-	err = database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
-	if err != nil {
-		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
-		return
-	}
 	statement := `
 	UPDATE gifts
 	SET name = $1, description = $2, gotten = $3, location = $4
