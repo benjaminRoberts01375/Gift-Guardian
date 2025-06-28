@@ -6,8 +6,7 @@ import (
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 )
 
-// Example URL: https://giftguardian.benlab.us/db/userConfirmation/abcdefg123456
-func userConfirmation(w http.ResponseWriter, r *http.Request) {
+func newUserSignUpConfirmation(w http.ResponseWriter, r *http.Request) {
 	activationToken := r.PathValue("token")
 	claims, valid := userJWTIsValid(activationToken)
 	if !valid {

@@ -13,7 +13,7 @@ type UserSignIn struct {
 	Password string `json:"password"`
 }
 
-func userSignIn(w http.ResponseWriter, r *http.Request) {
+func newUserSignIn(w http.ResponseWriter, r *http.Request) {
 	userRequest, err := Coms.ExternalPostReceived[UserSignIn](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)

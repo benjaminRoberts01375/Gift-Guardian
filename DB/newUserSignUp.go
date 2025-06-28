@@ -15,7 +15,7 @@ type UserCreateNew struct {
 	LastName  string `json:"last_name"`
 }
 
-func userCreateNew(w http.ResponseWriter, r *http.Request) {
+func newUserSignUp(w http.ResponseWriter, r *http.Request) {
 	userData, err := Coms.ExternalPostReceived[UserCreateNew](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
