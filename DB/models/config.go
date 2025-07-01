@@ -7,11 +7,16 @@ import (
 )
 
 type Config struct {
-	DBPort             int    `json:"db_port"`
-	DBName             string `json:"db_name"`
-	DBUser             string `json:"user"`
-	DBPassword         string `json:"password"`
-	DBContainerName    string `json:"container_name"`
+	DBPort          int    `json:"db_port"`
+	DBName          string `json:"db_name"`
+	DBUser          string `json:"db_user"`
+	DBPassword      string `json:"db_password"`
+	DBContainerName string `json:"db_container_name"`
+
+	CachePort          int    `json:"cache_port"`
+	CacheContainerName string `json:"cache_container_name"`
+	CachePassword      string `json:"cache_password"`
+
 	JWTSecret          string `json:"jwt_secret"`
 	EmailAPIKey        string `json:"email_api_key"`
 	AllowSendingEmails bool   `json:"allow_sending_emails"`
@@ -24,6 +29,11 @@ func (config Config) PSQLInfo() string {
 		"postgresql://%s:%s@%s:%d/%s?sslmode=disable",
 		config.DBUser, config.DBPassword, config.DBContainerName, config.DBPort, config.DBName,
 	)
+}
+
+// Returns the URL to connect to the Valkey cache
+func (config Config) ValkeyAddress() string {
+	return fmt.Sprintf("%s:%d", config.CacheContainerName, config.CachePort)
 }
 
 // Checks that config is set up correctly, panics if not
@@ -48,6 +58,15 @@ func (config Config) PreflightChecks() {
 	}
 	if config.EmailAPIKey == "" {
 		panic("EmailAPIKey is not set in config")
+	}
+	if config.CachePort == 0 {
+		panic("CachePort is not set in config")
+	}
+	if config.CacheContainerName == "" {
+		panic("CacheContainerName is not set in config")
+	}
+	if config.CachePassword == "" {
+		panic("CachePassword is not set in config")
 	}
 	Coms.Println("Preflight checks passed")
 }
