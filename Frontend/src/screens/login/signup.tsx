@@ -116,7 +116,7 @@ const SignUp = () => {
 								navigate("/login");
 							}}
 						>
-							Login
+							Back to Login
 						</button>
 					</div>
 				</div>

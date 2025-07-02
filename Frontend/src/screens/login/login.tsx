@@ -90,7 +90,7 @@ const Login = () => {
 				</div>
 				<div id={CredentialsStyles["actions"]}>
 					<button className={CredentialsStyles["primary"]} type="submit">
-						Sign In
+						Login
 					</button>
 					<div id={CredentialsStyles["secondary-actions"]}>
 						<button
@@ -100,7 +100,7 @@ const Login = () => {
 								navigate("/forgot-password");
 							}}
 						>
-							Forgot Password
+							Forgot Password?
 						</button>
 						<button
 							className={CredentialsStyles["secondary"]}
