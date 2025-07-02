@@ -14,7 +14,7 @@ func newUserSignUp(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
 		return
 	}
-	userPassword, err := bcrypt.GenerateFromPassword([]byte(userData.Password), 10) // 72 bytes max
+	userPassword, err := createPasswordHash(userData.Password)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
 		return
@@ -37,4 +37,8 @@ func newUserSignUp(w http.ResponseWriter, r *http.Request) {
 	message := `Hello ` + userData.FirstName + `, and welcome to Gift Guardian! Please click the link below to confirm your account:
 https://giftguardian.benlab.us/user-confirmation/` + confirmationJWT
 	go sendEmail(userData.Email, "Gift Guardian Account Confirmation", message)
+}
+
+func createPasswordHash(password string) ([]byte, error) {
+	return bcrypt.GenerateFromPassword([]byte(password), 10) // 72 bytes max
 }
