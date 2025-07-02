@@ -3,20 +3,14 @@ package main
 import (
 	"net/http"
 
+	"github.com/benjaminRoberts01375/Gift-Guardian/DB/models"
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 	"github.com/resend/resend-go/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserCreateNew struct {
-	Email     string `json:"username"`
-	Password  string `json:"password"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-}
-
 func newUserSignUp(w http.ResponseWriter, r *http.Request) {
-	userData, err := Coms.ExternalPostReceived[UserCreateNew](r)
+	userData, err := Coms.ExternalPostReceived[models.UserCreateNew](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
 		return
