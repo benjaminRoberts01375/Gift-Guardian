@@ -5,7 +5,6 @@ import (
 
 	"github.com/benjaminRoberts01375/Gift-Guardian/DB/models"
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
-	"github.com/resend/resend-go/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -30,24 +29,12 @@ func newUserSignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
-	if config.AllowSendingEmails {
-		go sendConfirmationEmail(userData.Email, userData.FirstName)
-	}
-}
 
-func sendConfirmationEmail(username string, firstName string) {
-	confirmationJWT, err := userGenerateJWT(username, UserJWTConfirmation)
+	confirmationJWT, err := userGenerateJWT(userData.Email, UserJWTConfirmation)
 	if err != nil {
 		return
 	}
-	message := `Hello ` + firstName + `, and welcome to Gift Guardian! Please click the link below to confirm your account:
+	message := `Hello ` + userData.FirstName + `, and welcome to Gift Guardian! Please click the link below to confirm your account:
 https://giftguardian.benlab.us/user-confirmation/` + confirmationJWT
-	client := resend.NewClient(config.EmailAPIKey)
-	emailParams := &resend.SendEmailRequest{
-		From:    "No Reply <do-not-reply@mail.benlab.us>",
-		To:      []string{username},
-		Subject: "Gift Guardian Account Confirmation",
-		Text:    message,
-	}
-	client.Emails.Send(emailParams)
+	go sendEmail(userData.Email, "Gift Guardian Account Confirmation", message)
 }
