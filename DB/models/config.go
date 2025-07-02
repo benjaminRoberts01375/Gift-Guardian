@@ -16,6 +16,7 @@ type Config struct {
 	CachePort          int    `json:"cache_port"`
 	CacheContainerName string `json:"cache_container_name"`
 	CachePassword      string `json:"cache_password"`
+	CacheIDLength      int    `json:"cache_id_length"`
 
 	JWTSecret          string `json:"jwt_secret"`
 	EmailAPIKey        string `json:"email_api_key"`
@@ -67,6 +68,9 @@ func (config Config) PreflightChecks() {
 	}
 	if config.CachePassword == "" {
 		panic("CachePassword is not set in config")
+	}
+	if config.CacheIDLength <= 0 {
+		panic("CacheIDLength is not set in config:")
 	}
 	Coms.Println("Preflight checks passed")
 }

@@ -1,9 +1,13 @@
 package main
 
-import "github.com/resend/resend-go/v2"
+import (
+	Coms "github.com/benjaminRoberts01375/Go-Communicate"
+	"github.com/resend/resend-go/v2"
+)
 
 func sendEmail(to string, subject string, message string) {
 	if !config.AllowSendingEmails {
+		Coms.Println("Not sending email to " + to)
 		return
 	}
 

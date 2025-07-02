@@ -12,6 +12,7 @@ import (
 )
 
 var database *sql.DB
+var cache valkey.Client
 var config models.Config
 
 func main() {
@@ -20,7 +21,8 @@ func main() {
 	config.PreflightChecks()
 	database = setupDB()
 	defer database.Close()
-	setupValkeyClient()
+	cache = setupValkeyClient()
+	defer cache.Close()
 	Coms.Println("Going up")
 	http.HandleFunc("POST /userCreate", newUserSignUp)
 	http.HandleFunc("POST /userSignIn", newUserSignIn)
@@ -36,6 +38,9 @@ func main() {
 	http.HandleFunc("POST /userDeleteGroup", userDeleteGroup)
 	http.HandleFunc("POST /userDeleteList", userDeleteList)
 	http.HandleFunc("POST /userDeleteGift", userDeleteGift)
+	http.HandleFunc("POST /user-reset-password-request", userResetPasswordRequest)
+	http.HandleFunc("POST /user-reset-password-check/{token}", userResetPasswordCheckValid)
+	http.HandleFunc("POST /user-reset-password-confirmation/{token}", userResetPasswordConfirmation)
 	if config.DevMode {
 		Coms.Println("Dev mode enabled")
 	}
