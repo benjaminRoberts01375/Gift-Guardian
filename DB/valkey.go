@@ -9,8 +9,8 @@ import (
 type CacheEntryDuration time.Duration
 
 const (
-	PasswordSet CacheEntryDuration = CacheEntryDuration(time.Minute * 15)
-	UserJWT                        = CacheEntryDuration(UserJWTDuration)
+	passwordSet CacheEntryDuration = CacheEntryDuration(time.Minute * 15)
+	userJWT                        = CacheEntryDuration(UserJWTDuration)
 )
 
 func createCacheEntry(key string, value string, duration CacheEntryDuration) error {
@@ -40,7 +40,7 @@ func getAndDeleteCacheEntry(key string) (string, error) {
 func cacheResetPassword(userID string) (string, error) {
 	// TODO: Check if the resetID already exists in the cache and generate a new one if it does
 	resetID := generateRandomString(16)
-	return resetID, createCacheEntry(resetID, userID, PasswordSet)
+	return resetID, createCacheEntry(resetID, userID, passwordSet)
 }
 
 func generateRandomString(length int) string {
