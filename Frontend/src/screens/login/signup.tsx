@@ -104,15 +104,6 @@ const SignUp = () => {
 							className={CredentialsStyles["secondary"]}
 							onClick={event => {
 								event.preventDefault();
-								navigate("/forgot-password");
-							}}
-						>
-							Forgot Password
-						</button>
-						<button
-							className={CredentialsStyles["secondary"]}
-							onClick={event => {
-								event.preventDefault();
 								navigate("/login");
 							}}
 						>
