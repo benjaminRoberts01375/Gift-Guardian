@@ -5,14 +5,13 @@ import (
 	"net/http"
 
 	_ "github.com/lib/pq"
-	"github.com/valkey-io/valkey-go"
 
 	"github.com/benjaminRoberts01375/Gift-Guardian/DB/models"
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 )
 
 var database *sql.DB
-var cache valkey.Client
+var cache CacheClient[*CacheLayer]
 var config models.Config
 
 func main() {
@@ -21,8 +20,11 @@ func main() {
 	config.PreflightChecks()
 	database = setupDB()
 	defer database.Close()
-	cache = setupValkeyClient()
-	defer cache.Close()
+	// Setup cache
+	cache.raw = &CacheLayer{}
+	cache.raw.Setup()
+	defer cache.raw.Close()
+
 	Coms.Println("Going up")
 	http.HandleFunc("POST /userCreate", newUserSignUp)
 	http.HandleFunc("POST /userSignIn", newUserSignIn)
@@ -58,20 +60,4 @@ func setupDB() *sql.DB {
 		panic("Could not ping DB at " + config.PSQLInfo() + ": " + err.Error())
 	}
 	return db
-}
-
-func setupValkeyClient() valkey.Client {
-	// TODO: Handle username and client name
-	options := valkey.ClientOption{
-		InitAddress: []string{config.ValkeyAddress()},
-		// Username:    config.CacheUsername,
-		Password: config.CachePassword,
-		// ClientName:  config.CacheClientName,
-	}
-
-	client, err := valkey.NewClient(options)
-	if err != nil {
-		panic("Could not connect to Valkey: " + err.Error())
-	}
-	return client
 }

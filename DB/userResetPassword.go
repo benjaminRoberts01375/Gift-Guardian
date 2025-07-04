@@ -12,7 +12,7 @@ func userResetPasswordRequest(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
-	transactionID, err := cacheResetPassword(*email)
+	transactionID, err := cache.setResetPassword(*email)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
@@ -27,7 +27,7 @@ https://giftguardian.benlab.us/reset-password/` + transactionID
 
 func userResetPasswordCheckValid(w http.ResponseWriter, r *http.Request) {
 	replaceToken := r.PathValue("token")
-	email, err := getCacheEntry(replaceToken)
+	email, err := cache.getResetPassword(replaceToken)
 
 	if err != nil || email == "" {
 		Coms.ExternalPostRespondCode(http.StatusNotFound, w)
@@ -43,7 +43,7 @@ func userResetPasswordConfirmation(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
 		return
 	}
-	email, err := getAndDeleteCacheEntry(replaceToken)
+	email, err := cache.getAndDeleteResetPassword(replaceToken)
 	if err != nil || email == "" {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
 		return

@@ -2,45 +2,132 @@ package main
 
 import (
 	"context"
+	"errors"
 	"math/rand"
 	"time"
+
+	Coms "github.com/benjaminRoberts01375/Go-Communicate"
+	"github.com/valkey-io/valkey-go"
 )
 
-type CacheEntryDuration time.Duration
+type CacheSpec interface {
+	// Cache Management
+	Setup()
+	Close()
 
-const (
-	passwordSet CacheEntryDuration = CacheEntryDuration(time.Minute * 15)
-	userJWT                        = CacheEntryDuration(UserJWTDuration)
+	// Basic cache functions
+	Set(key string, value string, duration CacheType) error
+	Get(key string) (string, CacheType, error)
+	GetAndDelete(key string) (string, CacheType, error)
+}
+
+type CacheLayer struct { // Implements main 5 functions
+	DB valkey.Client
+}
+
+type CacheClient[client CacheSpec] struct { // Holds some DB that satisfies the CacheSpec interface. Action functions here
+	raw client
+}
+
+type CacheType struct {
+	duration time.Duration
+	purpose  string
+}
+
+var (
+	cachePasswordSet CacheType = CacheType{duration: time.Minute * 15, purpose: "Set Password"}
+	cacheUserJWT     CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
 )
 
-func createCacheEntry(key string, value string, duration CacheEntryDuration) error {
-	ctx := context.Background()
-	// Only set the cache if the value doesn't already exist in the cache (NX)
-	return cache.Do(ctx, cache.B().Set().Key(key).Value(value).Nx().Ex(time.Duration(duration)).Build()).Error()
-}
-
-func getCacheEntry(key string) (string, error) {
-	ctx := context.Background()
-	return cache.Do(ctx, cache.B().Get().Key(key).Build()).ToString()
-}
-
-func getAndDeleteCacheEntry(key string) (string, error) {
-	ctx := context.Background()
-	result, err := cache.Do(ctx, cache.B().Get().Key(key).Build()).ToString()
-	if err != nil {
-		return "", err
+func (cache *CacheLayer) Setup() {
+	// TODO: Handle username and client name
+	options := valkey.ClientOption{
+		InitAddress: []string{config.ValkeyAddress()},
+		// Username:    config.CacheUsername,
+		Password: config.CachePassword,
+		// ClientName:  config.CacheClientName
 	}
-	err = cache.Do(ctx, cache.B().Del().Key(key).Build()).Error()
+	Coms.Println("Connecting to Valkey")
+	client, err := valkey.NewClient(options)
 	if err != nil {
-		return "", err
+		Coms.PrintErr(err)
+		panic("Could not connect to Valkey: " + err.Error())
 	}
-	return result, nil
+	cache.DB = client // Directly assign to the field
+	Coms.Println("Connected to Valkey")
 }
 
-func cacheResetPassword(userID string) (string, error) {
+func (cache *CacheLayer) Close() {
+	cache.DB.Close()
+}
+
+func (cache CacheLayer) Get(key string) (string, CacheType, error) {
+	ctx := context.Background()
+	rawResult, err := cache.DB.Do(ctx, cache.DB.B().Hgetall().Key(key).Build()).AsStrMap()
+	if err != nil {
+		return "", CacheType{}, err
+	}
+	var cacheType CacheType
+	value := rawResult["value"]
+	switch rawResult["purpose"] {
+	case cachePasswordSet.purpose:
+		cacheType = cachePasswordSet
+	case cacheUserJWT.purpose:
+		cacheType = cacheUserJWT
+	default:
+		return "", CacheType{}, errors.New("invalid cache type")
+	}
+
+	return value, cacheType, nil
+}
+
+func (cache CacheLayer) GetAndDelete(key string) (string, CacheType, error) {
+	value, cacheType, err := cache.Get(key)
+	if err != nil {
+		return "", CacheType{}, err
+	}
+	err = cache.DB.Do(context.Background(), cache.DB.B().Hdel().Key(key).Field("value").Field("purpose").Build()).Error()
+	if err != nil {
+		return "", CacheType{}, err
+	}
+	return value, cacheType, nil
+}
+
+func (cache CacheLayer) Set(key string, value string, cacheType CacheType) error {
+	ctx := context.Background()
+	err := cache.DB.Do(ctx, cache.DB.B().Hset().Key(key).FieldValue().FieldValue("value", value).FieldValue("purpose", cacheType.purpose).Build()).Error()
+	if err != nil {
+		return err
+	}
+	return cache.DB.Do(ctx, cache.DB.B().Expire().Key(key).Seconds(int64(cacheType.duration.Seconds())).Build()).Error()
+}
+
+func (cache CacheClient[client]) setResetPassword(email string) (string, error) {
 	// TODO: Check if the resetID already exists in the cache and generate a new one if it does
 	resetID := generateRandomString(16)
-	return resetID, createCacheEntry(resetID, userID, passwordSet)
+	return resetID, cache.raw.Set(resetID, email, cachePasswordSet)
+}
+
+func (cache CacheClient[client]) getResetPassword(resetID string) (string, error) {
+	email, cacheType, err := cache.raw.Get(resetID)
+	if err != nil {
+		return "", err
+	}
+	if cacheType != cachePasswordSet {
+		return "", errors.New("invalid cache type")
+	}
+	return email, nil
+}
+
+func (cache CacheClient[client]) getAndDeleteResetPassword(resetID string) (string, error) {
+	email, cacheType, err := cache.raw.GetAndDelete(resetID)
+	if err != nil {
+		return "", err
+	}
+	if cacheType != cachePasswordSet {
+		return "", errors.New("invalid cache type")
+	}
+	return email, nil
 }
 
 func generateRandomString(length int) string {
