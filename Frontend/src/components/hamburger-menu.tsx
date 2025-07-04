@@ -33,8 +33,8 @@ const HamburgerMenu: React.FC = () => {
 						<a href="/change-email">Change Email</a>
 					</li>
 					<li>
-						<a href="/change-password">
-							<p>Change Password</p>
+						<a href="/reset-password">
+							<p>Reset Password</p>
 						</a>
 					</li>
 					<li>

@@ -22,7 +22,7 @@ createRoot(document.getElementById("root")!).render(
 					<Route path="/forgot-password" element={<ForgotPassword />} />
 					<Route path="/forgot-password/:token" element={<ForgotPasswordSet />} />
 					<Route path="/check-email" element={<CheckEmail />} />
-					<Route path="/change-password" element={<ResetPassword />} />
+					<Route path="/reset-password" element={<ResetPassword />} />
 					<Route path="/dashboard" element={<Screen content={<Dashboard />} title="Dashboard" />} />
 				</Routes>
 			</ListsProvider>
