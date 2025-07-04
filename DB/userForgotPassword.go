@@ -6,7 +6,7 @@ import (
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 )
 
-func userResetPasswordRequest(w http.ResponseWriter, r *http.Request) {
+func userForgotPasswordRequest(w http.ResponseWriter, r *http.Request) {
 	email, err := Coms.ExternalPostReceived[string](r)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
@@ -25,7 +25,7 @@ https://giftguardian.benlab.us/reset-password/` + transactionID
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
 }
 
-func userResetPasswordCheckValid(w http.ResponseWriter, r *http.Request) {
+func userForgotPasswordCheckValid(w http.ResponseWriter, r *http.Request) {
 	replaceToken := r.PathValue("token")
 	email, err := cache.getResetPassword(replaceToken)
 
@@ -36,7 +36,7 @@ func userResetPasswordCheckValid(w http.ResponseWriter, r *http.Request) {
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
 }
 
-func userResetPasswordConfirmation(w http.ResponseWriter, r *http.Request) {
+func userForgotPasswordConfirmation(w http.ResponseWriter, r *http.Request) {
 	replaceToken := r.PathValue("token")
 	newPassword, err := Coms.ExternalPostReceived[string](r)
 	if err != nil {
