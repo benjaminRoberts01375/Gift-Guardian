@@ -102,13 +102,13 @@ func (cache CacheLayer) Set(key string, value string, cacheType CacheType) error
 	return cache.DB.Do(ctx, cache.DB.B().Expire().Key(key).Seconds(int64(cacheType.duration.Seconds())).Build()).Error()
 }
 
-func (cache CacheClient[client]) setResetPassword(email string) (string, error) {
+func (cache CacheClient[client]) setForgotPassword(email string) (string, error) {
 	// TODO: Check if the resetID already exists in the cache and generate a new one if it does
 	resetID := generateRandomString(16)
 	return resetID, cache.raw.Set(resetID, email, cachePasswordSet)
 }
 
-func (cache CacheClient[client]) getResetPassword(resetID string) (string, error) {
+func (cache CacheClient[client]) getForgotPassword(resetID string) (string, error) {
 	email, cacheType, err := cache.raw.Get(resetID)
 	if err != nil {
 		return "", err
@@ -129,6 +129,8 @@ func (cache CacheClient[client]) getAndDeleteResetPassword(resetID string) (stri
 	}
 	return email, nil
 }
+
+// func (cache CacheClient[client]) set
 
 func generateRandomString(length int) string {
 	// Charset is URL safe and easy to read
