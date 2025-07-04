@@ -19,6 +19,10 @@ type CacheSpec interface {
 	Set(key string, value string, duration CacheType) error
 	Get(key string) (string, CacheType, error)
 	GetAndDelete(key string) (string, CacheType, error)
+
+	SetHash(key string, values map[string]string, duration CacheType) error
+	GetHash(key string) (map[string]string, CacheType, error)
+	GetAndDeleteHash(key string) (map[string]string, CacheType, error)
 }
 
 type CacheLayer struct { // Implements main 5 functions
@@ -81,6 +85,25 @@ func (cache CacheLayer) Get(key string) (string, CacheType, error) {
 	return value, cacheType, nil
 }
 
+func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error) {
+	ctx := context.Background()
+	rawResult, err := cache.DB.Do(ctx, cache.DB.B().Hgetall().Key(key).Build()).AsStrMap()
+	if err != nil {
+		return nil, CacheType{}, err
+	}
+	var cacheType CacheType
+	switch rawResult["purpose"] {
+	case cachePasswordSet.purpose:
+		cacheType = cachePasswordSet
+	case cacheUserJWT.purpose:
+		cacheType = cacheUserJWT
+	default:
+		return nil, CacheType{}, errors.New("invalid cache type")
+	}
+
+	return rawResult, cacheType, nil
+}
+
 func (cache CacheLayer) GetAndDelete(key string) (string, CacheType, error) {
 	value, cacheType, err := cache.Get(key)
 	if err != nil {
@@ -93,6 +116,18 @@ func (cache CacheLayer) GetAndDelete(key string) (string, CacheType, error) {
 	return value, cacheType, nil
 }
 
+func (cache CacheLayer) GetAndDeleteHash(key string) (map[string]string, CacheType, error) {
+	values, cacheType, err := cache.GetHash(key)
+	if err != nil {
+		return nil, CacheType{}, err
+	}
+	err = cache.DB.Do(context.Background(), cache.DB.B().Hdel().Key(key).Field("purpose").Build()).Error()
+	if err != nil {
+		return nil, CacheType{}, err
+	}
+	return values, cacheType, nil
+}
+
 func (cache CacheLayer) Set(key string, value string, cacheType CacheType) error {
 	ctx := context.Background()
 	err := cache.DB.Do(ctx, cache.DB.B().Hset().Key(key).FieldValue().FieldValue("value", value).FieldValue("purpose", cacheType.purpose).Build()).Error()
@@ -100,6 +135,19 @@ func (cache CacheLayer) Set(key string, value string, cacheType CacheType) error
 		return err
 	}
 	return cache.DB.Do(ctx, cache.DB.B().Expire().Key(key).Seconds(int64(cacheType.duration.Seconds())).Build()).Error()
+}
+
+func (cache CacheLayer) SetHash(key string, values map[string]string, duration CacheType) error {
+	ctx := context.Background()
+	hash := cache.DB.B().Hset().Key(key).FieldValue().FieldValue("purpose", duration.purpose)
+	for field, value := range values {
+		hash = hash.FieldValue(field, value)
+	}
+	err := cache.DB.Do(ctx, hash.Build()).Error()
+	if err != nil {
+		return err
+	}
+	return cache.DB.Do(ctx, cache.DB.B().Expire().Key(key).Seconds(int64(duration.duration.Seconds())).Build()).Error()
 }
 
 func (cache CacheClient[client]) setForgotPassword(email string) (string, error) {
