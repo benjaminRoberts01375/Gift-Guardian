@@ -43,6 +43,8 @@ var (
 	cacheUserJWT     CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
 )
 
+const cacheKeyLength = 16
+
 func (cache *CacheLayer) Setup() {
 	// TODO: Handle username and client name
 	options := valkey.ClientOption{
@@ -152,7 +154,7 @@ func (cache CacheLayer) SetHash(key string, values map[string]string, duration C
 
 func (cache CacheClient[client]) setForgotPassword(email string) (string, error) {
 	// TODO: Check if the resetID already exists in the cache and generate a new one if it does
-	resetID := generateRandomString(16)
+	resetID := generateRandomString(cacheKeyLength)
 	return resetID, cache.raw.Set(resetID, email, cachePasswordSet)
 }
 
