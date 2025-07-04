@@ -20,7 +20,7 @@ createRoot(document.getElementById("root")!).render(
 					<Route path="/login" element={<Login />} />
 					<Route path="/signup" element={<SignUp />} />
 					<Route path="/forgot-password" element={<ForgotPassword />} />
-					<Route path="/reset-password/:token" element={<ForgotPasswordSet />} />
+					<Route path="/forgot-password/:token" element={<ForgotPasswordSet />} />
 					<Route path="/check-email" element={<CheckEmail />} />
 					<Route path="/change-password" element={<ResetPassword />} />
 					<Route path="/dashboard" element={<Screen content={<Dashboard />} title="Dashboard" />} />

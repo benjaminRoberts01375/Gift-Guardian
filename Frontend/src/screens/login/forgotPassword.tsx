@@ -11,7 +11,7 @@ const ForgotPassword = () => {
 		const formData = new FormData(event.currentTarget);
 		const email = formData.get("email") as string;
 		email.trim();
-		fetch("/db/user-reset-password-request", {
+		fetch("/db/user-forgot-password-request", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

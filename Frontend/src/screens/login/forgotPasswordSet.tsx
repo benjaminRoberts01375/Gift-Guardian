@@ -24,7 +24,7 @@ const ForgotPasswordSet = () => {
 			}
 
 			try {
-				const response = await fetch("/db/user-reset-password-check/" + token, {
+				const response = await fetch("/db/user-forgot-password-check/" + token, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -53,7 +53,7 @@ const ForgotPasswordSet = () => {
 		const password = formData.get("Password") as string;
 
 		try {
-			const response = await fetch("/db/user-reset-password-confirmation/" + token, {
+			const response = await fetch("/db/user-forgot-password-confirmation/" + token, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

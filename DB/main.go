@@ -40,9 +40,9 @@ func main() {
 	http.HandleFunc("POST /userDeleteGroup", userDeleteGroup)
 	http.HandleFunc("POST /userDeleteList", userDeleteList)
 	http.HandleFunc("POST /userDeleteGift", userDeleteGift)
-	http.HandleFunc("POST /user-reset-password-request", userForgotPasswordRequest)
-	http.HandleFunc("POST /user-reset-password-check/{token}", userForgotPasswordCheckValid)
-	http.HandleFunc("POST /user-reset-password-confirmation/{token}", userForgotPasswordConfirmation)
+	http.HandleFunc("POST /user-forgot-password-request", userForgotPasswordRequest)
+	http.HandleFunc("POST /user-forgot-password-check/{token}", userForgotPasswordCheckValid)
+	http.HandleFunc("POST /user-forgot-password-confirmation/{token}", userForgotPasswordConfirmation)
 	http.HandleFunc("POST /user-reset-password", userResetPassword)
 	if config.DevMode {
 		Coms.Println("Dev mode enabled")
