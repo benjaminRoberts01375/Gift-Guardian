@@ -18,7 +18,7 @@ const ForgotPassword = () => {
 			},
 			body: JSON.stringify(email),
 		});
-		navigate("/check-email");
+		navigate("/check-email", { state: { userEmail: email } });
 	}
 
 	return (

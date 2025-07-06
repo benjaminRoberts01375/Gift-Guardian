@@ -44,6 +44,8 @@ func main() {
 	http.HandleFunc("POST /user-forgot-password-check/{token}", userForgotPasswordCheckValid)
 	http.HandleFunc("POST /user-forgot-password-confirmation/{token}", userForgotPasswordConfirmation)
 	http.HandleFunc("POST /user-reset-password", userResetPassword)
+	http.HandleFunc("POST /user-reset-email-request", userResetEmailRequest)
+	http.HandleFunc("/user-reset-email-confirmation/{token}", userResetEmailConfirmation)
 	if config.DevMode {
 		Coms.Println("Dev mode enabled")
 	}

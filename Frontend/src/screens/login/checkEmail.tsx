@@ -13,7 +13,7 @@ const CheckEmail: React.FC = () => {
 	const email = state?.userEmail;
 
 	return (
-		<CredentialsScreen title="Check Email">
+		<CredentialsScreen title="Check Your E-Mail">
 			<p id={EmailStyles["explanation"]}>
 				Check your email
 				{email ? <span id={EmailStyles["bold"]}> {email}</span> : ""} for a verification link.

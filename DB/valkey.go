@@ -41,6 +41,7 @@ type CacheType struct {
 var (
 	cachePasswordSet CacheType = CacheType{duration: time.Minute * 15, purpose: "Set Password"}
 	cacheUserJWT     CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
+	cacheChangeEmail CacheType = CacheType{duration: time.Minute * 15, purpose: "Change Email"}
 )
 
 const cacheKeyLength = 16
@@ -80,6 +81,8 @@ func (cache CacheLayer) Get(key string) (string, CacheType, error) {
 		cacheType = cachePasswordSet
 	case cacheUserJWT.purpose:
 		cacheType = cacheUserJWT
+	case cacheChangeEmail.purpose:
+		cacheType = cacheChangeEmail
 	default:
 		return "", CacheType{}, errors.New("invalid cache type")
 	}
@@ -99,6 +102,8 @@ func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error
 		cacheType = cachePasswordSet
 	case cacheUserJWT.purpose:
 		cacheType = cacheUserJWT
+	case cacheChangeEmail.purpose:
+		cacheType = cacheChangeEmail
 	default:
 		return nil, CacheType{}, errors.New("invalid cache type: " + rawResult["purpose"])
 	}
@@ -180,7 +185,25 @@ func (cache CacheClient[client]) getAndDeleteResetPassword(resetID string) (stri
 	return email, nil
 }
 
-// func (cache CacheClient[client]) set
+func (cache CacheClient[client]) setChangeEmail(originalEmail string, newEmail string) (string, error) {
+	id := generateRandomString(cacheKeyLength)
+	hash := make(map[string]string)
+	hash["originalEmail"] = originalEmail
+	hash["newEmail"] = newEmail
+	return id, cache.raw.SetHash(id, hash, cacheChangeEmail)
+}
+
+func (cache CacheClient[client]) getAndDeleteChangeEmail(id string) (string, string, error) {
+	emails, cacheType, err := cache.raw.GetAndDeleteHash(id)
+	if err != nil {
+		return "", "", err
+	}
+	if cacheType != cacheChangeEmail {
+		return "", "", errors.New("invalid cache type")
+	}
+
+	return emails["originalEmail"], emails["newEmail"], nil
+}
 
 func generateRandomString(length int) string {
 	// Charset is URL safe and easy to read
