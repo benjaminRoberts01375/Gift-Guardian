@@ -35,7 +35,7 @@ func newUserSignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	message := `Hello ` + userData.FirstName + `, and welcome to Gift Guardian! Please click the link below to confirm your account:
-https://giftguardian.benlab.us/user-confirmation/` + confirmationJWT
+https://giftguardian.benlab.us/db/user-confirmation/` + confirmationJWT
 	go sendEmail(userData.Email, "Gift Guardian Account Confirmation", message)
 }
 

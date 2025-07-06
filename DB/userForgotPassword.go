@@ -19,7 +19,7 @@ func userForgotPasswordRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	message := `A password reset was issued for your Gift Guardian account. To reset your password, click the link below:
-https://giftguardian.benlab.us/reset-password/` + transactionID
+https://giftguardian.benlab.us/db/reset-password/` + transactionID
 	go sendEmail(*email, "Gift Guardian Password Reset", message)
 
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
