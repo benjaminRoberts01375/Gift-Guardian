@@ -100,7 +100,7 @@ func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error
 	case cacheUserJWT.purpose:
 		cacheType = cacheUserJWT
 	default:
-		return nil, CacheType{}, errors.New("invalid cache type")
+		return nil, CacheType{}, errors.New("invalid cache type: " + rawResult["purpose"])
 	}
 
 	return rawResult, cacheType, nil
