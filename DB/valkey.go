@@ -39,9 +39,10 @@ type CacheType struct {
 }
 
 var (
-	cachePasswordSet CacheType = CacheType{duration: time.Minute * 15, purpose: "Set Password"}
-	cacheUserJWT     CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
-	cacheChangeEmail CacheType = CacheType{duration: time.Minute * 15, purpose: "Change Email"}
+	cachePasswordSet   CacheType = CacheType{duration: time.Minute * 15, purpose: "Set Password"}
+	cacheUserJWT       CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
+	cacheChangeEmail   CacheType = CacheType{duration: time.Minute * 15, purpose: "Change Email"}
+	cacheNewUserSignUp CacheType = CacheType{duration: time.Minute * 15, purpose: "User Sign Up"}
 )
 
 const cacheKeyLength = 16
@@ -83,6 +84,8 @@ func (cache CacheLayer) Get(key string) (string, CacheType, error) {
 		cacheType = cacheUserJWT
 	case cacheChangeEmail.purpose:
 		cacheType = cacheChangeEmail
+	case cacheNewUserSignUp.purpose:
+		cacheType = cacheNewUserSignUp
 	default:
 		return "", CacheType{}, errors.New("invalid cache type")
 	}
@@ -104,6 +107,8 @@ func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error
 		cacheType = cacheUserJWT
 	case cacheChangeEmail.purpose:
 		cacheType = cacheChangeEmail
+	case cacheNewUserSignUp.purpose:
+		cacheType = cacheNewUserSignUp
 	default:
 		return nil, CacheType{}, errors.New("invalid cache type: " + rawResult["purpose"])
 	}
@@ -203,6 +208,22 @@ func (cache CacheClient[client]) getAndDeleteChangeEmail(id string) (string, str
 	}
 
 	return emails["originalEmail"], emails["newEmail"], nil
+}
+
+func (cache *CacheClient[client]) setNewUserSignUp(email string) (string, error) {
+	id := generateRandomString(cacheKeyLength)
+	return id, cache.raw.Set(id, email, cacheNewUserSignUp)
+}
+
+func (cache *CacheClient[client]) getAndDeleteNewUserSignUp(id string) (string, error) {
+	email, cacheType, err := cache.raw.GetAndDelete(id)
+	if err != nil {
+		return "", err
+	}
+	if cacheType != cacheNewUserSignUp {
+		return "", errors.New("invalid cache type")
+	}
+	return email, nil
 }
 
 func generateRandomString(length int) string {
