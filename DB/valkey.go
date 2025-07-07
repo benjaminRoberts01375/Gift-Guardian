@@ -221,6 +221,10 @@ func (cache *CacheClient[client]) getUserSignIn(JWT string) (string, error) {
 	return userID, nil
 }
 
+func (cache *CacheClient[client]) deleteUserSignIn(JWT string) error {
+	return cache.raw.Delete(JWT)
+}
+
 func generateRandomString(length int) string {
 	// Charset is URL safe and easy to read
 	const charset = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ123456789"

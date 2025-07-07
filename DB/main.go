@@ -29,6 +29,7 @@ func main() {
 	http.HandleFunc("POST /userCreate", newUserSignUp)
 	http.HandleFunc("POST /userSignIn", newUserSignIn)
 	http.HandleFunc("POST /userJWTSignIn", userJWTSignIn)
+	http.HandleFunc("POST /userLogout", userLogout)
 	http.HandleFunc("/user-confirmation/{token}", newUserSignUpConfirmation)
 	http.HandleFunc("POST /userCreateList", userCreateList)
 	http.HandleFunc("POST /userUpdateList", userUpdateList)
