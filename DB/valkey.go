@@ -75,22 +75,10 @@ func (cache CacheLayer) Get(key string) (string, CacheType, error) {
 	if err != nil {
 		return "", CacheType{}, err
 	}
-	var cacheType CacheType
 	value := rawResult["value"]
-	switch rawResult["purpose"] {
-	case cachePasswordSet.purpose:
-		cacheType = cachePasswordSet
-	case cacheUserJWT.purpose:
-		cacheType = cacheUserJWT
-	case cacheChangeEmail.purpose:
-		cacheType = cacheChangeEmail
-	case cacheNewUserSignUp.purpose:
-		cacheType = cacheNewUserSignUp
-	default:
-		return "", CacheType{}, errors.New("invalid cache type")
-	}
+	cacheType, err := cache.getCacheType(rawResult["purpose"])
 
-	return value, cacheType, nil
+	return value, cacheType, err
 }
 
 func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error) {
@@ -99,21 +87,9 @@ func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error
 	if err != nil {
 		return nil, CacheType{}, err
 	}
-	var cacheType CacheType
-	switch rawResult["purpose"] {
-	case cachePasswordSet.purpose:
-		cacheType = cachePasswordSet
-	case cacheUserJWT.purpose:
-		cacheType = cacheUserJWT
-	case cacheChangeEmail.purpose:
-		cacheType = cacheChangeEmail
-	case cacheNewUserSignUp.purpose:
-		cacheType = cacheNewUserSignUp
-	default:
-		return nil, CacheType{}, errors.New("invalid cache type: " + rawResult["purpose"])
-	}
+	cacheType, err := cache.getCacheType(rawResult["purpose"])
 
-	return rawResult, cacheType, nil
+	return rawResult, cacheType, err
 }
 
 func (cache CacheLayer) GetAndDelete(key string) (string, CacheType, error) {
@@ -235,4 +211,21 @@ func generateRandomString(length int) string {
 		stringBase[i] = charset[rand.Intn(len(charset))]
 	}
 	return string(stringBase)
+}
+
+func (cache CacheLayer) getCacheType(purpose string) (CacheType, error) {
+	switch purpose {
+	case cachePasswordSet.purpose:
+		return cachePasswordSet, nil
+	case cacheUserJWT.purpose:
+		return cacheUserJWT, nil
+	case cacheChangeEmail.purpose:
+		return cacheChangeEmail, nil
+	case cacheNewUserSignUp.purpose:
+		return cacheNewUserSignUp, nil
+	case cacheUserSignIn.purpose:
+		return cacheUserSignIn, nil
+	default:
+		return CacheType{}, errors.New("invalid cache type")
+	}
 }
