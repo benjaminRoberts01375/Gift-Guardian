@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -28,14 +27,6 @@ func userGenerateJWT(username string, duration time.Duration) (string, error) {
 	return jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(config.JWTSecret))
 }
 
-func userJWTIsValidFromCookie(r *http.Request) (*UserJWTClaims, bool) {
-	cookie, err := r.Cookie(UserJWTCookieName)
-	if err != nil {
-		return nil, false
-	}
-	return userJWTIsValid(cookie.Value)
-}
-
 func userJWTIsValid(tokenString string) (*UserJWTClaims, bool) {
 	token, err := jwt.ParseWithClaims(tokenString, &UserJWTClaims{}, func(token *jwt.Token) (any, error) {
 		return []byte(config.JWTSecret), nil
@@ -44,15 +35,8 @@ func userJWTIsValid(tokenString string) (*UserJWTClaims, bool) {
 		return nil, false
 	}
 	claims, ok := token.Claims.(*UserJWTClaims)
-	if ((!ok || !token.Valid) && !config.DevMode) || !userExists(claims.Username) {
+	if (!ok || !token.Valid) && !config.DevMode {
 		return nil, false
 	}
 	return claims, claims.ExpiresAt.After(time.Now()) || config.DevMode
-}
-
-func userExists(username string) bool {
-	statement := `SELECT EXISTS(SELECT 1 FROM users WHERE email = $1);`
-	var dbExists bool
-	err := database.QueryRow(statement, username).Scan(&dbExists)
-	return err == nil && dbExists
 }

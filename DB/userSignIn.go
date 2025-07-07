@@ -20,12 +20,13 @@ func newUserSignIn(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	statement := `
-	SELECT password
+	SELECT password, id
 	FROM users
 	WHERE email = $1 AND confirmed = true
 	`
 	var dbPasswordHash []byte
-	err = database.QueryRow(statement, userRequest.Email).Scan(&dbPasswordHash)
+	var userID string
+	err = database.QueryRow(statement, userRequest.Email).Scan(&dbPasswordHash, &userID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusBadRequest, w)
 		return
@@ -42,6 +43,9 @@ func newUserSignIn(w http.ResponseWriter, r *http.Request) {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
+	userHasLoggedIn(userID)
+	cache.setUserSignIn(jwt, userID)
+
 	if config.DevMode {
 		http.SetCookie(w, &http.Cookie{
 			Name:     UserJWTCookieName,
@@ -64,4 +68,14 @@ func newUserSignIn(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
+}
+
+func userHasLoggedIn(userID string) error {
+	statement := `
+	UPDATE users
+	SET last_login = NOW()
+	WHERE ID = $1
+	`
+	_, err := database.Exec(statement, userID)
+	return err
 }

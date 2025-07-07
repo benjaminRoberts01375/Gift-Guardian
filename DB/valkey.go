@@ -43,6 +43,7 @@ var (
 	cacheUserJWT       CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
 	cacheChangeEmail   CacheType = CacheType{duration: time.Minute * 15, purpose: "Change Email"}
 	cacheNewUserSignUp CacheType = CacheType{duration: time.Minute * 15, purpose: "User Sign Up"}
+	cacheUserSignIn    CacheType = CacheType{duration: UserJWTDuration, purpose: "User Sign In"}
 )
 
 const cacheKeyLength = 16
@@ -73,7 +74,7 @@ func (cache CacheLayer) Get(key string) (string, CacheType, error) {
 	ctx := context.Background()
 	rawResult, err := cache.DB.Do(ctx, cache.DB.B().Hgetall().Key(key).Build()).AsStrMap()
 	if err != nil {
-		return "", CacheType{}, err
+		return "", CacheType{}, errors.New("failed to get value from cache: " + err.Error())
 	}
 	value := rawResult["value"]
 	cacheType, err := cache.getCacheType(rawResult["purpose"])
@@ -118,8 +119,10 @@ func (cache CacheLayer) GetAndDeleteHash(key string) (map[string]string, CacheTy
 
 func (cache CacheLayer) Set(key string, value string, cacheType CacheType) error {
 	ctx := context.Background()
+	Coms.Println("Valkey Set with type: " + cacheType.purpose)
 	err := cache.DB.Do(ctx, cache.DB.B().Hset().Key(key).FieldValue().FieldValue("value", value).FieldValue("purpose", cacheType.purpose).Build()).Error()
 	if err != nil {
+		Coms.PrintErrStr("Valkey Set Error: " + err.Error())
 		return err
 	}
 	return cache.DB.Do(ctx, cache.DB.B().Expire().Key(key).Seconds(int64(cacheType.duration.Seconds())).Build()).Error()
@@ -200,6 +203,26 @@ func (cache *CacheClient[client]) getAndDeleteNewUserSignUp(id string) (string, 
 		return "", errors.New("invalid cache type")
 	}
 	return email, nil
+}
+
+func (cache *CacheClient[client]) setUserSignIn(JWT string, userID string) error {
+	err := cache.raw.Set(JWT, userID, cacheUserSignIn)
+	if err != nil {
+		Coms.PrintErrStr("Valkey Set Error: " + err.Error())
+		return err
+	}
+	return nil
+}
+
+func (cache *CacheClient[client]) getUserSignIn(JWT string) (string, error) {
+	userID, cacheType, err := cache.raw.Get(JWT)
+	if err != nil {
+		return "", errors.New("failed to get user ID from JWT: " + err.Error())
+	}
+	if cacheType != cacheUserSignIn {
+		return "", errors.New("invalid cache type")
+	}
+	return userID, nil
 }
 
 func generateRandomString(length int) string {

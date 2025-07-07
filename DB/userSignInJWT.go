@@ -7,7 +7,12 @@ import (
 )
 
 func userJWTSignIn(w http.ResponseWriter, r *http.Request) {
-	_, _, _, err := checkUserRequest[any](r)
+	_, userID, _, err := checkUserRequest[any](r)
+	if err != nil {
+		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
+		return
+	}
+	err = userHasLoggedIn(userID)
 	if err != nil {
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return

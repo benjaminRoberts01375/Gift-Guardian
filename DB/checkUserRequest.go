@@ -9,15 +9,19 @@ import (
 )
 
 func checkUserRequest[ReturnType any](r *http.Request) (*UserJWTClaims, string, *ReturnType, error) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
+	cookie, err := r.Cookie(UserJWTCookieName)
+
+	if err != nil {
+		return nil, "", nil, errors.New("missing JWT cookie")
+	}
+	claims, ok := userJWTIsValid(cookie.Value)
+	if !ok {
 		return nil, "", nil, errors.New("invalid JWT")
 	}
-	// Get user ID from email
-	var userID string
-	err := database.QueryRow("SELECT id FROM users WHERE email=$1", claims.Username).Scan(&userID)
+
+	userID, err := cache.getUserSignIn(cookie.Value) // Pass JWT to cache to get user ID
 	if err != nil {
-		return nil, "", nil, err
+		Coms.PrintErrStr("failed to get user ID from JWT: " + err.Error())
 	}
 
 	// Check if ReturnType is any/interface{}

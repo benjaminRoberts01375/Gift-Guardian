@@ -15,23 +15,25 @@ type UserDataResponse struct {
 }
 
 func userGetData(w http.ResponseWriter, r *http.Request) {
-	claims, isValid := userJWTIsValidFromCookie(r)
-	if !isValid {
-		Coms.ExternalPostRespondCode(http.StatusForbidden, w)
+	_, userID, _, err := checkUserRequest[any](r)
+	if err != nil {
+		Coms.PrintErrStr("checkUserRequest failed: " + err.Error())
+		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
 	dbTransaction, err := database.Begin()
 	if err != nil {
+		Coms.PrintErrStr("failed to begin transaction: " + err.Error())
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
 	defer dbTransaction.Rollback()
 
-	// Get user ID and public user data from email
-	var userID string
+	// Get public user data from email
 	var publicUser models.PublicUser
-	err = database.QueryRow("SELECT id, email, first_name, last_name FROM users WHERE email=$1", claims.Username).Scan(&userID, &publicUser.Email, &publicUser.FirstName, &publicUser.LastName)
+	err = database.QueryRow("SELECT email, first_name, last_name FROM users WHERE id=$1", userID).Scan(&publicUser.Email, &publicUser.FirstName, &publicUser.LastName)
 	if err != nil {
+		Coms.PrintErrStr("could not get basic user data: " + err.Error())
 		if err == sql.ErrNoRows {
 			Coms.ExternalPostRespondCode(http.StatusNotFound, w) // User not found
 			return
@@ -42,6 +44,7 @@ func userGetData(w http.ResponseWriter, r *http.Request) {
 
 	lists, err := getLists(dbTransaction, userID)
 	if err != nil {
+		Coms.PrintErrStr("could not get lists: " + err.Error())
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
