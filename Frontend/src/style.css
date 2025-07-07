@@ -46,6 +46,7 @@ a {
 
 button {
 	cursor: pointer;
+	color: black;
 }
 
 h1 {
@@ -176,22 +177,29 @@ dialog #buttons {
 	.flavor-button {
 		transition-duration: 0.25s;
 		width: 100%;
-		font-size: 12pt;
+		font-size: 14pt;
 		flex: 1;
 	}
 	.flavor-icon {
 		flex: 0;
 	}
 	.flavor-button,
-	.flavor-icon {
-		height: 18pt;
+	.flavor-icon,
+	.flavor-button-distant {
+		height: 35px;
+		min-width: 35px;
+		/* margin: 7pt 0pt 0pt 3pt; */
 	}
-	h1 {
+	h1,
+	h2 {
+		margin-bottom: 7pt;
+	}
+	/* h1 {
 		font-size: 18pt;
 	}
 	h2 {
 		font-size: 16pt;
-	}
+	} */
 	dialog #buttons {
 		padding: 20pt;
 	}

@@ -28,6 +28,7 @@
 	border-width: 0pt;
 	margin: 3pt 0pt 0pt 5pt;
 	padding: 5pt 0pt 5pt 5pt;
+	border-radius: 0pt;
 }
 
 #actions {
@@ -52,5 +53,9 @@
 	#inputs {
 		max-width: 100%;
 		min-width: 100pt;
+	}
+	.field {
+		height: 25px;
+		font-size: 13pt;
 	}
 }
