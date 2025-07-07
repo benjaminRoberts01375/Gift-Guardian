@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useList } from "../../context-hook.tsx";
 
 const Login = () => {
-	const { userRequestData } = useList();
+	const { userRequestData, cookieGet } = useList();
 	const [failedLogin, setSetFailedLogin] = useState<boolean>(false);
 	const navigate = useNavigate();
 
@@ -44,6 +44,10 @@ const Login = () => {
 	};
 
 	useEffect(() => {
+		const cookie = cookieGet("gg-jwt");
+		if (cookie === undefined || cookie === "") {
+			return;
+		}
 		const checkIfLoggedIn = async () => {
 			try {
 				const response = await fetch("/db/userJWTSignIn", {
@@ -63,7 +67,7 @@ const Login = () => {
 		};
 
 		checkIfLoggedIn();
-	}, [navigate, userRequestData]);
+	}, [navigate, userRequestData, cookieGet]);
 
 	return (
 		<CredentialsScreen title={failedLogin ? "Login Failed" : "Welcome"}>
