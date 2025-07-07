@@ -18,11 +18,11 @@ type CacheSpec interface {
 	// Basic cache functions
 	Set(key string, value string, duration CacheType) error
 	Get(key string) (string, CacheType, error)
-	GetAndDelete(key string) (string, CacheType, error)
+	Delete(key string) error
 
 	SetHash(key string, values map[string]string, duration CacheType) error
 	GetHash(key string) (map[string]string, CacheType, error)
-	GetAndDeleteHash(key string) (map[string]string, CacheType, error)
+	DeleteHash(key string) error
 }
 
 type CacheLayer struct { // Implements main 5 functions
@@ -93,28 +93,12 @@ func (cache CacheLayer) GetHash(key string) (map[string]string, CacheType, error
 	return rawResult, cacheType, err
 }
 
-func (cache CacheLayer) GetAndDelete(key string) (string, CacheType, error) {
-	value, cacheType, err := cache.Get(key)
-	if err != nil {
-		return "", CacheType{}, err
-	}
-	err = cache.DB.Do(context.Background(), cache.DB.B().Hdel().Key(key).Field("value").Field("purpose").Build()).Error()
-	if err != nil {
-		return "", CacheType{}, err
-	}
-	return value, cacheType, nil
+func (cache CacheLayer) Delete(key string) error {
+	return cache.DB.Do(context.Background(), cache.DB.B().Hdel().Key(key).Field("value").Field("purpose").Build()).Error()
 }
 
-func (cache CacheLayer) GetAndDeleteHash(key string) (map[string]string, CacheType, error) {
-	values, cacheType, err := cache.GetHash(key)
-	if err != nil {
-		return nil, CacheType{}, err
-	}
-	err = cache.DB.Do(context.Background(), cache.DB.B().Hdel().Key(key).Field("purpose").Build()).Error()
-	if err != nil {
-		return nil, CacheType{}, err
-	}
-	return values, cacheType, nil
+func (cache CacheLayer) DeleteHash(key string) error {
+	return cache.DB.Do(context.Background(), cache.DB.B().Hdel().Key(key).Field("purpose").Build()).Error()
 }
 
 func (cache CacheLayer) Set(key string, value string, cacheType CacheType) error {
@@ -159,12 +143,16 @@ func (cache CacheClient[client]) getForgotPassword(resetID string) (string, erro
 }
 
 func (cache CacheClient[client]) getAndDeleteResetPassword(resetID string) (string, error) {
-	email, cacheType, err := cache.raw.GetAndDelete(resetID)
+	email, cacheType, err := cache.raw.Get(resetID)
 	if err != nil {
 		return "", err
 	}
 	if cacheType != cachePasswordSet {
 		return "", errors.New("invalid cache type")
+	}
+	err = cache.raw.Delete(resetID)
+	if err != nil {
+		return "", err
 	}
 	return email, nil
 }
@@ -178,12 +166,16 @@ func (cache CacheClient[client]) setChangeEmail(originalEmail string, newEmail s
 }
 
 func (cache CacheClient[client]) getAndDeleteChangeEmail(id string) (string, string, error) {
-	emails, cacheType, err := cache.raw.GetAndDeleteHash(id)
+	emails, cacheType, err := cache.raw.GetHash(id)
 	if err != nil {
 		return "", "", err
 	}
 	if cacheType != cacheChangeEmail {
 		return "", "", errors.New("invalid cache type")
+	}
+	err = cache.raw.DeleteHash(id)
+	if err != nil {
+		return "", "", err
 	}
 
 	return emails["originalEmail"], emails["newEmail"], nil
@@ -195,12 +187,16 @@ func (cache *CacheClient[client]) setNewUserSignUp(email string) (string, error)
 }
 
 func (cache *CacheClient[client]) getAndDeleteNewUserSignUp(id string) (string, error) {
-	email, cacheType, err := cache.raw.GetAndDelete(id)
+	email, cacheType, err := cache.raw.Get(id)
 	if err != nil {
 		return "", err
 	}
 	if cacheType != cacheNewUserSignUp {
 		return "", errors.New("invalid cache type")
+	}
+	err = cache.raw.Delete(id)
+	if err != nil {
+		return "", err
 	}
 	return email, nil
 }
