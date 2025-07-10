@@ -8,7 +8,6 @@ import (
 
 const UserJWTCookieName = "gg-jwt"
 const UserJWTDuration = time.Hour*24*6 + time.Hour*12 // 6 + 0.5 days
-const UserJWTConfirmation = time.Minute * 15
 
 type UserJWTClaims struct {
 	Username string `json:"username"`

@@ -1,7 +1,10 @@
 package models
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
+	"strconv"
 
 	Coms "github.com/benjaminRoberts01375/Go-Communicate"
 )
@@ -22,6 +25,56 @@ type Config struct {
 	EmailAPIKey        string `json:"email_api_key"`
 	AllowSendingEmails bool   `json:"allow_sending_emails"`
 	DevMode            bool   `json:"dev_mode"`
+}
+
+// DEBUG PURPOSES ONLY - CONTAINS SENSITIVE INFORMATION
+func (config *Config) String() string {
+	jsonBytes, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		return config.DBName
+	}
+	return string(jsonBytes)
+}
+
+func (config *Config) ReadConfig() {
+	DBPort, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		panic("Could not read DB_PORT from environment: " + err.Error())
+	} else if DBPort <= 0 {
+		panic("DB_PORT is not set in environment")
+	}
+	DBContainerName := os.Getenv("DB_CONTAINER_NAME")
+	if DBContainerName == "" {
+		panic("DB_CONTAINER_NAME is not set in environment")
+	}
+	cachePort, err := strconv.Atoi(os.Getenv("CACHE_PORT"))
+	if err != nil || cachePort <= 0 {
+		panic("CACHE_PORT is not set in environment")
+	}
+	cacheContainerName := os.Getenv("CACHE_CONTAINER_NAME")
+	if cacheContainerName == "" {
+		panic("CACHE_CONTAINER_NAME is not set in environment")
+	}
+	cacheIDLength, err := strconv.Atoi(os.Getenv("CACHE_ID_LENGTH"))
+	if err != nil || cacheIDLength <= 0 {
+		panic("CACHE_ID_LENGTH is not set in environment")
+	}
+	allowSendingEmails, err := strconv.ParseBool(os.Getenv("ALLOW_SENDING_EMAILS"))
+	if err != nil {
+		panic("ALLOW_SENDING_EMAILS is not set in environment")
+	}
+	devMode, err := strconv.ParseBool(os.Getenv("DEV_MODE"))
+	if err != nil {
+		panic("DEV_MODE is not set in environment")
+	}
+	Coms.ReadExternalConfig("db.json", config)
+	config.DBPort = DBPort
+	config.CachePort = cachePort
+	config.CacheContainerName = cacheContainerName
+	config.CacheIDLength = cacheIDLength
+	config.AllowSendingEmails = allowSendingEmails
+	config.DevMode = devMode
+	config.DBContainerName = DBContainerName
 }
 
 // Returns the URL to connect to the DB

@@ -18,5 +18,8 @@ func sendEmail(to string, subject string, message string) {
 		Subject: subject,
 		Text:    message,
 	}
-	client.Emails.Send(emailParams)
+	_, err := client.Emails.Send(emailParams)
+	if err != nil {
+		Coms.PrintErrStr("Failed to send email: " + err.Error())
+	}
 }

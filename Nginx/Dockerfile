@@ -1,10 +1,30 @@
+# Build frontend with bun/vite
+FROM oven/bun:1.1.18 AS builder
+
+WORKDIR /app
+
+# Copy package files from Frontend directory
+COPY Frontend/package.json Frontend/bun.lock ./
+
+RUN bun install
+
+# Copy frontend source
+COPY Frontend/ .
+
+# Build the frontend
+RUN bun run build
+
+# Setup NGINX for production
 FROM nginx:1.27.4-alpine-slim
 
 # Remove the default nginx configuration
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Create the custom nginx configuration during the build
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy built frontend files
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy custom nginx configuration
+COPY Nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 

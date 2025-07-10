@@ -40,7 +40,6 @@ type CacheType struct {
 
 var (
 	cachePasswordSet   CacheType = CacheType{duration: time.Minute * 15, purpose: "Set Password"}
-	cacheUserJWT       CacheType = CacheType{duration: UserJWTDuration, purpose: "User JWT"}
 	cacheChangeEmail   CacheType = CacheType{duration: time.Minute * 15, purpose: "Change Email"}
 	cacheNewUserSignUp CacheType = CacheType{duration: time.Minute * 15, purpose: "User Sign Up"}
 	cacheUserSignIn    CacheType = CacheType{duration: UserJWTDuration, purpose: "User Sign In"}
@@ -240,8 +239,6 @@ func (cache CacheLayer) getCacheType(purpose string) (CacheType, error) {
 	switch purpose {
 	case cachePasswordSet.purpose:
 		return cachePasswordSet, nil
-	case cacheUserJWT.purpose:
-		return cacheUserJWT, nil
 	case cacheChangeEmail.purpose:
 		return cacheChangeEmail, nil
 	case cacheNewUserSignUp.purpose:

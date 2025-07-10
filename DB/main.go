@@ -12,11 +12,12 @@ import (
 
 var database *sql.DB
 var cache CacheClient[*CacheLayer]
-var config models.Config
+var config models.Config = models.Config{}
 
 func main() {
 	Coms.ReadConfig()
-	Coms.ReadExternalConfig("db.json", &config)
+	Coms.Println("Setup Coms config")
+	config.ReadConfig()
 	config.PreflightChecks()
 	database = setupDB()
 	defer database.Close()

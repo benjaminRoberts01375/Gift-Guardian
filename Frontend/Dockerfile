@@ -1,18 +1,20 @@
-FROM oven/bun:latest
+# Build frontend with bun/vite and copy the built files to nginx
+FROM oven/bun:1.1.18 AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package.json bun.lockb* ./
+COPY package.json bun.lock ./
 
-# Install dependencies
 RUN bun install
 
-# Copy project files
 COPY . .
 
-# Expose port
-EXPOSE 5173
+RUN bun run build
 
-# Start development server with host binding to allow external access
-CMD ["bun", "run", "dev"]
+FROM nginx:alpine
+
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

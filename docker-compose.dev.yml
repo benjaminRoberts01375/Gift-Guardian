@@ -1,19 +1,35 @@
 networks:
   gg-network:
     driver: bridge
-    internal: false
 
 services:
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.dev
+    container_name: frontend
+    restart: unless-stopped
+    networks:
+      - gg-network
+    hostname: frontend
+    volumes:
+      - ./Frontend:/app
+      - gg-node-modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+
   nginx:
     build:
-      context: . # Allow NGINX to access the Frontend directory
-      dockerfile: ./Nginx/Dockerfile
+      context: ./Nginx
+      dockerfile: Dockerfile.dev
     container_name: gg-nginx
     restart: unless-stopped
     networks:
       - gg-network
     ports:
       - "8080:80"
+    depends_on:
+      - frontend
 
   postgres:
     image: postgres:17.4-alpine
@@ -22,6 +38,8 @@ services:
     user: postgres:postgres
     networks:
       - gg-network
+    ports:
+      - "5432:5432"
     env_file:
       - ./Postgres/db.env
     volumes:
@@ -34,6 +52,8 @@ services:
     restart: unless-stopped
     networks:
       - gg-network
+    ports:
+      - "6379:6379"
     volumes:
       - valkey_data:/data
     secrets:
@@ -43,7 +63,7 @@ services:
   db:
     build:
       context: ./DB
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       secrets:
         - source: git_env
     container_name: gg-db
@@ -62,7 +82,8 @@ services:
       - CACHE_CONTAINER_NAME=gg-valkey
       - CACHE_ID_LENGTH=15
       - ALLOW_SENDING_EMAILS=false
-      - DEV_MODE=false
+      - DEV_MODE=true
+
     secrets:
       - source: db_coms
         target: config.json
@@ -75,7 +96,9 @@ services:
 
 volumes:
   postgres_data:
-    name: gg-postgres-data
+    name: gg-postgres-data-dev
+  gg-node-modules:
+    name: frontend-node-modules
   valkey_data:
     name: gg-valkey-data
 
