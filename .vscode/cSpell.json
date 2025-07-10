@@ -9,6 +9,18 @@
 		"Dockerfile",
 		".env"
 	],
-	"words": ["uuid-ossp", "initdb", "benlab.us", "upsertable", "sslmode"],
+	"words": [
+		"uuid-ossp",
+		"initdb",
+		"benlab.us",
+		"sslmode",
+		"GOPRIVATE",
+		"dbcoms",
+		"nosniff",
+		"SAMEORIGIN",
+		"fsnotify",
+		"abcdefghijkmnopqrstuvwxyz",
+		"ABCDEFGHJKLMNPQRSTUVWXYZ"
+	],
 	"flagWords": ["hte"]
 }
