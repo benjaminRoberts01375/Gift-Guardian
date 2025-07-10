@@ -22,8 +22,8 @@ WITH new_group AS (
     RETURNING id
 ),
 new_gift AS (
-    INSERT INTO gifts (group_id, name, description)
-    VALUES ((SELECT id FROM new_group), $3, $4)
+    INSERT INTO gifts (group_id, name, description, location)
+    VALUES ((SELECT id FROM new_group), $3, $4, $5)
     RETURNING id
 )
 SELECT
@@ -32,6 +32,7 @@ SELECT
 	`
 	err = database.QueryRow(statement, requestGroup.ListID, requestGroup.Name,
 		requestGroup.Gifts[0].Name, requestGroup.Gifts[0].Description,
+		requestGroup.Gifts[0].Location,
 	).Scan(
 		&requestGroup.ID, &requestGroup.Gifts[0].ID,
 	)
