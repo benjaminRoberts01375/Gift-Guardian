@@ -9,11 +9,13 @@ import (
 func userForgotPasswordRequest(w http.ResponseWriter, r *http.Request) {
 	email, err := Coms.ExternalPostReceived[string](r)
 	if err != nil {
+		Coms.PrintErrStr("Failed to parse email from request: " + err.Error())
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
 	transactionID, err := cache.setForgotPassword(*email)
 	if err != nil {
+		Coms.PrintErrStr("Failed to set password reset for email: " + err.Error())
 		Coms.ExternalPostRespondCode(http.StatusInternalServerError, w)
 		return
 	}
@@ -23,6 +25,7 @@ https://giftguardian.benlab.us/db/reset-password/` + transactionID
 	go sendEmail(*email, "Gift Guardian Password Reset", message)
 
 	Coms.ExternalPostRespondCode(http.StatusOK, w)
+	Coms.Println("Sent password reset email to " + *email)
 }
 
 func userForgotPasswordCheckValid(w http.ResponseWriter, r *http.Request) {
